@@ -205,6 +205,59 @@ app.post('/api/pu', (req: Request, res: Response) => {
   }
 });
 
+// POST bulk import Petak Ukur (Excel / CSV Batch)
+app.post('/api/pu/bulk', (req: Request, res: Response) => {
+  try {
+    const { items, mode } = req.body;
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: 'Data items harus berupa array dan tidak kosong.' });
+    }
+
+    if (mode === 'replace') {
+      petakUkurStore = [...items];
+    } else {
+      // Merge by kodePU: update if already exists, else insert
+      const existingCodes = new Set(petakUkurStore.map((p) => p.kodePU.toUpperCase()));
+      const toAdd: PetakUkur[] = [];
+
+      for (const item of items) {
+        const itemCode = (item.kodePU || '').toUpperCase();
+        if (existingCodes.has(itemCode)) {
+          const idx = petakUkurStore.findIndex((p) => p.kodePU.toUpperCase() === itemCode);
+          if (idx !== -1) {
+            petakUkurStore[idx] = { ...petakUkurStore[idx], ...item };
+          }
+        } else {
+          toAdd.push(item);
+        }
+      }
+      petakUkurStore = [...toAdd, ...petakUkurStore];
+    }
+
+    const newNotif: AppNotification = {
+      id: `notif-${Date.now()}`,
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      type: 'success',
+      title: `Impor Excel Selesai (${items.length} PU)`,
+      message: `Berhasil mengimpor ${items.length} data Petak Ukur (${mode === 'replace' ? 'Gantikan database' : 'Gabungkan database'}).`,
+      isRead: false,
+    };
+    notificationStore.unshift(newNotif);
+
+    broadcastEvent('pu_bulk_imported', { count: items.length, total: petakUkurStore.length });
+
+    return res.status(200).json({
+      success: true,
+      count: items.length,
+      total: petakUkurStore.length,
+      data: petakUkurStore,
+      notification: newNotif,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message || 'Gagal memproses impor massal.' });
+  }
+});
+
 // PUT update existing Petak Ukur
 app.put('/api/pu/:id', (req: Request, res: Response) => {
   try {

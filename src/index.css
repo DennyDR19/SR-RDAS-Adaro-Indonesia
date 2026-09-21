@@ -1,5 +1,31 @@
 @import "tailwindcss";
 
+/* PT Adaro Indonesia Web Theme Base */
+body {
+  background: linear-gradient(135deg, #09473d 0%, #063931 45%, #03241f 100%);
+  min-height: 100vh;
+  color: #f1f5f9;
+}
+
+/* Custom Adaro Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(5, 61, 52, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(52, 211, 153, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(163, 230, 53, 0.6);
+}
+
 /* Leaflet Custom Styling Overrides */
 .leaflet-custom-tooltip {
   background: transparent !important;

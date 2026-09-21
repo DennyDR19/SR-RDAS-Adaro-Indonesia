@@ -169,15 +169,83 @@ export function formatUtmDisplay(zone: number, hemisphere: 'N' | 'S', easting: n
 export function parseUtmInput(input: string): { zone: number; hemisphere: 'N' | 'S'; easting: number; northing: number } | null {
   if (!input) return null;
   const cleaned = input.replace(/[,;mENenXY:]/g, ' ').replace(/\s+/g, ' ').trim();
-  const match = cleaned.match(/^(\d{1,2})\s*([NSns])\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)$/);
+  // Support standard N/S hemisphere or M/L latitude band used in Indonesia (M is south of equator)
+  const match = cleaned.match(/^(\d{1,2})\s*([NSMLnsml])\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)$/);
   if (match) {
     const zone = parseInt(match[1], 10);
-    const hemisphere = match[2].toUpperCase() as 'N' | 'S';
+    const bandOrHemi = match[2].toUpperCase();
+    // In UTM grid, C through M are Southern Hemisphere. Also northing > 5,000,000 in Indonesia indicates South.
+    const hemisphere: 'N' | 'S' = bandOrHemi === 'N' ? 'N' : 'S';
     const easting = parseFloat(match[3]);
     const northing = parseFloat(match[4]);
     if (zone >= 1 && zone <= 60 && easting > 0 && northing > 0) {
       return { zone, hemisphere, easting, northing };
     }
   }
+  return null;
+}
+
+/**
+ * Universal coordinate parser for Excel import:
+ * Supports:
+ * - "50M 275294 9598293" or "48S 705581 9177828"
+ * - "-3.63733047 114.9622084" or "-3.63733, 114.9622"
+ * - Returns { latitude, longitude, utmZone, utmEasting, utmNorthing, formattedUtm }
+ */
+export function parseAnyCoordinate(input: string | number): {
+  latitude: number;
+  longitude: number;
+  utmZone: string;
+  utmEasting: number;
+  utmNorthing: number;
+  formattedUtm: string;
+} | null {
+  if (!input) return null;
+  const str = String(input).trim();
+
+  // Check if it matches UTM format, e.g. 50M 275294 9598293 or 48S 705581 9177828
+  const utmMatch = str.match(/^(\d{1,2})\s*([A-Za-z])\s+([0-9.]+)\s+([0-9.]+)$/);
+  if (utmMatch) {
+    const zone = parseInt(utmMatch[1], 10);
+    const letter = utmMatch[2].toUpperCase();
+    const easting = parseFloat(utmMatch[3]);
+    const northing = parseFloat(utmMatch[4]);
+    // In UTM: bands C..M are Southern Hemisphere. Also letter S is South.
+    // If northing > 5,000,000 (typical 9,000,000+ in Java/Kalimantan), it's Southern hemisphere
+    const hemisphere: 'N' | 'S' = (letter === 'N') ? 'N' : 'S';
+
+    try {
+      const geo = utmToLatLon(easting, northing, zone, hemisphere);
+      return {
+        latitude: geo.latitude,
+        longitude: geo.longitude,
+        utmZone: `${zone}${hemisphere}`,
+        utmEasting: Math.round(easting),
+        utmNorthing: Math.round(northing),
+        formattedUtm: `${zone}${letter} ${Math.round(easting)} ${Math.round(northing)}`,
+      };
+    } catch {
+      // ignore
+    }
+  }
+
+  // Check if it matches Lat/Lon format, e.g. "-3.63733047 114.9622084" or "-3.63733047, 114.9622084"
+  const latLonMatch = str.match(/^(-?\d{1,2}(?:\.\d+)?)[,\s]+(1\d{2}(?:\.\d+)?|-?\d{1,3}(?:\.\d+)?)$/);
+  if (latLonMatch) {
+    const lat = parseFloat(latLonMatch[1]);
+    const lon = parseFloat(latLonMatch[2]);
+    if (!isNaN(lat) && !isNaN(lon) && Math.abs(lat) <= 90 && Math.abs(lon) <= 180) {
+      const utm = latLonToUtm(lat, lon);
+      return {
+        latitude: lat,
+        longitude: lon,
+        utmZone: `${utm.zone}${utm.hemisphere}`,
+        utmEasting: utm.easting,
+        utmNorthing: utm.northing,
+        formattedUtm: `${utm.zone}${utm.hemisphere} ${utm.easting} ${utm.northing}`,
+      };
+    }
+  }
+
   return null;
 }

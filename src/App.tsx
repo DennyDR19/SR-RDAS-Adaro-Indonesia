@@ -13,6 +13,7 @@ import { NotificationDrawer } from './components/NotificationDrawer';
 import { ShareModal } from './components/ShareModal';
 import { GoogleSheetsModal } from './components/GoogleSheetsModal';
 import { BoundaryModal } from './components/BoundaryModal';
+import { ExcelImportModal } from './components/ExcelImportModal';
 import { GoogleSheetsBackend } from './services/googleSheetsBackend';
 import { getAccessToken } from './services/googleSheetsDirectService';
 import {
@@ -45,6 +46,7 @@ export default function App() {
   const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
   const [isGoogleSheetsModalOpen, setIsGoogleSheetsModalOpen] = useState<boolean>(false);
   const [isBoundaryModalOpen, setIsBoundaryModalOpen] = useState<boolean>(false);
+  const [isExcelImportModalOpen, setIsExcelImportModalOpen] = useState<boolean>(false);
   const [currentView, setCurrentView] = useState<'map' | 'analytics'>('map');
 
   // Custom Map Area Boundaries (SHP / KML)
@@ -252,6 +254,29 @@ export default function App() {
     }
   };
 
+  const handleBulkImport = async (importedData: PetakUkur[], mode: 'replace' | 'merge') => {
+    try {
+      const result = await ApiService.bulkImportPetakUkur(importedData, mode);
+      setPuList(result.data);
+      if (result.notification) {
+        setNotifications((prev) => [result.notification!, ...prev]);
+      }
+      setToastMessage({
+        title: 'Impor Excel Berhasil!',
+        desc: `Sebanyak ${result.count} data Petak Ukur berhasil dimuat ke database web.`,
+        type: 'success',
+      });
+      // Center map view
+      setCurrentView('map');
+    } catch (err: any) {
+      setToastMessage({
+        title: 'Gagal Impor Excel',
+        desc: err.message || 'Terjadi galat saat menyimpan data impor.',
+        type: 'error',
+      });
+    }
+  };
+
   const handleDeletePu = async (id: string) => {
     try {
       await ApiService.deletePetakUkur(id);
@@ -333,12 +358,13 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-gradient-to-b from-[#09473d] via-[#063931] to-[#02241f] text-slate-100 flex flex-col font-sans relative overflow-x-hidden">
       {/* Top Main Navigation Header */}
       <Header
         currentView={currentView}
         onChangeView={setCurrentView}
         onOpenAddModal={handleOpenAddModal}
+        onOpenExcelImport={() => setIsExcelImportModalOpen(true)}
         onExportPdf={() => exportDasReportPdf(puList)}
         onOpenShareModal={() => setIsShareModalOpen(true)}
         onOpenNotifications={() => setIsNotificationDrawerOpen(true)}
@@ -354,70 +380,70 @@ export default function App() {
 
       {/* Real-time Floating Toast Alert Banner */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-[1200] max-w-md bg-slate-900 border border-cyan-500/50 p-4 rounded-xl shadow-2xl animate-fade-in flex items-start gap-3">
-          <div className="p-2 rounded-lg bg-cyan-500/20 text-cyan-400 shrink-0 mt-0.5">
+        <div className="fixed bottom-6 right-6 z-[1200] max-w-md bg-[#04332b] border border-lime-400/60 p-4 rounded-xl shadow-2xl animate-fade-in flex items-start gap-3 backdrop-blur-md">
+          <div className="p-2 rounded-lg bg-lime-400/20 text-lime-300 shrink-0 mt-0.5">
             <Radio className="w-4 h-4 animate-pulse" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2">
-              <span className="font-bold text-slate-100 text-xs truncate">{toastMessage.title}</span>
+              <span className="font-bold text-white text-xs truncate">{toastMessage.title}</span>
               <button
                 onClick={() => setToastMessage(null)}
-                className="text-slate-400 hover:text-slate-200"
+                className="text-emerald-300/80 hover:text-white"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
-            <p className="text-slate-300 text-[11px] mt-0.5">{toastMessage.desc}</p>
+            <p className="text-emerald-200/90 text-[11px] mt-0.5">{toastMessage.desc}</p>
           </div>
         </div>
       )}
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 flex flex-col gap-4">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 flex flex-col gap-4 relative z-10">
         {/* Quick KPI Bar on Map View */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <div className="bg-slate-900/80 border border-slate-800/80 rounded-xl p-3 flex items-center justify-between">
+          <div className="bg-[#04332b]/85 border border-emerald-500/30 backdrop-blur-md rounded-xl p-3 flex items-center justify-between shadow-lg shadow-black/20">
             <div>
-              <span className="text-[10px] text-slate-400 font-bold uppercase block">Rata-Rata SR</span>
+              <span className="text-[10px] text-emerald-200/80 font-bold uppercase block">Rata-Rata SR</span>
               <span
                 className="text-xl font-black"
                 style={{
                   color:
                     metrics.rataRataSurvivalRate >= 80
-                      ? '#22c55e'
+                      ? '#a3e635'
                       : metrics.rataRataSurvivalRate >= 75
-                      ? '#eab308'
+                      ? '#facc15'
                       : metrics.rataRataSurvivalRate > 40
-                      ? '#ef4444'
-                      : '#94a3b8',
+                      ? '#f87171'
+                      : '#cbd5e1',
                 }}
               >
                 {metrics.rataRataSurvivalRate}%
               </span>
             </div>
-            <TrendingUp className="w-5 h-5 text-emerald-400" />
+            <TrendingUp className="w-5 h-5 text-lime-400" />
           </div>
 
-          <div className="bg-slate-900/80 border border-slate-800/80 rounded-xl p-3 flex items-center justify-between">
+          <div className="bg-[#04332b]/85 border border-emerald-500/30 backdrop-blur-md rounded-xl p-3 flex items-center justify-between shadow-lg shadow-black/20">
             <div>
-              <span className="text-[10px] text-slate-400 font-bold uppercase block">Petak Ukur (PU)</span>
-              <span className="text-xl font-black text-slate-100">{metrics.totalPU} Titik</span>
+              <span className="text-[10px] text-emerald-200/80 font-bold uppercase block">Petak Ukur (PU)</span>
+              <span className="text-xl font-black text-white">{metrics.totalPU} Titik</span>
             </div>
-            <MapPin className="w-5 h-5 text-cyan-400" />
+            <MapPin className="w-5 h-5 text-emerald-300" />
           </div>
 
-          <div className="bg-slate-900/80 border border-slate-800/80 rounded-xl p-3 flex items-center justify-between">
+          <div className="bg-[#04332b]/85 border border-emerald-500/30 backdrop-blur-md rounded-xl p-3 flex items-center justify-between shadow-lg shadow-black/20">
             <div>
-              <span className="text-[10px] text-slate-400 font-bold uppercase block">Lolos Standar (≥75%)</span>
-              <span className="text-xl font-black text-emerald-400">{metrics.persentaseLulusStandar}%</span>
+              <span className="text-[10px] text-emerald-200/80 font-bold uppercase block">Lolos Standar (≥75%)</span>
+              <span className="text-xl font-black text-lime-300">{metrics.persentaseLulusStandar}%</span>
             </div>
-            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+            <CheckCircle2 className="w-5 h-5 text-lime-400" />
           </div>
 
-          <div className="bg-slate-900/80 border border-slate-800/80 rounded-xl p-3 flex items-center justify-between">
+          <div className="bg-[#04332b]/85 border border-emerald-500/30 backdrop-blur-md rounded-xl p-3 flex items-center justify-between shadow-lg shadow-black/20">
             <div>
-              <span className="text-[10px] text-slate-400 font-bold uppercase block">Kebutuhan Sulam</span>
+              <span className="text-[10px] text-emerald-200/80 font-bold uppercase block">Kebutuhan Sulam</span>
               <span className="text-xl font-black text-rose-400">
                 {metrics.totalKebutuhanSulam.toLocaleString()} btg
               </span>
@@ -430,23 +456,23 @@ export default function App() {
         {currentView === 'map' && (
           <div className="flex-1 flex flex-col gap-4">
             {/* Map Search & Filter Bar */}
-            <div className="bg-slate-900/80 border border-slate-800/80 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2.5">
+            <div className="bg-[#04332b]/85 border border-emerald-500/30 backdrop-blur-md rounded-xl p-3 flex flex-wrap items-center justify-between gap-2.5 shadow-lg shadow-black/20">
               <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[280px]">
                 {/* Search */}
                 <div className="relative flex-1 min-w-[180px]">
-                  <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-emerald-400" />
                   <input
                     id="map-search-input"
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Cari Kode PU (misal PU-01), Blok, Desa, atau Jenis..."
-                    className="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:border-cyan-500"
+                    className="w-full bg-[#02241e] border border-emerald-500/30 text-emerald-100 placeholder-emerald-400/50 text-xs rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:border-lime-400"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-emerald-300/80 hover:text-white"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -455,12 +481,12 @@ export default function App() {
 
                 {/* Sub-DAS Filter */}
                 <div className="flex items-center gap-1.5">
-                  <Filter className="w-3.5 h-3.5 text-slate-400 hidden sm:block" />
+                  <Filter className="w-3.5 h-3.5 text-emerald-400 hidden sm:block" />
                   <select
                     id="subdas-filter-select"
                     value={activeSubDasFilter}
                     onChange={(e) => setActiveSubDasFilter(e.target.value)}
-                    className="bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-cyan-500"
+                    className="bg-[#02241e] border border-emerald-500/30 text-emerald-100 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-lime-400"
                   >
                     <option value="all">Semua Sub-DAS</option>
                     {metrics.distribusiSubDas.map((s) => (
@@ -474,14 +500,14 @@ export default function App() {
 
               {/* Action buttons inside filter bar */}
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-400 font-mono">
-                  Menampilkan: <strong>{filteredPuList.length}</strong> / {metrics.totalPU} PU
+                <span className="text-xs text-emerald-300/80 font-mono">
+                  Menampilkan: <strong className="text-lime-300 font-bold">{filteredPuList.length}</strong> / {metrics.totalPU} PU
                 </span>
               </div>
             </div>
 
             {/* Interactive Leaflet GIS Map */}
-            <div className="w-full h-[520px] md:h-[620px] relative">
+            <div className="w-full h-[520px] md:h-[620px] relative rounded-2xl overflow-hidden border border-emerald-500/30 shadow-2xl">
               <DasMap
                 puList={filteredPuList}
                 selectedPuId={selectedPu ? selectedPu.id : null}
@@ -517,9 +543,27 @@ export default function App() {
               setSelectedPu(pu);
               setIsDetailModalOpen(true);
             }}
+            onOpenExcelImport={() => setIsExcelImportModalOpen(true)}
           />
         )}
       </main>
+
+      {/* Corporate Footer - PT Adaro Indonesia */}
+      <footer className="w-full bg-[#03231e]/90 border-t border-emerald-500/20 py-4 px-4 mt-auto relative z-10">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-emerald-200/80">
+          <div>
+            <p className="font-bold text-white">
+              Peta Kinerja Rehabilitasi DAS PT Adaro Indonesia
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4 text-[11px] text-emerald-300/70">
+            <span>Standar Keberhasilan: &ge;75% Ambang Teknis &bull; &gt;80% Target Optimal</span>
+            <span className="hidden md:inline text-emerald-500/50">&bull;</span>
+            <span className="hidden md:inline font-mono">v2.4 &bull; 2024</span>
+          </div>
+        </div>
+      </footer>
 
       {/* Modal 1: Detail Petak Ukur (PU) */}
       <PuDetailModal
@@ -536,6 +580,15 @@ export default function App() {
         onClose={() => setIsFormModalOpen(false)}
         onSave={handleSavePu}
         initialData={editingPu}
+        onOpenExcelImport={() => setIsExcelImportModalOpen(true)}
+      />
+
+      {/* Modal: Batch Import PU from Excel (.xlsx / .csv) */}
+      <ExcelImportModal
+        isOpen={isExcelImportModalOpen}
+        onClose={() => setIsExcelImportModalOpen(false)}
+        onImportSuccess={handleBulkImport}
+        currentCount={puList.length}
       />
 
       {/* Modal 3: Share Summary to Social Media & Team */}

@@ -69,22 +69,22 @@ export const LegendWidget: React.FC<LegendWidgetProps> = ({
   ];
 
   return (
-    <div className="bg-slate-900/90 backdrop-blur-md rounded-xl p-3 border border-slate-800 shadow-xl text-xs text-slate-200">
-      <div className="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-slate-800">
-        <div className="flex items-center gap-1.5 font-bold text-slate-100 text-xs">
-          <Info className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Kriteria Nilai Survival Rate (Petak Ukur)</span>
+    <div className="bg-[#04332b]/90 backdrop-blur-md rounded-xl p-3.5 border border-emerald-500/30 shadow-xl text-xs text-emerald-100">
+      <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-emerald-500/20">
+        <div className="flex items-center gap-2 font-bold text-white text-xs">
+          <Info className="w-3.5 h-3.5 text-lime-400" />
+          <span>Kriteria Nilai Survival Rate (Petak Ukur) &bull; Acuan Teknis PT Adaro Indonesia</span>
         </div>
         <button
           id="legend-filter-all-btn"
           onClick={() => onSelectCategoryFilter('all')}
-          className={`text-[11px] px-2 py-0.5 rounded font-medium transition-colors ${
+          className={`text-[11px] px-2.5 py-0.5 rounded-lg font-bold transition-colors ${
             activeCategoryFilter === 'all'
-              ? 'bg-emerald-600 text-white'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm border border-emerald-400/40'
+              : 'text-emerald-300 hover:text-white hover:bg-emerald-900/40'
           }`}
         >
-          Semua ({totalPU})
+          Tampilkan Semua ({totalPU})
         </button>
       </div>
 
@@ -96,13 +96,13 @@ export const LegendWidget: React.FC<LegendWidgetProps> = ({
               key={c.id}
               id={`legend-filter-${c.id}-btn`}
               onClick={() => onSelectCategoryFilter(isActive ? 'all' : c.id)}
-              className={`p-2 rounded-lg border text-left transition-all relative flex flex-col justify-between ${
+              className={`p-2.5 rounded-xl border text-left transition-all relative flex flex-col justify-between ${
                 isActive
-                  ? 'ring-2 ring-cyan-400 bg-slate-800/90 border-slate-600 shadow-md'
-                  : 'bg-slate-950/50 hover:bg-slate-800/60 border-slate-800'
+                  ? 'ring-2 ring-lime-400 bg-[#064a3e] border-emerald-400 shadow-md'
+                  : 'bg-[#022720]/80 hover:bg-[#053d33] border-emerald-500/25'
               }`}
             >
-              <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-2">
                   <span
                     className="w-3.5 h-3.5 rounded-full inline-block shadow-sm"
@@ -111,20 +111,20 @@ export const LegendWidget: React.FC<LegendWidgetProps> = ({
                       border: `1.5px solid ${c.borderHex}`,
                     }}
                   />
-                  <span className="font-bold text-slate-100 text-xs">{c.range}</span>
+                  <span className="font-bold text-white text-xs">{c.range}</span>
                 </div>
-                <span className="font-mono text-xs font-bold px-1.5 py-0.2 rounded bg-slate-800 text-slate-300">
+                <span className="font-mono text-xs font-bold px-1.5 py-0.5 rounded bg-emerald-950/80 text-lime-300 border border-emerald-500/30">
                   {c.count} PU
                 </span>
               </div>
 
-              <div className="text-[10px] text-slate-400 leading-tight">
-                <span className="font-medium text-slate-300 block">{c.label}:</span>
+              <div className="text-[10px] text-emerald-200/80 leading-tight">
+                <span className="font-semibold text-emerald-100 block">{c.label}:</span>
                 {c.keterangan}
               </div>
 
               {isActive && (
-                <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-cyan-400" />
+                <div className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-lime-400 animate-ping" />
               )}
             </button>
           );

@@ -290,6 +290,74 @@ export class ApiService {
     }
   }
 
+  // Bulk import multiple Petak Ukur (e.g. from Excel / CSV)
+  static async bulkImportPetakUkur(
+    items: PetakUkur[],
+    mode: 'replace' | 'merge' = 'merge'
+  ): Promise<{ data: PetakUkur[]; count: number; notification?: AppNotification }> {
+    let resultData: PetakUkur[] | null = null;
+    let resultNotif: AppNotification | undefined = undefined;
+
+    try {
+      const res = await fetch('/api/pu/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items, mode }),
+      });
+      if (res.ok) {
+        const json = await res.json();
+        resultData = json.data;
+        resultNotif = json.notification;
+        if (Array.isArray(resultData)) {
+          saveLocalPUList(resultData);
+        }
+      }
+    } catch {
+      // server unavailable, fallback to local
+    }
+
+    if (!resultData) {
+      if (mode === 'replace') {
+        resultData = [...items];
+      } else {
+        const current = getLocalPUList();
+        const existingCodes = new Set(current.map((p) => p.kodePU.toUpperCase()));
+        const toAdd: PetakUkur[] = [];
+        for (const it of items) {
+          const code = (it.kodePU || '').toUpperCase();
+          if (existingCodes.has(code)) {
+            const idx = current.findIndex((p) => p.kodePU.toUpperCase() === code);
+            if (idx !== -1) {
+              current[idx] = { ...current[idx], ...it };
+            }
+          } else {
+            toAdd.push(it);
+          }
+        }
+        resultData = [...toAdd, ...current];
+      }
+      saveLocalPUList(resultData);
+
+      const notif: AppNotification = {
+        id: `notif-${Date.now()}`,
+        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+        type: 'success',
+        title: `Impor Excel Berhasil (${items.length} PU)`,
+        message: `Database PU diperbarui sebanyak ${items.length} titik petak ukur.`,
+        isRead: false,
+      };
+      const notifs = getLocalNotifs();
+      saveLocalNotifs([notif, ...notifs]);
+      resultNotif = notif;
+    }
+
+    return {
+      data: resultData,
+      count: items.length,
+      notification: resultNotif,
+    };
+  }
+
   // Reset to default sample
   static async resetData(): Promise<PetakUkur[]> {
     try {

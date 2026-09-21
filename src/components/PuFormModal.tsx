@@ -23,6 +23,7 @@ import {
   UserCheck,
   FileText,
   Percent,
+  FileSpreadsheet,
 } from 'lucide-react';
 
 interface PuFormModalProps {
@@ -30,6 +31,7 @@ interface PuFormModalProps {
   onClose: () => void;
   onSave: (data: Partial<PetakUkur>) => Promise<void>;
   initialData?: PetakUkur | null;
+  onOpenExcelImport?: () => void;
 }
 
 export const PuFormModal: React.FC<PuFormModalProps> = ({
@@ -37,6 +39,7 @@ export const PuFormModal: React.FC<PuFormModalProps> = ({
   onClose,
   onSave,
   initialData,
+  onOpenExcelImport,
 }) => {
   // 1. Tanggal pengambilan data
   const [tanggalPengambilanData, setTanggalPengambilanData] = useState<string>(
@@ -444,6 +447,32 @@ export const PuFormModal: React.FC<PuFormModalProps> = ({
             <div className="p-3 rounded-xl bg-rose-950/80 border border-rose-600 text-rose-300 flex items-start gap-2">
               <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
               <span>{validationError}</span>
+            </div>
+          )}
+
+          {/* Quick Excel Import Helper Banner */}
+          {onOpenExcelImport && !initialData && (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-emerald-950/40 border border-emerald-500/40 rounded-xl">
+              <div className="flex items-center gap-2.5 text-xs text-emerald-300">
+                <FileSpreadsheet className="w-5 h-5 text-emerald-400 shrink-0" />
+                <div>
+                  <span className="font-bold text-white block">Punya database PU dalam file Excel (.xlsx)?</span>
+                  <span className="text-slate-300 text-[11px]">
+                    Tidak perlu input satu per satu! Sistem dapat membaca langsung puluhan/ratusan baris data Anda sekaligus.
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenExcelImport();
+                }}
+                className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg shadow-md shrink-0 transition-colors flex items-center justify-center gap-1.5"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5" />
+                Impor File Excel Sekaligus
+              </button>
             </div>
           )}
 
