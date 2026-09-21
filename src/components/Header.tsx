@@ -10,6 +10,8 @@ import {
   Users,
   RotateCcw,
   Sparkles,
+  FileSpreadsheet,
+  Layers,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -19,10 +21,14 @@ interface HeaderProps {
   onExportPdf: () => void;
   onOpenShareModal: () => void;
   onOpenNotifications: () => void;
+  onOpenGoogleSheets: () => void;
+  isGoogleSheetsConnected: boolean;
   unreadNotifCount: number;
   isRealtimeConnected: boolean;
   activeClientsCount: number;
   onResetData: () => void;
+  onOpenBoundaryModal?: () => void;
+  boundaryCount?: number;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -32,10 +38,14 @@ export const Header: React.FC<HeaderProps> = ({
   onExportPdf,
   onOpenShareModal,
   onOpenNotifications,
+  onOpenGoogleSheets,
+  isGoogleSheetsConnected,
   unreadNotifCount,
   isRealtimeConnected,
   activeClientsCount,
   onResetData,
+  onOpenBoundaryModal,
+  boundaryCount = 0,
 }) => {
   return (
     <header className="w-full bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 py-3 sticky top-0 z-50">
@@ -126,6 +136,46 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <FileDown className="w-3.5 h-3.5 text-cyan-400" />
             <span className="hidden sm:inline">Laporan PDF</span>
+          </button>
+
+          {/* Boundary Area SHP / KML Button */}
+          {onOpenBoundaryModal && (
+            <button
+              id="header-boundary-btn"
+              onClick={onOpenBoundaryModal}
+              title="Unggah & Kelola Boundary Area Peta (SHP / KML)"
+              className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 flex items-center gap-1.5 transition-colors"
+            >
+              <Layers className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="hidden sm:inline">Boundary Area</span>
+              {boundaryCount > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-cyan-500/20 text-cyan-300 font-mono font-bold border border-cyan-500/30">
+                  {boundaryCount}
+                </span>
+              )}
+            </button>
+          )}
+
+          {/* Google Sheets & Drive Backend Button */}
+          <button
+            id="header-gsheets-btn"
+            onClick={onOpenGoogleSheets}
+            title="Hubungkan & Sinkronkan ke Google Drive & Google Sheets"
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border flex items-center gap-1.5 transition-all shadow-sm ${
+              isGoogleSheetsConnected
+                ? 'bg-emerald-950/70 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/60'
+                : 'bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border-emerald-500/40 animate-pulse'
+            }`}
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Google Drive & Sheet</span>
+            {isGoogleSheetsConnected ? (
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            ) : (
+              <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-[10px] text-emerald-300 border border-emerald-500/30 font-bold">
+                Hubungkan
+              </span>
+            )}
           </button>
 
           {/* Share Social & Team Button */}

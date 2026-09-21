@@ -1,6 +1,13 @@
 import { PetakUkur, AppNotification } from '../types';
 import { INITIAL_PETAK_UKUR, INITIAL_NOTIFICATIONS } from '../data/defaultData';
 import { calculateSurvivalRate, getCategoryInfo } from '../utils/survivalHelper';
+import { GoogleSheetsBackend } from './googleSheetsBackend';
+import {
+  getAccessToken,
+  getSavedSpreadsheetId,
+  saveSinglePUToGoogleSheet,
+  fetchPUsFromGoogleSheet,
+} from './googleSheetsDirectService';
 
 const LOCAL_STORAGE_KEY = 'das_rehabilitasi_pu_v1';
 const NOTIF_STORAGE_KEY = 'das_rehabilitasi_notif_v1';
@@ -34,8 +41,22 @@ function saveLocalNotifs(notifs: AppNotification[]): void {
 }
 
 export class ApiService {
-  // Get all PU data from server or fallback to local storage
+  // Get all PU data from server, Google Sheets, or fallback to local storage
   static async getPetakUkurList(): Promise<PetakUkur[]> {
+    // 1. Try Google Sheets if configured
+    if (GoogleSheetsBackend.isConnected()) {
+      try {
+        const sheetData = await GoogleSheetsBackend.fetchFromSheet();
+        if (Array.isArray(sheetData) && sheetData.length > 0) {
+          saveLocalPUList(sheetData);
+          return sheetData;
+        }
+      } catch (err) {
+        console.warn('Google Sheets fetch failed, falling back:', err);
+      }
+    }
+
+    // 2. Try Node/Express backend server
     try {
       const res = await fetch('/api/pu');
       if (res.ok) {
@@ -72,6 +93,9 @@ export class ApiService {
 
   // Save new PU
   static async createPetakUkur(payload: Partial<PetakUkur>): Promise<{ pu: PetakUkur; notification?: AppNotification }> {
+    let savedPu: PetakUkur | null = null;
+    let savedNotif: AppNotification | undefined = undefined;
+
     try {
       const res = await fetch('/api/pu', {
         method: 'POST',
@@ -80,68 +104,91 @@ export class ApiService {
       });
       if (res.ok) {
         const json = await res.json();
-        return { pu: json.data, notification: json.notification };
+        savedPu = json.data;
+        savedNotif = json.notification;
       }
     } catch {
       // Fallback to local storage (e.g. on GitHub Pages static deployment)
     }
 
-    const list = getLocalPUList();
-    const tanamanAwal = Number(payload.tanamanAwal) || 50;
-    const tanamanHidup = Math.min(Number(payload.tanamanHidup) || 0, tanamanAwal);
-    const { rate, category } = calculateSurvivalRate(tanamanHidup, tanamanAwal);
-    const catInfo = getCategoryInfo(category);
-    const sulam = Math.max(0, tanamanAwal - tanamanHidup);
+    if (!savedPu) {
+      const list = getLocalPUList();
+      const tanamanAwal = Number(payload.tanamanAwal) || 50;
+      const tanamanHidup = Math.min(Number(payload.tanamanHidup) || 0, tanamanAwal);
+      const { rate, category } = calculateSurvivalRate(tanamanHidup, tanamanAwal);
+      const catInfo = getCategoryInfo(category);
+      const sulam = Math.max(0, tanamanAwal - tanamanHidup);
 
-    const newPu: PetakUkur = {
-      id: `pu-${Date.now()}`,
-      kodePU: payload.kodePU?.trim() || `PU-${list.length + 1}`,
-      subDas: payload.subDas || 'Sub-DAS Citarum Hulu',
-      blok: payload.blok || 'Blok Lapangan',
-      desa: payload.desa || '-',
-      kecamatan: payload.kecamatan || '-',
-      latitude: Number(payload.latitude) || -7.15,
-      longitude: Number(payload.longitude) || 107.65,
-      luasHa: Number(payload.luasHa) || 0.1,
-      jenisTanaman: Array.isArray(payload.jenisTanaman) && payload.jenisTanaman.length > 0 ? payload.jenisTanaman : ['Puspa', 'Damar'],
-      tanamanAwal,
-      tanamanHidup,
-      tanamanMerana: Number(payload.tanamanMerana) || 0,
-      survivalRate: rate,
-      kategori: category,
-      tinggiRataRataCm: Number(payload.tinggiRataRataCm) || 120,
-      tutupanTajukPersen: Number(payload.tutupanTajukPersen) || 25,
-      tahunTanam: Number(payload.tahunTanam) || 2024,
-      periodeEvaluasi: payload.periodeEvaluasi || 'P1 (Tahun 1)',
-      kesehatanTanaman: payload.kesehatanTanaman || 'Cukup Sehat',
-      kebutuhanPenyulaman: sulam,
-      rekomendasi: payload.rekomendasi || catInfo.rekomendasiStandar,
-      tanggalEvaluasi: payload.tanggalEvaluasi || new Date().toISOString().split('T')[0],
-      evaluator: payload.evaluator || 'Tim Surveyor Rehabilitasi DAS',
-      catatan: payload.catatan || '',
-      updatedAt: new Date().toISOString(),
-    };
+      const newPu: PetakUkur = {
+        id: `pu-${Date.now()}`,
+        kodePU: payload.kodePU?.trim() || `PU-${list.length + 1}`,
+        subDas: payload.subDas || 'Sub-DAS Citarum Hulu',
+        blok: payload.blok || 'Blok Lapangan',
+        desa: payload.desa || '-',
+        kecamatan: payload.kecamatan || '-',
+        latitude: Number(payload.latitude) || -7.15,
+        longitude: Number(payload.longitude) || 107.65,
+        luasHa: Number(payload.luasHa) || 0.1,
+        jenisTanaman: Array.isArray(payload.jenisTanaman) && payload.jenisTanaman.length > 0 ? payload.jenisTanaman : ['Puspa', 'Damar'],
+        tanamanAwal,
+        tanamanHidup,
+        tanamanMerana: Number(payload.tanamanMerana) || 0,
+        survivalRate: rate,
+        kategori: category,
+        tinggiRataRataCm: Number(payload.tinggiRataRataCm) || 120,
+        tutupanTajukPersen: Number(payload.tutupanTajukPersen) || 25,
+        tahunTanam: Number(payload.tahunTanam) || 2024,
+        periodeEvaluasi: payload.periodeEvaluasi || 'P1 (Tahun 1)',
+        kesehatanTanaman: payload.kesehatanTanaman || 'Cukup Sehat',
+        kebutuhanPenyulaman: sulam,
+        rekomendasi: payload.rekomendasi || catInfo.rekomendasiStandar,
+        tanggalEvaluasi: payload.tanggalEvaluasi || new Date().toISOString().split('T')[0],
+        evaluator: payload.evaluator || 'Tim Surveyor Rehabilitasi DAS',
+        catatan: payload.catatan || '',
+        updatedAt: new Date().toISOString(),
+      };
 
-    saveLocalPUList([newPu, ...list]);
+      saveLocalPUList([newPu, ...list]);
 
-    const notif: AppNotification = {
-      id: `notif-${Date.now()}`,
-      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
-      type: category === 'hitam' ? 'alert' : category === 'merah' ? 'warning' : 'success',
-      title: `Petak Ukur Baru: ${newPu.kodePU} (SR ${rate}%)`,
-      message: `Tercatat di ${newPu.blok}, ${newPu.subDas}. Status: ${catInfo.name}.`,
-      petakUkurId: newPu.id,
-      isRead: false,
-    };
+      const notif: AppNotification = {
+        id: `notif-${Date.now()}`,
+        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+        type: category === 'hitam' ? 'alert' : category === 'merah' ? 'warning' : 'success',
+        title: `Petak Ukur Baru: ${newPu.kodePU} (SR ${rate}%)`,
+        message: `Tercatat di ${newPu.blok}, ${newPu.subDas}. Status: ${catInfo.name}.`,
+        petakUkurId: newPu.id,
+        isRead: false,
+      };
 
-    const notifs = getLocalNotifs();
-    saveLocalNotifs([notif, ...notifs]);
+      const notifs = getLocalNotifs();
+      saveLocalNotifs([notif, ...notifs]);
 
-    return { pu: newPu, notification: notif };
+      savedPu = newPu;
+      savedNotif = notif;
+    }
+
+    // Auto-sync to Google Sheet if connected (Webhook)
+    if (GoogleSheetsBackend.isConnected() && savedPu) {
+      GoogleSheetsBackend.savePU(savedPu).catch((e) => console.warn('Sync to Google Sheets Webhook failed:', e));
+    }
+
+    // Auto-sync to Direct Google Account Sheets
+    const directToken = getAccessToken();
+    const sheetId = getSavedSpreadsheetId();
+    if (directToken && sheetId && savedPu) {
+      saveSinglePUToGoogleSheet(directToken, sheetId, savedPu).catch((e) =>
+        console.warn('Sync to Direct Google Sheet failed:', e)
+      );
+    }
+
+    return { pu: savedPu, notification: savedNotif };
   }
 
   // Update existing PU
   static async updatePetakUkur(id: string, payload: Partial<PetakUkur>): Promise<{ pu: PetakUkur; notification?: AppNotification }> {
+    let updatedPu: PetakUkur | null = null;
+    let updatedNotif: AppNotification | undefined = undefined;
+
     try {
       const res = await fetch(`/api/pu/${id}`, {
         method: 'PUT',
@@ -150,60 +197,97 @@ export class ApiService {
       });
       if (res.ok) {
         const json = await res.json();
-        return { pu: json.data, notification: json.notification };
+        updatedPu = json.data;
+        updatedNotif = json.notification;
       }
     } catch {
       // Fallback
     }
 
-    const list = getLocalPUList();
-    const existing = list.find((p) => p.id === id);
-    if (!existing) throw new Error('Petak ukur tidak ditemukan.');
+    if (!updatedPu) {
+      const list = getLocalPUList();
+      const existing = list.find((p) => p.id === id);
+      if (!existing) throw new Error('Petak ukur tidak ditemukan.');
 
-    const tanamanAwal = payload.tanamanAwal !== undefined ? Number(payload.tanamanAwal) : existing.tanamanAwal;
-    const tanamanHidup = payload.tanamanHidup !== undefined ? Number(payload.tanamanHidup) : existing.tanamanHidup;
-    const { rate, category } = calculateSurvivalRate(tanamanHidup, tanamanAwal);
-    const catInfo = getCategoryInfo(category);
+      const tanamanAwal: number =
+        payload.tanamanAwal !== undefined
+          ? Number(payload.tanamanAwal)
+          : existing.tanamanAwal ?? 50;
+      const tanamanHidup: number =
+        payload.tanamanHidup !== undefined
+          ? Number(payload.tanamanHidup)
+          : existing.tanamanHidup ??
+            Math.round(((payload.survivalRate || payload.persentaseHidup || existing.survivalRate || 0) / 100) * tanamanAwal);
+      const { rate, category } = calculateSurvivalRate(tanamanHidup, tanamanAwal);
+      const finalCategory = payload.kategori || category;
+      const catInfo = getCategoryInfo(finalCategory);
 
-    const updatedPu: PetakUkur = {
-      ...existing,
-      ...payload,
-      tanamanAwal,
-      tanamanHidup,
-      survivalRate: rate,
-      kategori: category,
-      kebutuhanPenyulaman: Math.max(0, tanamanAwal - tanamanHidup),
-      rekomendasi: payload.rekomendasi || catInfo.rekomendasiStandar,
-      updatedAt: new Date().toISOString(),
-    };
+      const puObj: PetakUkur = {
+        ...existing,
+        ...payload,
+        tanamanAwal,
+        tanamanHidup,
+        survivalRate: payload.survivalRate !== undefined ? Number(payload.survivalRate) : rate,
+        kategori: finalCategory,
+        kebutuhanPenyulaman: Math.max(0, tanamanAwal - tanamanHidup),
+        rekomendasi: payload.rekomendasi || catInfo.rekomendasiStandar,
+        updatedAt: new Date().toISOString(),
+      };
 
-    saveLocalPUList(list.map((p) => (p.id === id ? updatedPu : p)));
+      saveLocalPUList(list.map((p) => (p.id === id ? puObj : p)));
 
-    const notif: AppNotification = {
-      id: `notif-${Date.now()}`,
-      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
-      type: category === 'hitam' ? 'alert' : category === 'merah' ? 'warning' : 'info',
-      title: `Pembaruan Nilai: ${updatedPu.kodePU} (SR ${rate}%)`,
-      message: `Perubahan data evaluasi tersimpan di ${updatedPu.blok}.`,
-      petakUkurId: updatedPu.id,
-      isRead: false,
-    };
+      const notif: AppNotification = {
+        id: `notif-${Date.now()}`,
+        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+        type: category === 'hitam' ? 'alert' : category === 'merah' ? 'warning' : 'info',
+        title: `Pembaruan Nilai: ${puObj.kodePU} (SR ${rate}%)`,
+        message: `Perubahan data evaluasi tersimpan di ${puObj.blok}.`,
+        petakUkurId: puObj.id,
+        isRead: false,
+      };
 
-    const notifs = getLocalNotifs();
-    saveLocalNotifs([notif, ...notifs]);
+      const notifs = getLocalNotifs();
+      saveLocalNotifs([notif, ...notifs]);
 
-    return { pu: updatedPu, notification: notif };
+      updatedPu = puObj;
+      updatedNotif = notif;
+    }
+
+    // Auto-sync to Google Sheet if connected (Webhook)
+    if (GoogleSheetsBackend.isConnected() && updatedPu) {
+      GoogleSheetsBackend.savePU(updatedPu).catch((e) => console.warn('Sync to Google Sheets Webhook failed:', e));
+    }
+
+    // Auto-sync to Direct Google Account Sheets
+    const directToken = getAccessToken();
+    const sheetId = getSavedSpreadsheetId();
+    if (directToken && sheetId && updatedPu) {
+      saveSinglePUToGoogleSheet(directToken, sheetId, updatedPu).catch((e) =>
+        console.warn('Sync to Direct Google Sheet failed:', e)
+      );
+    }
+
+    return { pu: updatedPu, notification: updatedNotif };
   }
 
   // Delete PU
   static async deletePetakUkur(id: string): Promise<void> {
     try {
       const res = await fetch(`/api/pu/${id}`, { method: 'DELETE' });
-      if (res.ok) return;
+      if (res.ok) {
+        if (GoogleSheetsBackend.isConnected()) {
+          GoogleSheetsBackend.deletePU(id).catch(() => {});
+        }
+        return;
+      }
     } catch {}
 
     const list = getLocalPUList();
     saveLocalPUList(list.filter((p) => p.id !== id));
+
+    if (GoogleSheetsBackend.isConnected()) {
+      GoogleSheetsBackend.deletePU(id).catch(() => {});
+    }
   }
 
   // Reset to default sample

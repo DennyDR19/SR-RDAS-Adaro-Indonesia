@@ -126,23 +126,35 @@ export function computeDasMetrics(puList: PetakUkur[]) {
   const subDasMap: Record<string, { count: number; sumSR: number; hidup: number; awal: number }> = {};
 
   puList.forEach((pu) => {
-    totalAwal += pu.tanamanAwal;
-    totalHidup += pu.tanamanHidup;
-    totalSulam += pu.kebutuhanPenyulaman;
-    totalSRSum += pu.survivalRate;
+    const awal = pu.tanamanAwal || 50;
+    const hidup =
+      pu.tanamanHidup !== undefined
+        ? pu.tanamanHidup
+        : Math.round(((pu.survivalRate || 0) / 100) * awal);
+    const sulam =
+      pu.kebutuhanPenyulaman !== undefined
+        ? pu.kebutuhanPenyulaman
+        : Math.max(0, awal - hidup);
+    const sr = pu.persentaseHidup !== undefined ? pu.persentaseHidup : pu.survivalRate || 0;
+    const sDas = pu.das || pu.subDas || 'Sub-DAS Citarum';
+
+    totalAwal += awal;
+    totalHidup += hidup;
+    totalSulam += sulam;
+    totalSRSum += sr;
     countByKategori[pu.kategori]++;
 
-    if (pu.survivalRate >= 75) {
+    if (sr >= 75) {
       countLulus++;
     }
 
-    if (!subDasMap[pu.subDas]) {
-      subDasMap[pu.subDas] = { count: 0, sumSR: 0, hidup: 0, awal: 0 };
+    if (!subDasMap[sDas]) {
+      subDasMap[sDas] = { count: 0, sumSR: 0, hidup: 0, awal: 0 };
     }
-    subDasMap[pu.subDas].count++;
-    subDasMap[pu.subDas].sumSR += pu.survivalRate;
-    subDasMap[pu.subDas].hidup += pu.tanamanHidup;
-    subDasMap[pu.subDas].awal += pu.tanamanAwal;
+    subDasMap[sDas].count++;
+    subDasMap[sDas].sumSR += sr;
+    subDasMap[sDas].hidup += hidup;
+    subDasMap[sDas].awal += awal;
   });
 
   const distribusiSubDas = Object.keys(subDasMap).map((subDas) => {

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
-import { PetakUkur, SurvivalCategory } from '../types';
+import { PetakUkur, SurvivalCategory, CustomBoundary } from '../types';
 import { CATEGORY_INFO_MAP, getCategoryInfo } from '../utils/survivalHelper';
-import { Layers, MapPin, Eye, Filter, RefreshCw, ZoomIn, ZoomOut, Crosshair } from 'lucide-react';
+import { Layers, MapPin, Eye, Filter, RefreshCw, ZoomIn, ZoomOut, Crosshair, FolderArchive } from 'lucide-react';
 
 interface DasMapProps {
   puList: PetakUkur[];
@@ -11,6 +11,9 @@ interface DasMapProps {
   onOpenDetail: (pu: PetakUkur) => void;
   activeCategoryFilter: string;
   activeSubDasFilter: string;
+  customBoundaries?: CustomBoundary[];
+  onOpenBoundaryModal?: () => void;
+  focusedBoundary?: CustomBoundary | null;
 }
 
 type TileLayerType = 'satellite' | 'streets' | 'topo';
@@ -36,12 +39,16 @@ export const DasMap: React.FC<DasMapProps> = ({
   onOpenDetail,
   activeCategoryFilter,
   activeSubDasFilter,
+  customBoundaries = [],
+  onOpenBoundaryModal,
+  focusedBoundary = null,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersLayerRef = useRef<L.LayerGroup | null>(null);
   const boundaryLayerRef = useRef<L.Polygon | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
+  const customBoundaryLayersRef = useRef<{ [id: string]: L.GeoJSON }>({});
 
   const [activeTile, setActiveTile] = useState<TileLayerType>('satellite');
   const [showBoundary, setShowBoundary] = useState<boolean>(true);
@@ -129,6 +136,133 @@ export const DasMap: React.FC<DasMapProps> = ({
     }
   }, [showBoundary]);
 
+  // Synchronize and render Custom Boundaries (SHP / KML / GeoJSON)
+  useEffect(() => {
+    if (!mapInstanceRef.current) return;
+    const map = mapInstanceRef.current;
+    const currentLayerIds = new Set(customBoundaries.map((b) => b.id));
+
+    // Remove obsolete layers
+    Object.keys(customBoundaryLayersRef.current).forEach((id) => {
+      if (!currentLayerIds.has(id)) {
+        const layer = customBoundaryLayersRef.current[id];
+        if (layer && map.hasLayer(layer)) {
+          map.removeLayer(layer);
+        }
+        delete customBoundaryLayersRef.current[id];
+      }
+    });
+
+    // Add or update layers
+    customBoundaries.forEach((b) => {
+      let geoJsonLayer = customBoundaryLayersRef.current[b.id];
+
+      if (!geoJsonLayer) {
+        try {
+          geoJsonLayer = L.geoJSON(b.data, {
+            style: () => ({
+              color: b.color,
+              fillColor: b.fillColor,
+              fillOpacity: b.fillOpacity,
+              weight: b.weight,
+              dashArray: b.dashArray === 'none' ? undefined : b.dashArray,
+            }),
+            onEachFeature: (feature, layer) => {
+              const props = feature.properties || {};
+              const propKeys = Object.keys(props).filter(
+                (k) => typeof props[k] !== 'object' && props[k] !== null && props[k] !== undefined
+              );
+
+              const propsRows = propKeys.slice(0, 8).map(
+                (k) => `
+                <tr class="border-b border-slate-800/80">
+                  <td class="text-slate-400 font-mono text-[10px] py-1 pr-2 whitespace-nowrap">${k}</td>
+                  <td class="text-slate-200 font-medium text-[11px] py-1">${String(props[k])}</td>
+                </tr>
+              `
+              ).join('');
+
+              const popupHtml = `
+                <div class="p-3 max-w-[280px] bg-slate-900 text-slate-100 rounded-xl shadow-2xl border border-slate-700 text-xs">
+                  <div class="flex items-center gap-2 pb-1.5 mb-2 border-b border-slate-800">
+                    <span class="w-3 h-3 rounded-full shrink-0 border border-white/40" style="background-color: ${b.color};"></span>
+                    <span class="font-bold text-slate-100 truncate">${b.name}</span>
+                  </div>
+                  <div class="flex items-center justify-between text-[10px] text-slate-400 mb-2 bg-slate-950/60 px-2 py-1 rounded">
+                    <span>Format: <b class="text-cyan-400 uppercase font-mono">${b.fileType}</b></span>
+                    <span class="truncate max-w-[130px] font-mono text-slate-500">${b.fileName}</span>
+                  </div>
+                  ${
+                    propsRows
+                      ? `
+                    <div class="max-h-40 overflow-y-auto pr-1">
+                      <table class="w-full text-left">
+                        <tbody>${propsRows}</tbody>
+                      </table>
+                    </div>
+                  `
+                      : '<div class="text-[11px] text-slate-500 italic py-1">Tidak ada atribut khusus dalam file spasial ini.</div>'
+                  }
+                </div>
+              `;
+
+              layer.bindTooltip(`<b>${b.name}</b>`, {
+                sticky: true,
+                className: 'leaflet-custom-tooltip',
+              });
+              layer.bindPopup(popupHtml, { className: 'leaflet-custom-popup' });
+            },
+          });
+
+          customBoundaryLayersRef.current[b.id] = geoJsonLayer;
+        } catch (err) {
+          console.error(`Error rendering GeoJSON boundary ${b.name}:`, err);
+        }
+      } else {
+        // Update layer styles dynamically
+        geoJsonLayer.setStyle({
+          color: b.color,
+          fillColor: b.fillColor,
+          fillOpacity: b.fillOpacity,
+          weight: b.weight,
+          dashArray: b.dashArray === 'none' ? undefined : b.dashArray,
+        });
+      }
+
+      if (geoJsonLayer) {
+        if (b.visible) {
+          if (!map.hasLayer(geoJsonLayer)) {
+            geoJsonLayer.addTo(map);
+            geoJsonLayer.bringToBack();
+          }
+        } else {
+          if (map.hasLayer(geoJsonLayer)) {
+            map.removeLayer(geoJsonLayer);
+          }
+        }
+      }
+    });
+  }, [customBoundaries]);
+
+  // Fit bounds when focusedBoundary changes
+  useEffect(() => {
+    if (!focusedBoundary || !mapInstanceRef.current) return;
+    const layer = customBoundaryLayersRef.current[focusedBoundary.id];
+    if (layer) {
+      try {
+        const bounds = layer.getBounds();
+        if (bounds.isValid()) {
+          mapInstanceRef.current.fitBounds(bounds, {
+            padding: [50, 50],
+            maxZoom: 15,
+          });
+        }
+      } catch (e) {
+        console.warn('Could not fit to boundary bounds:', e);
+      }
+    }
+  }, [focusedBoundary]);
+
   // Render Petak Ukur Markers with interactive popups & hover
   useEffect(() => {
     if (!mapInstanceRef.current || !markersLayerRef.current) return;
@@ -139,12 +273,20 @@ export const DasMap: React.FC<DasMapProps> = ({
     // Filter items
     const filteredList = puList.filter((pu) => {
       if (activeCategoryFilter !== 'all' && pu.kategori !== activeCategoryFilter) return false;
-      if (activeSubDasFilter !== 'all' && pu.subDas !== activeSubDasFilter) return false;
+      const dasVal = pu.das || pu.subDas;
+      if (activeSubDasFilter !== 'all' && dasVal !== activeSubDasFilter) return false;
       return true;
     });
 
     filteredList.forEach((pu) => {
       const catInfo = getCategoryInfo(pu.kategori);
+      const awal = pu.tanamanAwal || 50;
+      const hidup =
+        pu.tanamanHidup !== undefined
+          ? pu.tanamanHidup
+          : Math.round(((pu.survivalRate || 0) / 100) * awal);
+      const namaDas = pu.das || pu.subDas;
+      const utmLabel = pu.koordinatUtm || `${pu.latitude.toFixed(4)}, ${pu.longitude.toFixed(4)}`;
 
       // Color scheme for marker symbol
       // 0-40%: Hitam, >40-<75%: Merah, 75-80%: Kuning, >80%: Hijau
@@ -221,7 +363,7 @@ export const DasMap: React.FC<DasMapProps> = ({
             </span>
           </div>
           <div class="text-[11px] text-slate-300 font-medium mb-1">
-            ${pu.blok} • ${pu.subDas}
+            ${pu.blok}${pu.petak ? ` (${pu.petak})` : ''} • ${namaDas}
           </div>
           <div class="grid grid-cols-2 gap-1.5 py-1 text-[11px] bg-slate-950/60 p-1.5 rounded mb-1.5">
             <div>
@@ -230,8 +372,11 @@ export const DasMap: React.FC<DasMapProps> = ({
             </div>
             <div>
               <span class="text-slate-400 block text-[10px]">Pohon Hidup</span>
-              <span class="font-bold text-sm text-slate-200">${pu.tanamanHidup} / ${pu.tanamanAwal} btg</span>
+              <span class="font-bold text-sm text-slate-200">${hidup} / ${awal} btg</span>
             </div>
+          </div>
+          <div class="text-[10px] text-cyan-400 font-mono mb-1 truncate">
+            UTM: ${utmLabel}
           </div>
           <div class="text-[10px] text-slate-400 mb-1">
             <strong class="text-slate-300">Jenis:</strong> ${pu.jenisTanaman.join(', ')}
@@ -357,6 +502,24 @@ export const DasMap: React.FC<DasMapProps> = ({
           <div className="w-2.5 h-2.5 rounded-full border border-sky-400 bg-sky-500/40" />
           {showBoundary ? 'Delineasi DAS Aktif' : 'Batas DAS Non-aktif'}
         </button>
+
+        {/* Boundary Area SHP / KML Manager Button */}
+        {onOpenBoundaryModal && (
+          <button
+            id="open-boundary-modal-btn"
+            onClick={onOpenBoundaryModal}
+            title="Kelola & Unggah Boundary Area Peta (SHP / KML)"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold border shadow-lg backdrop-blur-md flex items-center gap-2 self-start transition-all bg-slate-900/95 hover:bg-slate-850 text-cyan-300 border-cyan-500/40 hover:border-cyan-400 group"
+          >
+            <FolderArchive className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
+            <span>Boundary SHP / KML</span>
+            {customBoundaries.length > 0 && (
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-cyan-500/20 text-cyan-300 font-mono font-bold border border-cyan-500/30">
+                {customBoundaries.filter((b) => b.visible).length}
+              </span>
+            )}
+          </button>
+        )}
       </div>
 
       {/* Top Right Zoom and Control Tools */}
@@ -413,17 +576,19 @@ export const DasMap: React.FC<DasMapProps> = ({
           <div className="grid grid-cols-3 gap-2 py-1.5 px-2 bg-slate-950/80 rounded-lg text-center text-xs mb-2">
             <div>
               <span className="text-[10px] text-slate-400 block">Hidup / Awal</span>
-              <span className="font-semibold text-slate-200">{hoveredPu.tanamanHidup} / {hoveredPu.tanamanAwal}</span>
+              <span className="font-semibold text-slate-200">
+                {hoveredPu.tanamanHidup !== undefined ? hoveredPu.tanamanHidup : Math.round(((hoveredPu.survivalRate || 0) / 100) * (hoveredPu.tanamanAwal || 50))} / {hoveredPu.tanamanAwal || 50}
+              </span>
             </div>
             <div>
               <span className="text-[10px] text-slate-400 block">Kebutuhan Sulam</span>
-              <span className={`font-semibold ${hoveredPu.kebutuhanPenyulaman > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
-                {hoveredPu.kebutuhanPenyulaman} btg
+              <span className={`font-semibold ${(hoveredPu.kebutuhanPenyulaman ?? 0) > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                {hoveredPu.kebutuhanPenyulaman ?? 0} btg
               </span>
             </div>
             <div>
               <span className="text-[10px] text-slate-400 block">Tutupan Tajuk</span>
-              <span className="font-semibold text-slate-200">{hoveredPu.tutupanTajukPersen}%</span>
+              <span className="font-semibold text-slate-200">{hoveredPu.tutupanTajukPersen ?? Math.min(100, Math.round(hoveredPu.survivalRate * 0.6))}%</span>
             </div>
           </div>
           <p className="text-[11px] text-slate-300 line-clamp-1 italic">

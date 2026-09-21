@@ -88,13 +88,14 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
   // 3. Filtered PU table
   const filteredPuList = puList.filter((pu) => {
-    if (selectedSubDas !== 'all' && pu.subDas !== selectedSubDas) return false;
+    if (selectedSubDas !== 'all' && (pu.das || pu.subDas) !== selectedSubDas) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       return (
         pu.kodePU.toLowerCase().includes(q) ||
         pu.blok.toLowerCase().includes(q) ||
-        pu.desa.toLowerCase().includes(q) ||
+        (pu.lokasiDaerah || pu.desa || '').toLowerCase().includes(q) ||
+        (pu.das || pu.subDas || '').toLowerCase().includes(q) ||
         pu.jenisTanaman.some((j) => j.toLowerCase().includes(q))
       );
     }
@@ -418,6 +419,18 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <tbody className="divide-y divide-slate-800/60">
               {filteredPuList.map((pu) => {
                 const cat = CATEGORY_INFO_MAP[pu.kategori];
+                const awal = pu.tanamanAwal || 50;
+                const hidup =
+                  pu.tanamanHidup !== undefined
+                    ? pu.tanamanHidup
+                    : Math.round(((pu.survivalRate || 0) / 100) * awal);
+                const sulam =
+                  pu.kebutuhanPenyulaman !== undefined
+                    ? pu.kebutuhanPenyulaman
+                    : Math.max(0, awal - hidup);
+                const namaDas = pu.das || pu.subDas;
+                const srVal = pu.persentaseHidup !== undefined ? pu.persentaseHidup : pu.survivalRate;
+
                 return (
                   <tr
                     key={pu.id}
@@ -429,21 +442,26 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                   >
                     <td className="py-3 px-3 font-bold text-cyan-400 whitespace-nowrap">
                       {pu.kodePU}
+                      {pu.petak && (
+                        <span className="ml-1 text-[10px] text-slate-400 font-normal">
+                          ({pu.petak})
+                        </span>
+                      )}
                     </td>
                     <td className="py-3 px-3">
                       <div className="font-medium text-slate-200">{pu.blok}</div>
-                      <div className="text-[10px] text-slate-400">{pu.subDas}</div>
+                      <div className="text-[10px] text-slate-400">{namaDas}</div>
                     </td>
                     <td className="py-3 px-3 text-slate-300">
                       {pu.jenisTanaman.slice(0, 2).join(', ')}
                       {pu.jenisTanaman.length > 2 && '...'}
                     </td>
                     <td className="py-3 px-3 text-center font-mono text-slate-200 whitespace-nowrap">
-                      {pu.tanamanHidup} / {pu.tanamanAwal}
+                      {hidup} / {awal}
                     </td>
                     <td className="py-3 px-3 text-center">
                       <span className="font-bold text-sm" style={{ color: cat.colorHex }}>
-                        {pu.survivalRate}%
+                        {srVal}%
                       </span>
                     </td>
                     <td className="py-3 px-3 text-center">
@@ -456,14 +474,14 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                     <td className="py-3 px-3 text-center">
                       <span
                         className={`font-semibold font-mono ${
-                          pu.kebutuhanPenyulaman > 0 ? 'text-rose-400' : 'text-emerald-400'
+                          sulam > 0 ? 'text-rose-400' : 'text-emerald-400'
                         }`}
                       >
-                        {pu.kebutuhanPenyulaman} btg
+                        {sulam} btg
                       </span>
                     </td>
                     <td className="py-3 px-3 text-slate-300 text-[11px] max-w-xs truncate">
-                      {pu.rekomendasi}
+                      {pu.rekomendasi || (srVal >= 75 ? 'Pertahankan pemeliharaan intensif.' : 'Segera lakukan penyulaman bibit.')}
                     </td>
                     <td className="py-3 px-3 text-right">
                       <button

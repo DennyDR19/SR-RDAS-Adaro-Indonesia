@@ -1,6 +1,6 @@
 {
   "name": "Peta Kinerja Rehabilitasi DAS",
-  "description": "Sistem Informasi Geografis Pemantauan Kinerja Petak Ukur (PU) Rehabilitasi Daerah Aliran Sungai dengan Evaluasi Survival Rate Real-Time, Dasbor Analitik, Notifikasi, dan Ekspor PDF.",
+  "description": "Sistem Informasi Geografis Pemantauan Kinerja Petak Ukur (PU) Rehabilitasi Daerah Aliran Sungai dengan Evaluasi Survival Rate Real-Time, Integrasi Backend Google Sheets & Drive, Pengunggahan Boundary Area Spasial (SHP/KML), Dasbor Analitik, dan Ekspor PDF.",
   "requestFramePermissions": ["geolocation"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

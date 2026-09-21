@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { PetakUkur, AppNotification } from './types';
+import { PetakUkur, AppNotification, CustomBoundary } from './types';
 import { ApiService } from './services/apiService';
 import { computeDasMetrics } from './utils/survivalHelper';
 import { exportDasReportPdf } from './utils/pdfGenerator';
@@ -11,6 +11,15 @@ import { PuDetailModal } from './components/PuDetailModal';
 import { PuFormModal } from './components/PuFormModal';
 import { NotificationDrawer } from './components/NotificationDrawer';
 import { ShareModal } from './components/ShareModal';
+import { GoogleSheetsModal } from './components/GoogleSheetsModal';
+import { BoundaryModal } from './components/BoundaryModal';
+import { GoogleSheetsBackend } from './services/googleSheetsBackend';
+import { getAccessToken } from './services/googleSheetsDirectService';
+import {
+  getSavedBoundaries,
+  saveBoundaries,
+  getSampleBoundaries,
+} from './utils/boundaryParser';
 import {
   Search,
   Filter,
@@ -34,7 +43,17 @@ export default function App() {
   const [editingPu, setEditingPu] = useState<PetakUkur | null>(null);
   const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] = useState<boolean>(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+  const [isGoogleSheetsModalOpen, setIsGoogleSheetsModalOpen] = useState<boolean>(false);
+  const [isBoundaryModalOpen, setIsBoundaryModalOpen] = useState<boolean>(false);
   const [currentView, setCurrentView] = useState<'map' | 'analytics'>('map');
+
+  // Custom Map Area Boundaries (SHP / KML)
+  const [boundaries, setBoundaries] = useState<CustomBoundary[]>(() => {
+    const saved = getSavedBoundaries();
+    if (saved && saved.length > 0) return saved;
+    return getSampleBoundaries();
+  });
+  const [focusedBoundary, setFocusedBoundary] = useState<CustomBoundary | null>(null);
 
   // Filters
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>('all');
@@ -197,8 +216,9 @@ export default function App() {
       return (
         pu.kodePU.toLowerCase().includes(q) ||
         pu.blok.toLowerCase().includes(q) ||
-        pu.subDas.toLowerCase().includes(q) ||
-        pu.desa.toLowerCase().includes(q) ||
+        (pu.das || pu.subDas || '').toLowerCase().includes(q) ||
+        (pu.lokasiDaerah || pu.desa || '').toLowerCase().includes(q) ||
+        (pu.petak || '').toLowerCase().includes(q) ||
         pu.jenisTanaman.some((j) => j.toLowerCase().includes(q))
       );
     }
@@ -273,6 +293,45 @@ export default function App() {
     }
   };
 
+  // Custom Boundary Handlers
+  const handleAddBoundary = (boundary: CustomBoundary) => {
+    setBoundaries((prev) => {
+      const updated = [boundary, ...prev];
+      saveBoundaries(updated);
+      return updated;
+    });
+    setFocusedBoundary(boundary);
+  };
+
+  const handleUpdateBoundary = (updated: CustomBoundary) => {
+    setBoundaries((prev) => {
+      const next = prev.map((b) => (b.id === updated.id ? updated : b));
+      saveBoundaries(next);
+      return next;
+    });
+  };
+
+  const handleRemoveBoundary = (id: string) => {
+    setBoundaries((prev) => {
+      const next = prev.filter((b) => b.id !== id);
+      saveBoundaries(next);
+      return next;
+    });
+  };
+
+  const handleToggleBoundaryVisibility = (id: string) => {
+    setBoundaries((prev) => {
+      const next = prev.map((b) => (b.id === id ? { ...b, visible: !b.visible } : b));
+      saveBoundaries(next);
+      return next;
+    });
+  };
+
+  const handleFocusBoundary = (b: CustomBoundary) => {
+    setFocusedBoundary(b);
+    setCurrentView('map');
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       {/* Top Main Navigation Header */}
@@ -283,10 +342,14 @@ export default function App() {
         onExportPdf={() => exportDasReportPdf(puList)}
         onOpenShareModal={() => setIsShareModalOpen(true)}
         onOpenNotifications={() => setIsNotificationDrawerOpen(true)}
+        onOpenGoogleSheets={() => setIsGoogleSheetsModalOpen(true)}
+        isGoogleSheetsConnected={Boolean(getAccessToken() || GoogleSheetsBackend.isConnected())}
         unreadNotifCount={notifications.filter((n) => !n.isRead).length}
         isRealtimeConnected={isRealtimeConnected}
         activeClientsCount={activeClientsCount}
         onResetData={handleResetData}
+        onOpenBoundaryModal={() => setIsBoundaryModalOpen(true)}
+        boundaryCount={boundaries.length}
       />
 
       {/* Real-time Floating Toast Alert Banner */}
@@ -429,6 +492,9 @@ export default function App() {
                 }}
                 activeCategoryFilter={activeCategoryFilter}
                 activeSubDasFilter={activeSubDasFilter}
+                customBoundaries={boundaries}
+                onOpenBoundaryModal={() => setIsBoundaryModalOpen(true)}
+                focusedBoundary={focusedBoundary}
               />
             </div>
 
@@ -487,6 +553,32 @@ export default function App() {
         onMarkRead={handleMarkNotifRead}
         onMarkAllRead={handleMarkAllNotifRead}
         onSelectPuFromNotif={handleSelectPuFromNotif}
+      />
+
+      {/* Modal 5: Google Sheets Backend Database Integration */}
+      <GoogleSheetsModal
+        isOpen={isGoogleSheetsModalOpen}
+        onClose={() => setIsGoogleSheetsModalOpen(false)}
+        puList={puList}
+        onDataLoaded={(newList) => setPuList(newList)}
+        onShowToast={(title, desc, type) => {
+          setToastMessage({ title, desc, type });
+        }}
+      />
+
+      {/* Modal 6: Boundary Map Area (SHP / KML) Upload & Management */}
+      <BoundaryModal
+        isOpen={isBoundaryModalOpen}
+        onClose={() => setIsBoundaryModalOpen(false)}
+        boundaries={boundaries}
+        onAddBoundary={handleAddBoundary}
+        onUpdateBoundary={handleUpdateBoundary}
+        onRemoveBoundary={handleRemoveBoundary}
+        onToggleVisibility={handleToggleBoundaryVisibility}
+        onFocusBoundary={handleFocusBoundary}
+        onShowToast={(title, desc, type) => {
+          setToastMessage({ title, desc, type });
+        }}
       />
     </div>
   );

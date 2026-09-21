@@ -217,8 +217,15 @@ app.put('/api/pu/:id', (req: Request, res: Response) => {
     const existing = petakUkurStore[index];
     const body = req.body;
 
-    const tanamanAwal = body.tanamanAwal !== undefined ? Number(body.tanamanAwal) : existing.tanamanAwal;
-    const tanamanHidup = body.tanamanHidup !== undefined ? Number(body.tanamanHidup) : existing.tanamanHidup;
+    const tanamanAwal: number =
+      body.tanamanAwal !== undefined
+        ? Number(body.tanamanAwal)
+        : existing.tanamanAwal ?? 50;
+    const tanamanHidup: number =
+      body.tanamanHidup !== undefined
+        ? Number(body.tanamanHidup)
+        : existing.tanamanHidup ??
+          Math.round(((body.survivalRate || body.persentaseHidup || existing.survivalRate || 0) / 100) * tanamanAwal);
 
     if (tanamanHidup > tanamanAwal) {
       return res.status(400).json({ error: 'Jumlah tanaman hidup tidak boleh melebihi jumlah tanaman awal.' });
@@ -237,8 +244,8 @@ app.put('/api/pu/:id', (req: Request, res: Response) => {
       kodePU: body.kodePU ? body.kodePU.trim().toUpperCase() : existing.kodePU,
       tanamanAwal,
       tanamanHidup,
-      survivalRate: rate,
-      kategori: category,
+      survivalRate: body.survivalRate !== undefined ? Number(body.survivalRate) : rate,
+      kategori: body.kategori || category,
       kebutuhanPenyulaman,
       updatedAt: new Date().toISOString(),
     };

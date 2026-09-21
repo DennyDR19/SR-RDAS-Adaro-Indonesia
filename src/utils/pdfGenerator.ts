@@ -181,15 +181,24 @@ export function exportDasReportPdf(puList: PetakUkur[], title = 'Laporan Kinerja
   doc.text('2. TABEL DATA DETAIL PETAK UKUR (PU)', 14, lastY);
 
   const puRows = puList.map((pu, index) => {
+    const awal = pu.tanamanAwal || 50;
+    const hidup =
+      pu.tanamanHidup !== undefined
+        ? pu.tanamanHidup
+        : Math.round(((pu.survivalRate || 0) / 100) * awal);
+    const coordStr = pu.koordinatUtm
+      ? pu.koordinatUtm
+      : `${pu.latitude.toFixed(4)}, ${pu.longitude.toFixed(4)}`;
+
     return [
       pu.kodePU,
-      `${pu.blok}\n(${pu.subDas})`,
-      `${pu.latitude.toFixed(4)}, ${pu.longitude.toFixed(4)}`,
-      `${pu.tanamanHidup} / ${pu.tanamanAwal}`,
+      `${pu.blok}${pu.petak ? ` (${pu.petak})` : ''}\n(${pu.das || pu.subDas})`,
+      coordStr,
+      `${hidup} / ${awal}`,
       `${pu.survivalRate}%`,
       pu.kategori.toUpperCase(),
-      `${pu.kebutuhanPenyulaman} btg`,
-      pu.rekomendasi,
+      `${pu.kebutuhanPenyulaman !== undefined ? pu.kebutuhanPenyulaman : Math.max(0, awal - hidup)} btg`,
+      pu.rekomendasi || (pu.survivalRate >= 75 ? 'Pertahankan pemeliharaan berkala.' : 'Lakukan penyulaman bibit segera.'),
     ];
   });
 
