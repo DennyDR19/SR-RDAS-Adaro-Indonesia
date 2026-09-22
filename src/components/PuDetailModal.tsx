@@ -54,6 +54,20 @@ export const PuDetailModal: React.FC<PuDetailModalProps> = ({
 
   const survivalRateVal = pu.persentaseHidup !== undefined ? pu.persentaseHidup : pu.survivalRate;
   const tglPengambilan = pu.tanggalPengambilanData || pu.tanggalEvaluasi;
+  const rawInputDate = pu.tanggalInput || pu.tanggalTerinput || pu.updatedAt || pu.tanggalEvaluasi;
+  let formattedInputDate = rawInputDate;
+  try {
+    const d = new Date(rawInputDate);
+    if (!isNaN(d.getTime())) {
+      formattedInputDate = d.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      }) + (rawInputDate.includes('T') ? ` ${d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB` : '');
+    }
+  } catch {
+    // fallback
+  }
   const namaDas = pu.das || pu.subDas;
   const lokasi = pu.lokasiDaerah || (pu.desa ? `${pu.desa}, Kec. ${pu.kecamatan}` : 'Wilayah DAS');
   const namaAssessor = pu.assessor || pu.evaluator;
@@ -112,7 +126,7 @@ export const PuDetailModal: React.FC<PuDetailModalProps> = ({
               Identifikasi Geospasial & Administrasi Petak
             </h3>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
               <div>
                 <span className="text-slate-400 text-[10px] block">Kode Petak Ukur</span>
                 <span className="font-bold text-slate-100 font-mono text-sm">{pu.kodePU}</span>
@@ -126,8 +140,12 @@ export const PuDetailModal: React.FC<PuDetailModalProps> = ({
                 <span className="font-semibold text-slate-200">{namaDas}</span>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] block">Tanggal Ambil Data</span>
+                <span className="text-slate-400 text-[10px] block">Tgl Sensus Lapangan</span>
                 <span className="font-semibold text-slate-200">{tglPengambilan}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 text-[10px] block">Tgl Terinput ke Web</span>
+                <span className="font-semibold text-lime-300 font-mono text-[11px]">{formattedInputDate}</span>
               </div>
             </div>
 

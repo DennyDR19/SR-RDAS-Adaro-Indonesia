@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { PetakUkur } from '../types';
 import { computeDasMetrics, CATEGORY_INFO_MAP } from '../utils/survivalHelper';
 import {
@@ -27,7 +27,23 @@ import {
   ShieldCheck,
   Search,
   FileSpreadsheet,
+  Calendar,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  Clock,
+  Filter,
 } from 'lucide-react';
+
+export type SortField =
+  | 'updatedAt'
+  | 'survivalRate'
+  | 'kebutuhanPenyulaman'
+  | 'kodePU'
+  | 'blok'
+  | 'tanggalEvaluasi';
+
+export type SortOrder = 'asc' | 'desc';
 
 interface AnalyticsDashboardProps {
   puList: PetakUkur[];
@@ -53,6 +69,10 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   const isFiltered = activeFilterCount > 0 || (allPuList && puList.length < allPuList.length);
   const [selectedSubDas, setSelectedSubDas] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // Fitur "Urut Berdasarkan"
+  const [sortField, setSortField] = useState<SortField>('updatedAt');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
 
   // 1. Data for Donut Chart (Distribution by 4 user criteria)
   const donutData = [
@@ -137,6 +157,87 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     }
     return true;
   });
+
+  // Handler untuk mengubah pengurutan dari dropdown "Urut Berdasarkan"
+  const handleSortSelect = (value: string) => {
+    const [field, order] = value.split('-') as [SortField, SortOrder];
+    setSortField(field);
+    setSortOrder(order);
+  };
+
+  // Handler untuk mengubah pengurutan dengan klik header kolom
+  const handleHeaderClick = (field: SortField) => {
+    if (sortField === field) {
+      setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortOrder(field === 'kodePU' || field === 'blok' ? 'asc' : 'desc');
+    }
+  };
+
+  // Helper format tanggal data terinput ke web
+  const formatTanggalInput = (pu: PetakUkur): { dateStr: string; timeStr: string } => {
+    const raw = pu.tanggalInput || pu.tanggalTerinput || pu.updatedAt || pu.tanggalEvaluasi;
+    if (!raw) return { dateStr: '-', timeStr: '' };
+    try {
+      const d = new Date(raw);
+      if (!isNaN(d.getTime())) {
+        const dateStr = d.toLocaleDateString('id-ID', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        });
+        const hasTime = raw.includes('T') || raw.includes(':');
+        const timeStr = hasTime
+          ? d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB'
+          : 'Web Entry';
+        return { dateStr, timeStr };
+      }
+    } catch {
+      // fallback
+    }
+    return { dateStr: raw, timeStr: 'Web Entry' };
+  };
+
+  // 4. Sorted PU table berdasarkan pilihan user
+  const sortedPuList = useMemo(() => {
+    const list = [...filteredPuList];
+    list.sort((a, b) => {
+      let cmp = 0;
+      if (sortField === 'updatedAt') {
+        const dateA = new Date(a.tanggalInput || a.tanggalTerinput || a.updatedAt || a.tanggalEvaluasi || 0).getTime();
+        const dateB = new Date(b.tanggalInput || b.tanggalTerinput || b.updatedAt || b.tanggalEvaluasi || 0).getTime();
+        cmp = dateA - dateB;
+      } else if (sortField === 'survivalRate') {
+        const srA = a.persentaseHidup !== undefined ? a.persentaseHidup : (a.survivalRate || 0);
+        const srB = b.persentaseHidup !== undefined ? b.persentaseHidup : (b.survivalRate || 0);
+        cmp = srA - srB;
+      } else if (sortField === 'kebutuhanPenyulaman') {
+        const awalA = a.tanamanAwal || 50;
+        const hidupA = a.tanamanHidup !== undefined ? a.tanamanHidup : Math.round(((a.survivalRate || 0) / 100) * awalA);
+        const sulamA = a.kebutuhanPenyulaman !== undefined ? a.kebutuhanPenyulaman : Math.max(0, awalA - hidupA);
+
+        const awalB = b.tanamanAwal || 50;
+        const hidupB = b.tanamanHidup !== undefined ? b.tanamanHidup : Math.round(((b.survivalRate || 0) / 100) * awalB);
+        const sulamB = b.kebutuhanPenyulaman !== undefined ? b.kebutuhanPenyulaman : Math.max(0, awalB - hidupB);
+
+        cmp = sulamA - sulamB;
+      } else if (sortField === 'kodePU') {
+        cmp = a.kodePU.localeCompare(b.kodePU, undefined, { numeric: true, sensitivity: 'base' });
+      } else if (sortField === 'blok') {
+        const locA = `${a.blok || ''} ${a.das || a.subDas || ''}`;
+        const locB = `${b.blok || ''} ${b.das || b.subDas || ''}`;
+        cmp = locA.localeCompare(locB);
+      } else if (sortField === 'tanggalEvaluasi') {
+        const dateA = new Date(a.tanggalEvaluasi || 0).getTime();
+        const dateB = new Date(b.tanggalEvaluasi || 0).getTime();
+        cmp = dateA - dateB;
+      }
+
+      return sortOrder === 'asc' ? cmp : -cmp;
+    });
+    return list;
+  }, [filteredPuList, sortField, sortOrder]);
 
   return (
     <div className="w-full space-y-6 pb-8">
@@ -451,8 +552,9 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             </p>
           </div>
 
-          {/* Filter and Search Bar */}
-          <div className="flex items-center gap-2">
+          {/* Filter, Search, and "Urut Berdasarkan" Controls */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Search Input */}
             <div className="relative">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-emerald-400" />
               <input
@@ -461,10 +563,11 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 placeholder="Cari PU / Blok / Jenis..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-[#02241e] border border-emerald-500/30 text-emerald-100 placeholder-emerald-400/50 text-xs rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:border-lime-400 w-48"
+                className="bg-[#02241e] border border-emerald-500/30 text-emerald-100 placeholder-emerald-400/50 text-xs rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:border-lime-400 w-44"
               />
             </div>
 
+            {/* Sub-DAS Filter */}
             <select
               id="analytics-subdas-filter"
               value={selectedSubDas}
@@ -479,6 +582,63 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               ))}
             </select>
 
+            {/* Fitur: "Urut Berdasarkan" */}
+            <div className="flex items-center gap-1.5 bg-[#02241e] border border-emerald-500/30 rounded-lg px-2.5 py-1 text-xs">
+              <ArrowUpDown className="w-3.5 h-3.5 text-lime-400 flex-shrink-0" />
+              <label htmlFor="analytics-sort-select" className="text-[11px] text-emerald-300 font-medium whitespace-nowrap hidden lg:inline">
+                Urut:
+              </label>
+              <select
+                id="analytics-sort-select"
+                value={`${sortField}-${sortOrder}`}
+                onChange={(e) => handleSortSelect(e.target.value)}
+                className="bg-transparent text-emerald-100 text-xs focus:outline-none cursor-pointer pr-1"
+                title="Pilih kriteria pengurutan tabel"
+              >
+                <option value="updatedAt-desc" className="bg-[#04332b] text-white">
+                  Tgl Terinput (Terbaru)
+                </option>
+                <option value="updatedAt-asc" className="bg-[#04332b] text-white">
+                  Tgl Terinput (Terlama)
+                </option>
+                <option value="survivalRate-asc" className="bg-[#04332b] text-white">
+                  Survival Rate (Terendah / Kritis Dulu)
+                </option>
+                <option value="survivalRate-desc" className="bg-[#04332b] text-white">
+                  Survival Rate (Tertinggi)
+                </option>
+                <option value="kebutuhanPenyulaman-desc" className="bg-[#04332b] text-white">
+                  Kebutuhan Sulam (Terbanyak)
+                </option>
+                <option value="kodePU-asc" className="bg-[#04332b] text-white">
+                  Kode PU (A - Z)
+                </option>
+                <option value="kodePU-desc" className="bg-[#04332b] text-white">
+                  Kode PU (Z - A)
+                </option>
+                <option value="blok-asc" className="bg-[#04332b] text-white">
+                  Lokasi / Blok (A - Z)
+                </option>
+                <option value="tanggalEvaluasi-desc" className="bg-[#04332b] text-white">
+                  Tgl Sensus Lapangan (Terbaru)
+                </option>
+              </select>
+              {/* Quick toggle sort direction */}
+              <button
+                type="button"
+                onClick={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
+                title={`Arah urutan: ${sortOrder === 'asc' ? 'Menaik (A-Z / Terlama)' : 'Menurun (Z-A / Terbaru)'}. Klik untuk balikkan.`}
+                className="p-1 rounded hover:bg-emerald-800/60 text-lime-300 transition-colors"
+              >
+                {sortOrder === 'asc' ? (
+                  <ArrowUp className="w-3.5 h-3.5 text-lime-400" />
+                ) : (
+                  <ArrowDown className="w-3.5 h-3.5 text-lime-400" />
+                )}
+              </button>
+            </div>
+
+            {/* Impor Excel Button */}
             {onOpenExcelImport && (
               <button
                 id="analytics-excel-import-btn"
@@ -494,105 +654,281 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </div>
         </div>
 
+        {/* Status Bar: Total baris & Kriteria Pengurutan Aktif */}
+        <div className="flex items-center justify-between text-[11px] text-emerald-300/80 mb-3 px-1">
+          <div className="flex items-center gap-2">
+            <span>
+              Menampilkan <strong className="text-lime-300 font-bold">{sortedPuList.length}</strong> Petak Ukur
+            </span>
+            {searchQuery && (
+              <span className="text-emerald-400/70">
+                (filter kata kunci: &ldquo;{searchQuery}&rdquo;)
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-1 text-[11px] text-emerald-300/90 font-mono">
+            <span>Urut:</span>
+            <span className="text-lime-300 font-sans font-medium">
+              {sortField === 'updatedAt'
+                ? `Tanggal Terinput (${sortOrder === 'desc' ? 'Terbaru' : 'Terlama'})`
+                : sortField === 'survivalRate'
+                ? `Survival Rate (${sortOrder === 'asc' ? 'Terendah / Kritis' : 'Tertinggi'})`
+                : sortField === 'kebutuhanPenyulaman'
+                ? `Kebutuhan Sulam (${sortOrder === 'desc' ? 'Terbanyak' : 'Tersedikit'})`
+                : sortField === 'kodePU'
+                ? `Kode PU (${sortOrder === 'asc' ? 'A-Z' : 'Z-A'})`
+                : sortField === 'blok'
+                ? `Lokasi (${sortOrder === 'asc' ? 'A-Z' : 'Z-A'})`
+                : `Tgl Sensus (${sortOrder === 'desc' ? 'Terbaru' : 'Terlama'})`}
+            </span>
+          </div>
+        </div>
+
         {/* Interactive Data Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               <tr className="border-b border-emerald-500/30 text-emerald-300/80 uppercase tracking-wider text-[10px]">
-                <th className="py-2.5 px-3">Kode PU</th>
-                <th className="py-2.5 px-3">Lokasi & Sub-DAS</th>
+                {/* Kode PU Column Header */}
+                <th
+                  className="py-2.5 px-3 cursor-pointer select-none hover:text-white transition-colors"
+                  onClick={() => handleHeaderClick('kodePU')}
+                  title="Klik untuk mengurutkan berdasarkan Kode PU"
+                >
+                  <div className="flex items-center gap-1">
+                    <span>Kode PU</span>
+                    {sortField === 'kodePU' ? (
+                      sortOrder === 'asc' ? (
+                        <ArrowUp className="w-3 h-3 text-lime-400" />
+                      ) : (
+                        <ArrowDown className="w-3 h-3 text-lime-400" />
+                      )
+                    ) : (
+                      <ArrowUpDown className="w-2.5 h-2.5 text-emerald-500/40" />
+                    )}
+                  </div>
+                </th>
+
+                {/* Kolom Tanggal Data Terinput ke Web */}
+                <th
+                  className="py-2.5 px-3 cursor-pointer select-none hover:text-white transition-colors"
+                  onClick={() => handleHeaderClick('updatedAt')}
+                  title="Klik untuk mengurutkan berdasarkan Tanggal Data Terinput ke Web"
+                >
+                  <div className="flex items-center gap-1.5 text-lime-300 font-bold">
+                    <Calendar className="w-3.5 h-3.5 text-lime-400" />
+                    <span>Tgl Terinput ke Web</span>
+                    {sortField === 'updatedAt' ? (
+                      sortOrder === 'asc' ? (
+                        <ArrowUp className="w-3 h-3 text-lime-300" />
+                      ) : (
+                        <ArrowDown className="w-3 h-3 text-lime-300" />
+                      )
+                    ) : (
+                      <ArrowUpDown className="w-2.5 h-2.5 text-emerald-500/40" />
+                    )}
+                  </div>
+                </th>
+
+                {/* Lokasi & Sub-DAS Header */}
+                <th
+                  className="py-2.5 px-3 cursor-pointer select-none hover:text-white transition-colors"
+                  onClick={() => handleHeaderClick('blok')}
+                  title="Klik untuk mengurutkan berdasarkan Lokasi & Sub-DAS"
+                >
+                  <div className="flex items-center gap-1">
+                    <span>Lokasi & Sub-DAS</span>
+                    {sortField === 'blok' ? (
+                      sortOrder === 'asc' ? (
+                        <ArrowUp className="w-3 h-3 text-lime-400" />
+                      ) : (
+                        <ArrowDown className="w-3 h-3 text-lime-400" />
+                      )
+                    ) : (
+                      <ArrowUpDown className="w-2.5 h-2.5 text-emerald-500/40" />
+                    )}
+                  </div>
+                </th>
+
                 <th className="py-2.5 px-3">Jenis Tanaman</th>
                 <th className="py-2.5 px-3 text-center">Hidup / Awal</th>
-                <th className="py-2.5 px-3 text-center">Survival Rate</th>
+
+                {/* Survival Rate Header */}
+                <th
+                  className="py-2.5 px-3 text-center cursor-pointer select-none hover:text-white transition-colors"
+                  onClick={() => handleHeaderClick('survivalRate')}
+                  title="Klik untuk mengurutkan berdasarkan Survival Rate"
+                >
+                  <div className="flex items-center justify-center gap-1">
+                    <span>Survival Rate</span>
+                    {sortField === 'survivalRate' ? (
+                      sortOrder === 'asc' ? (
+                        <ArrowUp className="w-3 h-3 text-lime-400" />
+                      ) : (
+                        <ArrowDown className="w-3 h-3 text-lime-400" />
+                      )
+                    ) : (
+                      <ArrowUpDown className="w-2.5 h-2.5 text-emerald-500/40" />
+                    )}
+                  </div>
+                </th>
+
                 <th className="py-2.5 px-3 text-center">Kategori</th>
-                <th className="py-2.5 px-3 text-center">Kebutuhan Sulam</th>
+
+                {/* Kebutuhan Sulam Header */}
+                <th
+                  className="py-2.5 px-3 text-center cursor-pointer select-none hover:text-white transition-colors"
+                  onClick={() => handleHeaderClick('kebutuhanPenyulaman')}
+                  title="Klik untuk mengurutkan berdasarkan Kebutuhan Sulam"
+                >
+                  <div className="flex items-center justify-center gap-1">
+                    <span>Kebutuhan Sulam</span>
+                    {sortField === 'kebutuhanPenyulaman' ? (
+                      sortOrder === 'asc' ? (
+                        <ArrowUp className="w-3 h-3 text-lime-400" />
+                      ) : (
+                        <ArrowDown className="w-3 h-3 text-lime-400" />
+                      )
+                    ) : (
+                      <ArrowUpDown className="w-2.5 h-2.5 text-emerald-500/40" />
+                    )}
+                  </div>
+                </th>
+
                 <th className="py-2.5 px-3">Rekomendasi Tindak Lanjut</th>
                 <th className="py-2.5 px-3 text-right">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-emerald-500/20">
-              {filteredPuList.map((pu) => {
-                const cat = CATEGORY_INFO_MAP[pu.kategori];
-                const awal = pu.tanamanAwal || 50;
-                const hidup =
-                  pu.tanamanHidup !== undefined
-                    ? pu.tanamanHidup
-                    : Math.round(((pu.survivalRate || 0) / 100) * awal);
-                const sulam =
-                  pu.kebutuhanPenyulaman !== undefined
-                    ? pu.kebutuhanPenyulaman
-                    : Math.max(0, awal - hidup);
-                const namaDas = pu.das || pu.subDas;
-                const srVal = pu.persentaseHidup !== undefined ? pu.persentaseHidup : pu.survivalRate;
-
-                return (
-                  <tr
-                    key={pu.id}
-                    className="hover:bg-[#06433a]/50 transition-colors group cursor-pointer"
-                    onClick={() => {
-                      onSelectPu(pu);
-                      onOpenDetail(pu);
-                    }}
-                  >
-                    <td className="py-3 px-3 font-bold text-lime-300 whitespace-nowrap">
-                      {pu.kodePU}
-                      {pu.petak && (
-                        <span className="ml-1 text-[10px] text-emerald-300/70 font-normal">
-                          ({pu.petak})
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-3 px-3">
-                      <div className="font-semibold text-white">{pu.blok}</div>
-                      <div className="text-[10px] text-emerald-300/80">{namaDas}</div>
-                    </td>
-                    <td className="py-3 px-3 text-emerald-100">
-                      {pu.jenisTanaman.slice(0, 2).join(', ')}
-                      {pu.jenisTanaman.length > 2 && '...'}
-                    </td>
-                    <td className="py-3 px-3 text-center font-mono text-white whitespace-nowrap">
-                      {hidup} / {awal}
-                    </td>
-                    <td className="py-3 px-3 text-center">
-                      <span className="font-bold text-sm" style={{ color: cat.colorHex }}>
-                        {srVal}%
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-center">
-                      <span
-                        className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border ${cat.badgeBg} ${cat.badgeBorder} ${cat.badgeText}`}
-                      >
-                        {cat.name}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-center">
-                      <span
-                        className={`font-semibold font-mono ${
-                          sulam > 0 ? 'text-rose-400' : 'text-lime-300'
-                        }`}
-                      >
-                        {sulam} btg
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-emerald-200/90 text-[11px] max-w-xs truncate">
-                      {pu.rekomendasi || (srVal >= 75 ? 'Pertahankan pemeliharaan intensif.' : 'Segera lakukan penyulaman bibit.')}
-                    </td>
-                    <td className="py-3 px-3 text-right">
+              {sortedPuList.length === 0 ? (
+                <tr>
+                  <td colSpan={10} className="py-8 text-center text-emerald-300/70">
+                    <p className="text-sm">Tidak ditemukan data Petak Ukur yang sesuai.</p>
+                    {searchQuery && (
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onSelectPu(pu);
-                          onOpenDetail(pu);
-                        }}
-                        className="px-2.5 py-1 rounded-lg bg-[#032e27] hover:bg-[#05453a] text-emerald-200 text-[11px] font-medium border border-emerald-500/30 transition-colors inline-flex items-center gap-1"
+                        onClick={() => setSearchQuery('')}
+                        className="mt-2 text-xs text-lime-300 hover:underline"
                       >
-                        Lihat
-                        <ArrowUpRight className="w-3 h-3 text-lime-400" />
+                        Hapus kata kunci pencarian
                       </button>
-                    </td>
-                  </tr>
-                );
-              })}
+                    )}
+                  </td>
+                </tr>
+              ) : (
+                sortedPuList.map((pu) => {
+                  const cat = CATEGORY_INFO_MAP[pu.kategori];
+                  const awal = pu.tanamanAwal || 50;
+                  const hidup =
+                    pu.tanamanHidup !== undefined
+                      ? pu.tanamanHidup
+                      : Math.round(((pu.survivalRate || 0) / 100) * awal);
+                  const sulam =
+                    pu.kebutuhanPenyulaman !== undefined
+                      ? pu.kebutuhanPenyulaman
+                      : Math.max(0, awal - hidup);
+                  const namaDas = pu.das || pu.subDas;
+                  const srVal = pu.persentaseHidup !== undefined ? pu.persentaseHidup : pu.survivalRate;
+                  const { dateStr, timeStr } = formatTanggalInput(pu);
+
+                  return (
+                    <tr
+                      key={pu.id}
+                      className="hover:bg-[#06433a]/50 transition-colors group cursor-pointer"
+                      onClick={() => {
+                        onSelectPu(pu);
+                        onOpenDetail(pu);
+                      }}
+                    >
+                      {/* Kode PU */}
+                      <td className="py-3 px-3 font-bold text-lime-300 whitespace-nowrap">
+                        {pu.kodePU}
+                        {pu.petak && (
+                          <span className="ml-1 text-[10px] text-emerald-300/70 font-normal">
+                            ({pu.petak})
+                          </span>
+                        )}
+                      </td>
+
+                      {/* Kolom Tanggal Data Terinput ke Web */}
+                      <td className="py-3 px-3 whitespace-nowrap">
+                        <div className="flex items-center gap-1.5 font-medium text-emerald-100">
+                          <Calendar className="w-3.5 h-3.5 text-lime-400 shrink-0" />
+                          <span className="font-semibold text-white">{dateStr}</span>
+                        </div>
+                        {timeStr && (
+                          <div className="text-[10px] text-emerald-300/70 font-mono pl-5">
+                            {timeStr}
+                          </div>
+                        )}
+                      </td>
+
+                      {/* Lokasi & Sub-DAS */}
+                      <td className="py-3 px-3">
+                        <div className="font-semibold text-white">{pu.blok}</div>
+                        <div className="text-[10px] text-emerald-300/80">{namaDas}</div>
+                      </td>
+
+                      {/* Jenis Tanaman */}
+                      <td className="py-3 px-3 text-emerald-100">
+                        {pu.jenisTanaman.slice(0, 2).join(', ')}
+                        {pu.jenisTanaman.length > 2 && '...'}
+                      </td>
+
+                      {/* Hidup / Awal */}
+                      <td className="py-3 px-3 text-center font-mono text-white whitespace-nowrap">
+                        {hidup} / {awal}
+                      </td>
+
+                      {/* Survival Rate */}
+                      <td className="py-3 px-3 text-center">
+                        <span className="font-bold text-sm" style={{ color: cat.colorHex }}>
+                          {srVal}%
+                        </span>
+                      </td>
+
+                      {/* Kategori */}
+                      <td className="py-3 px-3 text-center">
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border ${cat.badgeBg} ${cat.badgeBorder} ${cat.badgeText}`}
+                        >
+                          {cat.name}
+                        </span>
+                      </td>
+
+                      {/* Kebutuhan Sulam */}
+                      <td className="py-3 px-3 text-center">
+                        <span
+                          className={`font-semibold font-mono ${
+                            sulam > 0 ? 'text-rose-400' : 'text-lime-300'
+                          }`}
+                        >
+                          {sulam} btg
+                        </span>
+                      </td>
+
+                      {/* Rekomendasi */}
+                      <td className="py-3 px-3 text-emerald-200/90 text-[11px] max-w-xs truncate">
+                        {pu.rekomendasi || (srVal >= 75 ? 'Pertahankan pemeliharaan intensif.' : 'Segera lakukan penyulaman bibit.')}
+                      </td>
+
+                      {/* Aksi */}
+                      <td className="py-3 px-3 text-right">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSelectPu(pu);
+                            onOpenDetail(pu);
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-[#032e27] hover:bg-[#05453a] text-emerald-200 text-[11px] font-medium border border-emerald-500/30 transition-colors inline-flex items-center gap-1"
+                        >
+                          Lihat
+                          <ArrowUpRight className="w-3 h-3 text-lime-400" />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>

@@ -68,6 +68,8 @@ export interface PetakUkur {
   kebutuhanPenyulaman?: number;
   rekomendasi?: string;
   fotoUrl?: string;
+  tanggalInput?: string; // Tanggal & waktu data pertama kali terinput ke web
+  tanggalTerinput?: string; // alias
   updatedAt: string;
 }
 

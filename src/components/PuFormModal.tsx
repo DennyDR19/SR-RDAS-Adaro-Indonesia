@@ -363,6 +363,8 @@ export const PuFormModal: React.FC<PuFormModalProps> = ({
           persentaseHidup >= 75
             ? 'Pertahankan pemeliharaan berkala dan perlindungan tegakan.'
             : 'Lakukan penyulaman bibit berkualitas dan pembersihan gulma piringan.',
+        tanggalInput: initialData?.tanggalInput || new Date().toISOString(),
+        tanggalTerinput: initialData?.tanggalTerinput || new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
       onClose();

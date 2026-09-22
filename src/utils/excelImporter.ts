@@ -386,6 +386,8 @@ export async function parseExcelDatabaseFile(file: File): Promise<ImportPreviewR
           ? 'Pertahankan pemeliharaan intensif dan perlindungan tanaman.'
           : 'Segera laksanakan penyulaman bibit dan pembersihan gulma.',
       updatedAt: new Date().toISOString(),
+      tanggalInput: new Date().toISOString(),
+      tanggalTerinput: new Date().toISOString(),
     };
 
     puList.push(item);
