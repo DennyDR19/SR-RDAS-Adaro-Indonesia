@@ -2,7 +2,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import { PetakUkur, SurvivalCategory, CustomBoundary } from '../types';
 import { CATEGORY_INFO_MAP, getCategoryInfo } from '../utils/survivalHelper';
-import { Layers, MapPin, Eye, Filter, RefreshCw, ZoomIn, ZoomOut, Crosshair, FolderArchive } from 'lucide-react';
+import {
+  Layers,
+  MapPin,
+  Eye,
+  Filter,
+  RefreshCw,
+  ZoomIn,
+  ZoomOut,
+  Crosshair,
+  FolderArchive,
+  Maximize2,
+  Minimize2,
+} from 'lucide-react';
 
 interface DasMapProps {
   puList: PetakUkur[];
@@ -49,10 +61,74 @@ export const DasMap: React.FC<DasMapProps> = ({
   const boundaryLayerRef = useRef<L.Polygon | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
   const customBoundaryLayersRef = useRef<{ [id: string]: L.GeoJSON }>({});
+  const mapWrapperRef = useRef<HTMLDivElement>(null);
 
   const [activeTile, setActiveTile] = useState<TileLayerType>('satellite');
   const [showBoundary, setShowBoundary] = useState<boolean>(true);
   const [hoveredPu, setHoveredPu] = useState<PetakUkur | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+
+  // Fullscreen toggle handler with hybrid browser API and CSS viewport fallback
+  const toggleFullscreen = () => {
+    if (!isFullscreen) {
+      setIsFullscreen(true);
+      if (mapWrapperRef.current?.requestFullscreen) {
+        mapWrapperRef.current.requestFullscreen().catch(() => {
+          // Fallback CSS fixed full viewport
+        });
+      }
+    } else {
+      setIsFullscreen(false);
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+  };
+
+  // Sync fullscreen state with browser events & Esc key
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isDocFs = Boolean(document.fullscreenElement);
+      setIsFullscreen(isDocFs);
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+        if (document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isFullscreen]);
+
+  // Recalculate Leaflet tile layout whenever fullscreen state changes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.invalidateSize();
+      }
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [isFullscreen]);
+
+  // Auto-resize observer to prevent gray tiles on any container resize
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+    const ro = new ResizeObserver(() => {
+      mapInstanceRef.current?.invalidateSize();
+    });
+    ro.observe(mapContainerRef.current);
+    return () => ro.disconnect();
+  }, []);
 
   // Initialize Map
   useEffect(() => {
@@ -458,9 +534,36 @@ export const DasMap: React.FC<DasMapProps> = ({
   };
 
   return (
-    <div className="relative w-full h-full min-h-[460px] flex-1 bg-slate-950 overflow-hidden rounded-xl border border-slate-800 shadow-2xl">
+    <div
+      ref={mapWrapperRef}
+      className={`transition-all duration-300 flex-1 bg-slate-950 overflow-hidden ${
+        isFullscreen
+          ? 'fixed inset-0 z-[99999] w-screen h-screen rounded-none border-none shadow-none'
+          : 'relative w-full h-full min-h-[460px] rounded-xl border border-slate-800 shadow-2xl'
+      }`}
+    >
       {/* Map Container */}
       <div id="das-leaflet-map" ref={mapContainerRef} className="w-full h-full z-0" />
+
+      {/* Top Center Floating Fullscreen Status & Exit Pill */}
+      {isFullscreen && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[450] animate-fade-in pointer-events-auto">
+          <button
+            onClick={toggleFullscreen}
+            title="Klik untuk keluar dari mode layar penuh"
+            className="px-3.5 py-1.5 rounded-full bg-slate-900/95 hover:bg-slate-850 text-emerald-200 hover:text-white border border-emerald-500/50 shadow-2xl backdrop-blur-md text-xs font-semibold flex items-center gap-2 transition-all group ring-1 ring-lime-400/20"
+          >
+            <span className="w-2 h-2 rounded-full bg-lime-400 animate-pulse" />
+            <span className="text-white font-bold">Fokus Peta Layar Penuh</span>
+            <span className="text-emerald-400/80 font-normal hidden sm:inline">&bull; Tekan</span>
+            <kbd className="px-1.5 py-0.5 rounded bg-black/60 text-[10px] text-lime-300 font-mono border border-emerald-500/30">
+              ESC
+            </kbd>
+            <span className="text-emerald-400/80 font-normal hidden sm:inline">atau klik untuk keluar</span>
+            <Minimize2 className="w-3.5 h-3.5 text-lime-400 group-hover:scale-110 transition-transform ml-0.5" />
+          </button>
+        </div>
+      )}
 
       {/* Top Left Floating Basemap Selector */}
       <div className="absolute top-4 left-4 z-[400] flex flex-col gap-2">
@@ -534,8 +637,26 @@ export const DasMap: React.FC<DasMapProps> = ({
         )}
       </div>
 
-      {/* Top Right Zoom and Control Tools */}
+      {/* Top Right Zoom, Fullscreen, and Control Tools */}
       <div className="absolute top-4 right-4 z-[400] flex flex-col gap-1.5">
+        {/* Fullscreen Map Mode Toggle */}
+        <button
+          id="map-fullscreen-btn"
+          onClick={toggleFullscreen}
+          title={isFullscreen ? 'Keluar Layar Penuh (Esc)' : 'Fokus Peta: Layar Penuh (Full Screen)'}
+          className={`w-9 h-9 rounded-lg border flex items-center justify-center shadow-lg transition-all group ${
+            isFullscreen
+              ? 'bg-lime-500 hover:bg-lime-400 text-slate-950 border-lime-400 font-bold scale-105 ring-2 ring-lime-400/50'
+              : 'bg-slate-900/90 hover:bg-slate-800 text-slate-200 border-slate-700 hover:text-white'
+          }`}
+        >
+          {isFullscreen ? (
+            <Minimize2 className="w-4 h-4 text-slate-950" />
+          ) : (
+            <Maximize2 className="w-4 h-4 text-slate-200 group-hover:scale-110 transition-transform" />
+          )}
+        </button>
+
         <button
           id="map-zoom-in-btn"
           onClick={() => mapInstanceRef.current?.zoomIn()}
@@ -569,6 +690,29 @@ export const DasMap: React.FC<DasMapProps> = ({
           <Crosshair className="w-4 h-4" />
         </button>
       </div>
+
+      {/* Bottom Left Floating Mini-Legend in Fullscreen Mode */}
+      {isFullscreen && (
+        <div className="absolute bottom-5 left-4 z-[400] bg-slate-900/95 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-700/80 shadow-2xl animate-fade-in hidden md:flex items-center gap-3 text-xs">
+          <span className="font-bold text-slate-300 text-[10px] uppercase tracking-wider">Kategori SR:</span>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-black border border-slate-500" />
+            <span className="text-[11px] text-slate-300">0–40%</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+            <span className="text-[11px] text-slate-300">&gt;40–74%</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+            <span className="text-[11px] text-slate-300">75–80%</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+            <span className="text-[11px] text-slate-300">&gt;80%</span>
+          </div>
+        </div>
+      )}
 
       {/* Interactive Bottom Hover Preview Card */}
       {hoveredPu && (

@@ -13,6 +13,7 @@ import {
   FileSpreadsheet,
   Layers,
   HelpCircle,
+  BookOpen,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -31,6 +32,7 @@ interface HeaderProps {
   onResetData: () => void;
   onOpenBoundaryModal?: () => void;
   boundaryCount?: number;
+  onOpenPrdModal?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -49,6 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
   onResetData,
   onOpenBoundaryModal,
   boundaryCount = 0,
+  onOpenPrdModal,
 }) => {
   return (
     <header className="w-full bg-[#063f35]/90 backdrop-blur-md border-b border-emerald-500/25 px-4 py-3 sticky top-0 z-50 shadow-lg shadow-black/20">
@@ -159,6 +162,19 @@ export const Header: React.FC<HeaderProps> = ({
             <FileDown className="w-3.5 h-3.5 text-lime-300" />
             <span className="hidden sm:inline">Laporan PDF</span>
           </button>
+
+          {/* Dokumen PRD (DOC & PDF) Button */}
+          {onOpenPrdModal && (
+            <button
+              id="header-prd-btn"
+              onClick={onOpenPrdModal}
+              title="Lihat & Unduh Dokumen PRD (Format DOC / Word & PDF)"
+              className="px-2.5 py-1.5 rounded-xl bg-[#04332b] hover:bg-[#06433a] text-emerald-100 text-xs font-medium border border-emerald-500/30 flex items-center gap-1.5 transition-colors"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-lime-300" />
+              <span className="hidden sm:inline">Dokumen PRD</span>
+            </button>
+          )}
 
           {/* Boundary Area SHP / KML Button */}
           {onOpenBoundaryModal && (

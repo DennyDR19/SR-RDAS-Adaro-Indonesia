@@ -1,0 +1,1059 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 13425
+>>
+stream
+0.5670000000000001 w
+0 G
+0.02 0.31 0.23 rg
+0. 841.8899999999999864 595.2755905511811534 -85.0393700787401627 re
+f
+BT
+/F2 13 Tf
+14.9499999999999993 TL
+0.639 0.902 0.208 rg
+39.6850393700787407 810.7088976377953031 Td
+(PRODUCT REQUIREMENT DOCUMENT \(PRD\)) Tj
+ET
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+1. g
+39.6850393700787407 793.7010236220472734 Td
+(Sistem Informasi Geografis & Monitoring Kinerja Petak Ukur \(PU\) Rehabilitasi DAS) Tj
+ET
+BT
+/F1 7.5 Tf
+8.625 TL
+0.796 0.835 0.882 rg
+39.6850393700787407 776.69314960629913 Td
+(PT Adaro Indonesia - Divisi Lingkungan & Reklamasi DAS | Versi 2.4.0) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.024 0.306 0.231 rg
+39.6850393700787407 734.1734645669291695 Td
+(1. RINGKASAN EKSEKUTIF \(EXECUTIVE SUMMARY\)) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.118 0.161 0.231 rg
+39.6850393700787407 720.0002362204724022 Td
+(Sistem Informasi Geografis \(SIG\) Pemantauan Kinerja Petak Ukur \(PU\) Rehabilitasi DAS PT Adaro Indonesia adalah platform geospasial) Tj
+T* (dan analitik modern terpadu yang dirancang khusus untuk memonitor, mengevaluasi, dan melaporkan keberhasilan tanaman rehabilitasi) Tj
+T* (DAS secara presisi dan terukur. Sistem ini mengacu pada regulasi Permen LHK dengan standar kelulusan minimal Survival Rate \(SR\) >=) Tj
+T* (75%. Sistem mengintegrasikan pemetaan interaktif Leaflet GIS \(citra satelit resolusi tinggi, batas SHP/KML, mode layar penuh\), filter) Tj
+T* (multi-dimensi 16 parameter, analitik kinerja adaptif, sinkronisasi Google Sheets, dan generator PDF resmi.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.024 0.306 0.231 rg
+39.6850393700787407 649.1340944881889072 Td
+(2. TUJUAN & SASARAN PRODUK \(PRODUCT OBJECTIVES\)) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.118 0.161 0.231 rg
+39.6850393700787407 634.9608661417322537 Td
+(• Kepatuhan Regulasi: Memastikan evaluasi survival rate memenuhi standar kelulusan KLHK \(>= 75%\).) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.118 0.161 0.231 rg
+39.6850393700787407 622.2049606299212883 Td
+(• Visibilitas Spasial: Pemetaan 437 titik sampling PU di 6 Sub-DAS aktif dengan citra satelit & mode full screen.) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.118 0.161 0.231 rg
+39.6850393700787407 609.4490551181102092 Td
+(• Analisis Granular 16 Variabel: Filter spesifik per DAS, Blok, Petak, Koordinat UTM, Tanah, pH, Suhu, dll \(dengan opsi All\).) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.118 0.161 0.231 rg
+39.6850393700787407 596.69314960629913 Td
+(• Efisiensi Alokasi Sulam: Perhitungan otomatis kebutuhan bibit sulam pada petak Kritis \(Hitam & Merah\).) Tj
+ET
+BT
+/F1 8.2 Tf
+9.4299999999999979 TL
+0.118 0.161 0.231 rg
+39.6850393700787407 583.9372440944881646 Td
+(• Kolaborasi Terpadu: Ekspor PDF resmi korporat, sinkronisasi Google Sheets Cloud, dan notifikasi real-time SSE.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.024 0.306 0.231 rg
+39.6850393700787407 562.6774015748030706 Td
+(3. PERSONA PENGGUNA & PERAN) Tj
+ET
+0. G
+0.5670000000000001 w
+0. G
+0.5670000000000001 w
+0.02 0.31 0.23 rg
+0.78 G
+0. w
+0.02 0.31 0.23 rg
+39.6850393700787407 554.1734645669290558 115.6910694803310804 -21.0974409448818925 re
+f
+BT
+/F2 7.5 Tf
+8.625 TL
+1. g
+45.9212598425196887 541.5622440944880509 Td
+(Persona) Tj
+ET
+0.02 0.31 0.23 rg
+0.78 G
+0. w
+0.02 0.31 0.23 rg
+155.3761088504098211 554.1734645669290558 108.4442605108055062 -21.0974409448818925 re
+f
+BT
+/F2 7.5 Tf
+8.625 TL
+1. g
+161.6123293228507691 541.5622440944880509 Td
+(Peran Operasional) Tj
+ET
+0.02 0.31 0.23 rg
+0.78 G
+0. w
+0.02 0.31 0.23 rg
+263.8203693612153415 554.1734645669290558 291.7745912687058194 -21.0974409448818925 re
+f
+BT
+/F2 7.5 Tf
+8.625 TL
+1. g
+270.0565898336562896 541.5622440944880509 Td
+(Kebutuhan Utama) Tj
+ET
+0. G
+0.5670000000000001 w
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+39.6850393700787407 533.0760236220472734 115.6910694803310804 -29.7224409448818889 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+45.9212598425196887 520.4648031496062686 Td
+(Manajer Lingkungan &) Tj
+T* (Reklamasi) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+155.3761088504098211 533.0760236220472734 108.4442605108055062 -29.7224409448818889 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+161.6123293228507691 520.4648031496062686 Td
+(Pengambil Keputusan) Tj
+T* (Strategis) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+263.8203693612153415 533.0760236220472734 291.7745912687058194 -29.7224409448818889 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+270.0565898336562896 520.4648031496062686 Td
+(Review KPI makro konsesi, persentase kelulusan standar, pengesahan laporan PDF) Tj
+T* (resmi.) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+39.6850393700787407 503.3535826771653205 115.6910694803310804 -29.7224409448818889 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+45.9212598425196887 490.7423622047243725 Td
+(Pengawas Operasional) Tj
+T* (Lapangan) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+155.3761088504098211 503.3535826771653205 108.4442605108055062 -29.7224409448818889 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+161.6123293228507691 490.7423622047243725 Td
+(Verifikator & Surveyor) Tj
+T* (Sensus) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+263.8203693612153415 503.3535826771653205 291.7745912687058194 -29.7224409448818889 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+270.0565898336562896 490.7423622047243725 Td
+(Input sensus lapangan \(P0-P2\), inspeksi per blok/petak, analisis tanah &) Tj
+T* (mikroklimat.) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+39.6850393700787407 473.6311417322833677 115.6910694803310804 -29.7224409448818889 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+45.9212598425196887 461.0199212598425333 Td
+(Spesialis GIS & Data Analis) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+155.3761088504098211 473.6311417322833677 108.4442605108055062 -29.7224409448818889 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+161.6123293228507691 461.0199212598425333 Td
+(Pengelola Spasial &) Tj
+T* (Pemetaan) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+263.8203693612153415 473.6311417322833677 291.7745912687058194 -29.7224409448818889 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+270.0565898336562896 461.0199212598425333 Td
+(Unggah boundary SHP/KML, observasi tutupan kanopi citra satelit dalam mode full) Tj
+T* (screen.) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+39.6850393700787407 443.9087007874015285 115.6910694803310804 -29.7224409448818889 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+45.9212598425196887 431.2974803149606373 Td
+(Auditor Independen / KLHK) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+155.3761088504098211 443.9087007874015285 108.4442605108055062 -29.7224409448818889 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+161.6123293228507691 431.2974803149606373 Td
+(Penilai Keberhasilan) Tj
+T* (Tanaman) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+263.8203693612153415 443.9087007874015285 291.7745912687058194 -29.7224409448818889 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+270.0565898336562896 431.2974803149606373 Td
+(Verifikasi independen sampling petak ukur dan transparansi data penilaian) Tj
+T* (keberhasilan.) Tj
+ET
+0. G
+0.5670000000000001 w
+0.78 G
+0. w
+0. G
+0.5670000000000001 w
+0. G
+0.5670000000000001 w
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.024 0.306 0.231 rg
+39.6850393700787407 394.3437401574803403 Td
+(4. MATRIKS STANDAR KEBERHASILAN \(PERMEN LHK\)) Tj
+ET
+0. G
+0.5670000000000001 w
+0. G
+0.5670000000000001 w
+0.02 0.31 0.23 rg
+0.78 G
+0. w
+0.02 0.31 0.23 rg
+39.6850393700787407 385.8398031496062686 43.5466873839790978 -21.0974409448818925 re
+f
+BT
+/F2 7.5 Tf
+8.625 TL
+1. g
+45.9212598425196887 373.2285826771654342 Td
+(Kategori) Tj
+ET
+0.02 0.31 0.23 rg
+0.78 G
+0. w
+0.02 0.31 0.23 rg
+83.2317267540578456 385.8398031496062686 42.095892709853878 -21.0974409448818925 re
+f
+BT
+/F2 7.5 Tf
+8.625 TL
+1. g
+89.4679472264987936 373.2285826771654342 Td
+(Warna) Tj
+ET
+0.02 0.31 0.23 rg
+0.78 G
+0. w
+0.02 0.31 0.23 rg
+125.3276194639117165 385.8398031496062686 58.7418526550801019 -21.0974409448818925 re
+f
+BT
+/F2 7.5 Tf
+8.625 TL
+1. g
+131.5638399363526787 373.2285826771654342 Td
+(Rentang SR) Tj
+ET
+0.02 0.31 0.23 rg
+0.78 G
+0. w
+0.02 0.31 0.23 rg
+184.0694721189918255 385.8398031496062686 87.6813885231569401 -21.0974409448818925 re
+f
+BT
+/F2 7.5 Tf
+8.625 TL
+1. g
+190.3056925914328019 373.2285826771654342 Td
+(Status Kelulusan) Tj
+ET
+0.02 0.31 0.23 rg
+0.78 G
+0. w
+0.02 0.31 0.23 rg
+271.7508606421487798 385.8398031496062686 283.844099987772438 -21.0974409448818925 re
+f
+BT
+/F2 7.5 Tf
+8.625 TL
+1. g
+277.9870811145897278 373.2285826771654342 Td
+(Rekomendasi Tindakan Silvikultur) Tj
+ET
+0. G
+0.5670000000000001 w
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+39.6850393700787407 364.7423622047243725 43.5466873839790978 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+45.9212598425196887 352.1311417322834814 Td
+(Hitam) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+83.2317267540578456 364.7423622047243725 42.095892709853878 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+89.4679472264987936 352.1311417322834814 Td
+(#000000) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+125.3276194639117165 364.7423622047243725 58.7418526550801019 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+131.5638399363526787 352.1311417322834814 Td
+(0% - 40%) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+184.0694721189918255 364.7423622047243725 87.6813885231569401 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+190.3056925914328019 352.1311417322834814 Td
+(Sangat Kritis \(Gagal\)) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+271.7508606421487798 364.7423622047243725 283.844099987772438 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+277.9870811145897278 352.1311417322834814 Td
+(Penanaman ulang menyeluruh \(replanting\), perbaikan drainase mikro & piringan.) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+39.6850393700787407 343.6449212598424765 43.5466873839790978 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+45.9212598425196887 331.0337007874015853 Td
+(Merah) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+83.2317267540578456 343.6449212598424765 42.095892709853878 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+89.4679472264987936 331.0337007874015853 Td
+(#e11d48) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+125.3276194639117165 343.6449212598424765 58.7418526550801019 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+131.5638399363526787 331.0337007874015853 Td
+(>40% - <75%) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+184.0694721189918255 343.6449212598424765 87.6813885231569401 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+190.3056925914328019 331.0337007874015853 Td
+(Kritis / Kurang) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+271.7508606421487798 343.6449212598424765 283.844099987772438 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+277.9870811145897278 331.0337007874015853 Td
+(Penyulaman intensif bibit tinggi >50cm, penyiangan gulma, pemupukan NPK.) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+39.6850393700787407 322.5474803149605236 43.5466873839790978 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+45.9212598425196887 309.9362598425196893 Td
+(Kuning) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+83.2317267540578456 322.5474803149605236 42.095892709853878 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+89.4679472264987936 309.9362598425196893 Td
+(#f59e0b) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+125.3276194639117165 322.5474803149605236 58.7418526550801019 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+131.5638399363526787 309.9362598425196893 Td
+(75% - 80%) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+184.0694721189918255 322.5474803149605236 87.6813885231569401 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+190.3056925914328019 309.9362598425196893 Td
+(Lolos Standar Minimal) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+271.7508606421487798 322.5474803149605236 283.844099987772438 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+277.9870811145897278 309.9362598425196893 Td
+(Penyulaman ringan titik mati, pendangiran tanah, pemupukan susulan.) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+39.6850393700787407 301.4500393700786276 43.5466873839790978 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+45.9212598425196887 288.8388188976377933 Td
+(Hijau) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+83.2317267540578456 301.4500393700786276 42.095892709853878 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+89.4679472264987936 288.8388188976377933 Td
+(#10b981) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+125.3276194639117165 301.4500393700786276 58.7418526550801019 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+131.5638399363526787 288.8388188976377933 Td
+(>80% - 100%) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+184.0694721189918255 301.4500393700786276 87.6813885231569401 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+190.3056925914328019 288.8388188976377933 Td
+(Sangat Baik \(Prima\)) Tj
+ET
+1. g
+0.78 G
+0.2834645669291339 w
+1. g
+271.7508606421487798 301.4500393700786276 283.844099987772438 -21.0974409448818925 re
+B
+BT
+/F1 7.5 Tf
+8.625 TL
+0.314 g
+277.9870811145897278 288.8388188976377933 Td
+(Pemeliharaan rutin, perlindungan kebakaran/hama, pengayaan jenis lokal.) Tj
+ET
+0. G
+0.5670000000000001 w
+0.78 G
+0. w
+0. G
+0.5670000000000001 w
+0. G
+0.5670000000000001 w
+BT
+/F1 7 Tf
+8.0499999999999989 TL
+0.58 0.639 0.722 rg
+39.6850393700787407 19.8427559055116944 Td
+(Dokumen PRD PT Adaro Indonesia - Halaman 1 dari 2) Tj
+ET
+BT
+/F1 7 Tf
+8.0499999999999989 TL
+0.58 0.639 0.722 rg
+399.6850393700787549 19.8427559055116944 Td
+(Sistem Informasi Geografis Rehabilitasi DAS) Tj
+ET
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 6 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 4590
+>>
+stream
+0.5670000000000001 w
+0. G
+0.02 0.31 0.23 rg
+0. 841.8899999999999864 595.2755905511811534 -34.0157480314960665 re
+f
+BT
+/F2 8.5 Tf
+9.7749999999999986 TL
+1. g
+39.6850393700787407 819.212834645669318 Td
+(PRD SPESIFIKASI FITUR - SISTEM INFORMASI GEOGRAFIS REHABILITASI DAS) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.024 0.306 0.231 rg
+39.6850393700787407 785.1970866141732586 Td
+(5. RINCIAN SPESIFIKASI FITUR \(VERSI WEB TERBARU\)) Tj
+ET
+BT
+/F2 9 Tf
+10.3499999999999996 TL
+0.059 0.463 0.431 rg
+39.6850393700787407 768.1892125984252289 Td
+(5.1 Peta Geospasial Interaktif & Mode Full Screen) Tj
+ET
+BT
+/F1 7.8 Tf
+8.9699999999999989 TL
+0.2 0.255 0.333 rg
+39.6850393700787407 755.4333070866141497 Td
+(• 3 Basemap: Citra Satelit Resolusi Tinggi \(Esri World Imagery\), Peta Jalan \(OSM\), Topografi \(OpenTopoMap\).) Tj
+T* (• Mode Full Screen \(Layar Penuh\): Tombol toggle Maximize/Minimize di kontrol kanan atas, fallback CSS viewport penuh, tombol ESC untuk keluar,) Tj
+T* (floating exit pill di atas tengah, dan penyesuaian otomatis ResizeObserver.) Tj
+T* (• Pengelola Boundary SHP/KML: Mendukung unggah berkas Shapefile .zip dan KML batas area konsesi.) Tj
+T* (• 437 Marker Petak Ukur dengan kartu ringkasan melayang \(Hover Card\) seketika.) Tj
+ET
+BT
+/F2 9 Tf
+10.3499999999999996 TL
+0.059 0.463 0.431 rg
+39.6850393700787407 691.6537795275589815 Td
+(5.2 Panel Filter Multi-Dimensi 16 Parameter \(Opsi All\)) Tj
+ET
+BT
+/F1 7.8 Tf
+8.9699999999999989 TL
+0.2 0.255 0.333 rg
+39.6850393700787407 678.8978740157480161 Td
+(• 16 Variabel: \(1\) DAS, \(2\) Blok, \(3\) Petak, \(4\) Periode Evaluasi, \(5\) Lokasi Daerah, \(6\) Titik Koordinat UTM, \(7\) Tahun Tanam, \(8\) Kategori SR, \(9\)) Tj
+T* (Pengawas Lapangan, \(10\) Persentase Hidup, \(11\) Jarak Tanam, \(12\) Jenis Tanaman, \(13\) Suhu, \(14\) Kelembaban Udara, \(15\) Jenis Tanah, \(16\) pH) Tj
+T* (Tanah.) Tj
+T* (• Setiap variabel memiliki opsi "All" \(Semua\) untuk fleksibilitas analisis global vs area spesifik.) Tj
+T* (• Scope Indicator Bar & Tombol Reset One-Click untuk kembali ke seluruh 437 PU.) Tj
+ET
+BT
+/F2 9 Tf
+10.3499999999999996 TL
+0.059 0.463 0.431 rg
+39.6850393700787407 615.1183464566928478 Td
+(5.3 Dasbor Analitik Kinerja Adaptif) Tj
+ET
+BT
+/F1 7.8 Tf
+8.9699999999999989 TL
+0.2 0.255 0.333 rg
+39.6850393700787407 602.3624409448818824 Td
+(• 4 Kartu KPI: Rata-rata SR, Total PU, % Lulus Standar \(>=75%\), dan Total Kebutuhan Sulam.) Tj
+T* (• Donut Chart distribusi 4 kategori keberhasilan.) Tj
+T* (• Adaptive Bar Chart: Otomatis menampilkan kinerja per Sub-DAS \(skala makro\) dan beralih menjadi per Blok bila difilter ke 1 Sub-DAS, lengkap) Tj
+T* (dengan garis target 75%.) Tj
+T* (• Tabel Tindakan Silvikultur Prioritas dengan filter tab cepat.) Tj
+ET
+BT
+/F2 9 Tf
+10.3499999999999996 TL
+0.059 0.463 0.431 rg
+39.6850393700787407 538.5829133858267141 Td
+(5.4 Integrasi Korporat & Pelaporan) Tj
+ET
+BT
+/F1 7.8 Tf
+8.9699999999999989 TL
+0.2 0.255 0.333 rg
+39.6850393700787407 525.827007874015635 Td
+(• Ekspor Laporan Resmi PDF: Format A4 kop Adaro dengan lembar evaluasi dan kolom tanda tangan pengesahan.) Tj
+T* (• Integrasi Google Sheets Cloud: Sinkronisasi dua arah dengan Google Drive / Workspace.) Tj
+T* (• Impor Excel \(.xlsx\): Upload sensus lapangan dengan skema matching otomatis.) Tj
+T* (• Sinkronisasi Real-time SSE: Broadcast pembaruan data antar pengguna dengan laci notifikasi.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.024 0.306 0.231 rg
+39.6850393700787407 472.819133858267719 Td
+(6. KEBUTUHAN NON-FUNGSIONAL \(NFR\)) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.2 0.255 0.333 rg
+39.6850393700787407 458.6459055118110086 Td
+(• Kecepatan & Responsivitas: Pemuatan awal < 1.5 detik, 60 FPS pada interaksi peta Leaflet.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.2 0.255 0.333 rg
+39.6850393700787407 446.7403937007874219 Td
+(• Multi-Device Support: Optimal pada Desktop PC, Laptop, iPad/Tablet Lapangan, dan Smartphone.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.2 0.255 0.333 rg
+39.6850393700787407 434.8348818897638353 Td
+(• Keamanan Data: Isolasi token OAuth Google Sheets dan sanitasi data formulir.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.2 0.255 0.333 rg
+39.6850393700787407 422.9293700787402486 Td
+(• Offline-Resilience: Mekanisme penyimpanan lokal untuk daerah terpencil tanpa koneksi internet.) Tj
+ET
+BT
+/F1 7 Tf
+8.0499999999999989 TL
+0.58 0.639 0.722 rg
+39.6850393700787407 19.8427559055116944 Td
+(Dokumen PRD PT Adaro Indonesia - Halaman 2 dari 2) Tj
+ET
+BT
+/F1 7 Tf
+8.0499999999999989 TL
+0.58 0.639 0.722 rg
+399.6850393700787549 19.8427559055116944 Td
+(Sistem Informasi Geografis Rehabilitasi DAS) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R ]
+/Count 2
+>>
+endobj
+7 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+8 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+9 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+10 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+19 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+20 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 7 0 R
+/F2 8 0 R
+/F3 9 0 R
+/F4 10 0 R
+/F5 11 0 R
+/F6 12 0 R
+/F7 13 0 R
+/F8 14 0 R
+/F9 15 0 R
+/F10 16 0 R
+/F11 17 0 R
+/F12 18 0 R
+/F13 19 0 R
+/F14 20 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+21 0 obj
+<<
+/Producer (jsPDF 4.2.1)
+/CreationDate (D:20260922014750-00'00')
+>>
+endobj
+22 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 23
+0000000000 65535 f 
+0000018409 00000 n 
+0000020234 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000013630 00000 n 
+0000013767 00000 n 
+0000018472 00000 n 
+0000018597 00000 n 
+0000018727 00000 n 
+0000018860 00000 n 
+0000018998 00000 n 
+0000019122 00000 n 
+0000019251 00000 n 
+0000019383 00000 n 
+0000019519 00000 n 
+0000019647 00000 n 
+0000019774 00000 n 
+0000019903 00000 n 
+0000020036 00000 n 
+0000020138 00000 n 
+0000020484 00000 n 
+0000020570 00000 n 
+trailer
+<<
+/Size 23
+/Root 22 0 R
+/Info 21 0 R
+/ID [ <FAAB3E72A3578F6205367C2F84CA7AE4> <FAAB3E72A3578F6205367C2F84CA7AE4> ]
+>>
+startxref
+20674
+%%EOF

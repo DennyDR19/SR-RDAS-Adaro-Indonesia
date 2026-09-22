@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
+import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 import { INITIAL_PETAK_UKUR, INITIAL_NOTIFICATIONS } from './src/data/defaultData';
 import { PetakUkur, AppNotification } from './src/types';
@@ -360,6 +361,25 @@ app.delete('/api/pu/:id', (req: Request, res: Response) => {
   broadcastEvent('pu_deleted', { id, kodePU: deletedItem.kodePU, notification: notif });
 
   res.json({ success: true, id, notification: notif });
+});
+
+// Direct Download PRD endpoints
+app.get('/api/download/prd-doc', (req: Request, res: Response) => {
+  const filePath = path.join(process.cwd(), 'public', 'PRD_SIG_Rehabilitasi_DAS_PT_Adaro_Indonesia.doc');
+  if (fs.existsSync(filePath)) {
+    res.download(filePath, 'PRD_SIG_Rehabilitasi_DAS_PT_Adaro_Indonesia.doc');
+  } else {
+    res.status(404).send('File PRD DOC belum tersedia.');
+  }
+});
+
+app.get('/api/download/prd-pdf', (req: Request, res: Response) => {
+  const filePath = path.join(process.cwd(), 'public', 'PRD_SIG_Rehabilitasi_DAS_PT_Adaro_Indonesia.pdf');
+  if (fs.existsSync(filePath)) {
+    res.download(filePath, 'PRD_SIG_Rehabilitasi_DAS_PT_Adaro_Indonesia.pdf');
+  } else {
+    res.status(404).send('File PRD PDF belum tersedia.');
+  }
 });
 
 // Reset to default sample dataset
