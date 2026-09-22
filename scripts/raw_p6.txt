@@ -1,0 +1,46 @@
+PAGE 6
+393 88 1.79 Hitam 30-07-2026 9 Cidaun Kertajadi Jawa Barat 48M 756816 9170837 2024 3x3 Cemara Udang 32 58% Regosol 5 3B Sulton
+394 89 2.68 Hitam 30-07-2026 9 Cidaun Kertajadi Jawa Barat 48M 756616 9170837 2024 3x3 Cemara Udang 32 58% Regosol 5 3B Sulton
+395 90 27.68 Hitam 30-07-2026 9 Cidaun Kertajadi Jawa Barat 48M 756416 9170837 2024 3x3 Cemara Udang 32 58% Regosol 5 3B Sulton
+396 92 10.71 Hitam 30-07-2026 9 Cidaun Kertajadi Jawa Barat 48M 756016 9170837 2024 3x3 Cemara Udang 32 58% Regosol 5 3B Sulton
+397 93 42.86 Merah 30-07-2026 9 Cidaun Kertajadi Jawa Barat 48M 755816 9170837 2024 3x3 Cemara Udang 32 58% Regosol 5 3B Sulton
+398 97 12.50 Hitam 30-07-2026 9 Cidaun Kertajadi Jawa Barat 48M 754616 9170937 2024 3x3 Cemara Udang 32 58% Regosol 5 3B Sulton
+399 98 16.96 Hitam 30-07-2026 9 Cidaun Kertajadi Jawa Barat 48M 754416 9170937 2024 3x3 Cemara Udang 32 58% Regosol 5 3B Sulton
+400 13 83.04 Hijau 05-08-2026 9 Agrabinta Sinarlaut Jawa Barat 48M 704781 9177828 2024 3x3 Cemara Udang 32 60% Regosol 6.8 5 3B Sulton
+401 14 62.50 Merah 05-08-2026 9 Agrabinta Sinarlaut Jawa Barat 48M 704381 9177828 2024 3x3 Cemara Udang 32 60% Regosol 6.9 2 3B Sulton
+402 15 50.89 Merah 05-08-2026 9 Agrabinta Sinarlaut Jawa Barat 48M 703981 9177828 2024 3x3 Cemara Udang 32 60% Regosol 7 2 3B Sulton
+403 16 38.39 Hitam 05-08-2026 9 Agrabinta Sinarlaut Jawa Barat 48M 703581 9177828 2024 3x3 Cemara Udang 32 60% Regosol 7 2 3B Sulton
+404 12 60.71 Merah 05-08-2026 9 Agrabinta Sinarlaut Jawa Barat 48M 705181 9177828 2024 3x3 Cemara Udang 32 60% Regosol 6.8 2 3B Sulton
+405 50 63.39 Merah 06-08-2026 9 Sindangbarang Kertamukti Jawa Barat 48M 728075 9175778 2024 3x3 Cemara Udang 30 75% Regosol 6.9 6 3B Alfath
+406 51 68.75 Merah 06-08-2026 9 Sindangbarang Kertamukti Jawa Barat 48M 727875 9175780 2024 3x3 Cemara Udang 30 75% Regosol 6.8 2 3B Alfath
+407 52 46.43 Merah 06-08-2026 9 Sindangbarang Kertamukti Jawa Barat 48M 727675 9175796 2024 3x3 Cemara Udang 30 75% Regosol 6.8 3 3B Alfath
+408 53 66.07 Merah 06-08-2026 9 Sindangbarang Kertamukti Jawa Barat 48M 727475 9175815 2024 3x3 Cemara Udang 30 75% Regosol 6.8 1 3B Alfath
+409 54 81.25 Hijau 06-08-2026 9 Sindangbarang Kertamukti Jawa Barat 48M 727275 9175813 2024 3x3 Cemara Udang 30 75% Regosol 6.8 6 3B Alfath
+410 40 50.89 Merah 12-08-2026 9 Sindangbarang Talagasari Jawa Barat 48M 731675 9175378 2024 3x3 Cemara Udang 30 71% Regosol 6.8 2 3B Alfath
+411 41 81.25 Hijau 12-08-2026 9 Sindangbarang Talagasari Jawa Barat 48M 731275 9175478 2024 3x3 Cemara Udang 30 71% Regosol 6.8 2 3B Alfath
+412 42 78.57 Kuning 12-08-2026 9 Sindangbarang Talagasari Jawa Barat 48M 730875 9175578 2024 3x3 Cemara Udang 30 71% Regosol 6.8 4 3B Alfath
+413 43 83.93 Hijau 12-08-2026 9 Sindangbarang Talagasari Jawa Barat 48M 730475 9175578 2024 3x3 Cemara Udang 30 71% Regosol 6.9 7 3B Alfath
+414 44 80.36 Hijau 12-08-2026 9 Sindangbarang Talagasari Jawa Barat 48M 730075 9175678 2024 3x3 Cemara Udang 30 71% Regosol 6.8 4 3B Alfath
+415 45 42.86 Merah 12-08-2026 9 Sindangbarang Talagasari Jawa Barat 48M 729675 9175678 2024 3x3 Cemara Udang 30 71% Regosol 6.8 7 3B Alfath
+416 46 80.36 Hijau 12-08-2026 9 Sindangbarang Talagasari Jawa Barat 48M 729275 9175678 2024 3x3 Cemara Udang 30 71% Regosol 6.8 2 3B Alfath
+417 47 62.50 Merah 12-08-2026 9 Sindangbarang Talagasari Jawa Barat 48M 728875 9175678 2024 3x3 Cemara Udang 30 71% Regosol 6.8 3 3B Alfath
+418 48 42.86 Merah 12-08-2026 9 Sindangbarang Talagasari Jawa Barat 48M 728475 9175704 2024 3x3 Cemara Udang 30 71% Regosol 6.8 1 3B Alfath
+419 49 61.61 Merah 12-08-2026 9 Sindangbarang Talagasari Jawa Barat 48M 728275 9175727 2024 3x3 Cemara Udang 30 71% Regosol 6.8 5 3B Alfath
+420 549 76.79 Kuning 18/08/2026 1 I 11 Kiram, Karang Intan 50M 269707 9608552 2025 3x3 Mahoni, eucalyptus 32 75% Latosol 6 25 2A Ghadafi
+421 556 94.64 Hijau 18/08/2026 1 I 11 Kiram, Karang Intan 50M 269866 9608677 2025 3x3 Mahoni, bintaro 31.6 70% Latosol 6.1 27 2A Ghadafi
+422 562 76.79 Kuning 18/08/2026 1 I 11 Kiram, Karang Intan 50M 269719 9608756 2025 3x3 Mahoni, bintaro 31.6 68% Latosol 6.2 27 2A Ghadafi
+423 570 82.14 Hijau 15/08/2026 4 Tiwingan Lama II 8 Tahura Sultan Adam 50M 282110 9611756 2025 3x3 Karet, Petai 29.8 74% Latosol 6 36 2A Asra
+424 572 81.25 Hijau 15/08/2026 4 Tiwingan Lama II 8 Tahura Sultan Adam 50M 281898 9611843 2025 3x3 Karet, Petai 30.6 70% Latosol 6 33 2A Asra
+425 574 84.82 Hijau 15/08/2026 4 Tiwingan Lama II 8 Tahura Sultan Adam 50M 282310 9611854 2025 3x3 Karet, Petai 30.6 74% Latosol 6 42 2A Asra
+426 576 81.25 Hijau 15/08/2026 4 Tiwingan Lama II 8 Tahura Sultan Adam 50M 282115 9611956 2025 3x3 Karet, Petai 30.9 70% Latosol 6 34 2A Asra
+427 493 83.93 Hijau 27-08-2026 7 Belangian I 9 Belangian, Aranio, Banjar 50M 276185 9598007 2026 3X3 Latosol 2A M. Jufri
+428 497 73.21 Merah 27-08-2026 7 Belangian I 9 Belangian, Aranio, Banjar 50M 276169 9598214 2026 3X3 Latosol 2A M. Jufri
+429 238 78.57 Kuning 20-08-2026 R1 Batakan I 7 Batakan, kec. Panyipatan 50M 237199 9539912 2025 3x3 Pulai, Belangiran 32.7 68% Latosol 6.4 5 2A Maman
+430 240 83.04 Hijau 20-08-2026 R1 Batakan I 7 Batakan, kec. Panyipatan 50M 237142 9540012 2025 3x3 Pulai, Belangiran 32.4 68% Latosol 6.3 3 2A Maman
+431 248 83.93 Hijau 20-08-2026 R1 Batakan I 7 Batakan, kec. Panyipatan 50M 237151 9540114 2025 3x3 Pulai, Belangiran 32.5 69% Latosol 6.2 5 2A Maman
+432 252 82.14 Hijau 20-08-2026 R1 Batakan I 7 Batakan, kec. Panyipatan 50M 237171 9540201 2025 3x3 Pulai, Belangiran 32.6 69% Latosol 6.4 7 2A Maman
+433 260 81.25 Hijau 20-08-2026 R1 Batakan I 7 Batakan, kec. Panyipatan 50M 237162 9540307 2025 3x3 Pulai, Belangiran 32.5 69% Latosol 6.5 4 2A Maman
+434 262 82.14 Hijau 20-08-2026 R1 Batakan I 7 Batakan, kec. Panyipatan 50M 237178 9540398 2025 3x3 Pulai, Belangiran 32.6 69% Latosol 6.5 6 2A Maman
+435 242 75.00 Kuning 03-09-2026 R1 Batakan I 7 Batakan, Kec. Panyipatan 50M 237254 9539906 2025 3X3 Pulai, Belangiran 32.8 70% Latosol 6 5 2A Sule
+436 244 83.04 Hijau 03-09-2026 R1 Batakan I 7 Batakan, Kec. Panyipatan 50M 237267 9540026 2025 3X3 Pulai, Belangiran 32.9 70% Latosol 6 5 2A Sule
+437 258 78.57 Kuning 03-09-2026 R1 Batakan I 7 Batakan, Kec. Panyipatan 50M 237251 9540306 2025 3X3 Pulai, Belangiran 32.8 70% Latosol 6 5 2A Sule

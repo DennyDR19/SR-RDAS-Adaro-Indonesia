@@ -118,3 +118,43 @@ export interface CustomBoundary {
   uploadedAt: string;
   data: any; // GeoJSON FeatureCollection
 }
+
+export interface PuFilterCriteria {
+  das: string; // 'all' | specific DAS
+  blok: string; // 'all' | specific Blok
+  petak: string; // 'all' | specific Petak
+  periodeEvaluasi: string; // 'all' | specific Periode
+  lokasiDaerah: string; // 'all' | specific Lokasi
+  titikKoordinatUtm: string; // 'all' | specific UTM Zone or coordinate
+  tahunTanam: string; // 'all' | specific Tahun Tanam
+  kategori: string; // 'all' | 'hijau' | 'kuning' | 'merah' | 'hitam'
+  pengawasOperasional: string; // 'all' | specific Pengawas
+  persentaseHidup: string; // 'all' | '>80' | '75-80' | '40-75' | '<=40' | string
+  jarakTanam: string; // 'all' | specific Jarak Tanam
+  jenisTanaman: string; // 'all' | specific Jenis Tanaman
+  suhuLingkungan: string; // 'all' | '<28' | '28-30' | '>30' | string
+  kelembabanUdara: string; // 'all' | '<70' | '70-80' | '>80' | string
+  jenisTanah: string; // 'all' | specific Jenis Tanah
+  pHTanah: string; // 'all' | '<5' | '5-6' | '6-7' | '>7' | string
+  searchQuery?: string;
+}
+
+export const DEFAULT_PU_FILTER: PuFilterCriteria = {
+  das: 'all',
+  blok: 'all',
+  petak: 'all',
+  periodeEvaluasi: 'all',
+  lokasiDaerah: 'all',
+  titikKoordinatUtm: 'all',
+  tahunTanam: 'all',
+  kategori: 'all',
+  pengawasOperasional: 'all',
+  persentaseHidup: 'all',
+  jarakTanam: 'all',
+  jenisTanaman: 'all',
+  suhuLingkungan: 'all',
+  kelembabanUdara: 'all',
+  jenisTanah: 'all',
+  pHTanah: 'all',
+  searchQuery: '',
+};

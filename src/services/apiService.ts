@@ -9,17 +9,22 @@ import {
   fetchPUsFromGoogleSheet,
 } from './googleSheetsDirectService';
 
-const LOCAL_STORAGE_KEY = 'das_rehabilitasi_pu_v1';
-const NOTIF_STORAGE_KEY = 'das_rehabilitasi_notif_v1';
+const LOCAL_STORAGE_KEY = 'das_rehabilitasi_pu_2026_v2';
+const NOTIF_STORAGE_KEY = 'das_rehabilitasi_notif_2026_v2';
 
 function getLocalPUList(): PetakUkur[] {
   const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
   if (cached) {
     try {
-      return JSON.parse(cached);
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length >= 100) {
+        return parsed;
+      }
     } catch {}
   }
-  return [...INITIAL_PETAK_UKUR];
+  const initial = [...INITIAL_PETAK_UKUR];
+  saveLocalPUList(initial);
+  return initial;
 }
 
 function saveLocalPUList(list: PetakUkur[]): void {

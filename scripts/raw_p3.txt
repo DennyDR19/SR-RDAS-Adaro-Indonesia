@@ -1,0 +1,75 @@
+PAGE 3
+164 624 97.32 Hijau 12-03-2026 4 Batung I 2 Batung, Tapin 50M 321008 9677692 2019 3x3 Kemiri, Durian, Petai, Jengkol 31 68% Podsolik Merah Kuning 5.4 43 2A
+165 640 96.43 Hijau 12-03-2026 4 Batung I 1 Batung, Tapin 50M 320432 9678187 2025 3x3 Karet, Petai, Durian 29.7 63% Podsolik Merah Kuning 5.4 36 2A
+166 643 58.93 Merah 12-03-2026 4 Batung I 1 Batung, Tapin 50M 320480 9678334 2025 3x3 Karet, Jengkol 34 54% Podsolik Merah Kuning 4.8 48 2A
+167 404 60.71 Merah 26-03-2026 R1 Sabuhur II 4 Jorong, Pelaihari 50M 263148 9552835 2025 3x3 Galam, Waru 33.8 62% Aluvial 5.6 15 3C Adek N
+168 409 83.04 Hijau 26-03-2026 R1 Sabuhur II 4 Jorong, Pelaihari 50M 263149 9552932 2025 3x3 Galam, Pulai 33.5 64% Aluvial 6.2 15 3C Adek N
+169 414 56.25 Merah 26-03-2026 R1 Sabuhur II 4 Jorong, Pelaihari 50M 263148 9553041 2025 3x3 Belangiran, Galam, Pulai 35.3 57% Aluvial 5.6 15 3C Adek N
+170 419 45.54 Merah 26-03-2026 R1 Sabuhur II 2 Jorong, Pelaihari 50M 263150 9553141 2025 3x3 Belangiran, Galam, Pulai 34.8 64% Aluvial 5.8 13 3C Adek N
+171 110 46.43 Merah 18-03-2026 9 Cidaun Cisalak Jawa Barat 48M 750216 9171437 2024 3x3 Cemara Udang 27 70% Regosol 20 3B Cep
+172 518 91.96 Hijau 24/03/2026 1 I 10 Pamato, Kec. karang Intan 50M 269085 9608161 2025 3x3 Mahoni 33,4 64% Litosol 5,3 26 2A Ghadafi
+173 524 71.43 Merah 24/03/2026 1 I 10 Pamato, Kec. karang Intan 50M 269084 9608239 2025 3x3 Mahoni, eculyptus 35.1 58% Litosol 6,3 40 2A ghadafi
+174 466 65,18 Merah 25/03/2026 7 Belangian II 7 Belangian 50M 275274 9597783 2025 3x3 Karet, Pete, mahonI 29,6 74% Latosol 5,5 33 2A Jufri
+175 469 91.07 Hijau 01-04-2026 7 Belangian II 8 Belangian, Kec. Aranio, Banjar 50M 275132 9597919 2025 3x3 Mahoni, Jambu mete Latosol 2A M. Rafi'i
+176 473 80.36 Hijau 01-04-2026 7 Belangian II 8 Belangian, Kec. Aranio, Banjar 50M 275281 9597970 2025 3x3 Jambu mete, karet Latosol 2A M. Rafi'i
+177 475 91.96 Hijau 01-04-2026 7 Belangian II 8 Belangian, Kec. Aranio, Banjar 50M 275118 9598057 2025 3x3 Mahoni, Jambu mete Latosol 2A M. Rafi'i
+178 601 76.79 Kuning 02-04-2026 3 Tiwingan Lama I 4 Tiwingan Lama, Aranio, Banjar 50M 279391 9612207 2025 3x3 Kapuk randu 32 81% Latosol 5.4 36 2A Asra
+179 607 89.29 Hijau 02-04-2026 3 Tiwingan Lama I 4 Tiwingan Lama, Aranio, Banjar 50M 279385 9612300 2025 3x3 Kapuk randu 31.4 78% Latosol 5.4 43 2A Asra
+180 157 83.04 Hijau 08-04-2026 R1 Batakan II 6 Batakan, Kec. Panyipatan 50M 238254 9541048 2026 3x3 Pulai, belangiran 34.2 60% Latosol 6.2 3C Suliadi
+181 168 86.61 Hijau 08-04-2026 R1 Batakan II 5 Batakan, Kec. Panyipatan 50M 238203 9541233 2026 3x3 Pulai 34.1 62% Latosol 6 3C Suliadi
+182 505 19.64 Hitam 09-04-2026 1 I 9 Kiram, Karang Intan 50M 268886 9607868 2025 3x3 Mahoni 30.1 90% Podsolik Merah Kuning 4.4 26 3A A. Ghadafi
+183 511 5.36 Hitam 09-04-2026 1 I 9 Kiram, Karang Intan 50M 268698 9608065 2025 3x3 Mahoni 33.4 65% Podsolik Merah Kuning 5.4 26 3A A. Ghadafi
+184 515 42.86 Merah 09-04-2026 1 I 9 Kiram, Karang Intan 50M 268486 9608173 2025 3x3 Mahoni, Angsana 35.7 55% Podsolik Merah Kuning 5.2 15 3A A. Ghadafi
+185 4478 48.21 Merah 16-04-2026 7 Belangian Tanjung 7 Belangian Tanjung 50M 273730 9597700 2025 3x3 Kapuk randu, Jambu mete 27 86% Latosol 5.4 27 2A Ari
+186 4501 61.61 Merah 16-04-2026 7 Belangian Tanjung 7 Belangian Tanjung 50M 273731 9597794 2025 3x3 Kapuk randu, Jambu mete 27.6 82% Latosol 5.6 20 2A Ari
+187 58 75.89 Kuning 01-04-2026 9 Sindangbarang Kertamukti Jawa Barat 48M 726475 9175987 2024 3x3 Cemara Udang 26 66% Regosol 13 3B Alfath
+188 59 74.11 Merah 01-04-2026 9 Sindangbarang Kertamukti Jawa Barat 48M 726675 9175978 2024 3x3 Cemara Udang 26 66% Regosol 10 3B Alfath
+189 316 97.50 Hijau 08-04-2026 9 Cikanyere Pakuon Jawa Barat 48M 728677 9254291 2024 5x5 Nangka, Sukun dan Alpukat 26 76% Andosol 10.4 3B Ungkas
+190 322 100.00 Hijau 08-04-2026 9 Cikanyere Pakuon Jawa Barat 48M 729109 9254819 2024 5x5 Nangka, Sukun dan Alpukat 26 73% Andosol 11.5 3B Ungkas
+191 324 40.00 Hitam 08-04-2026 9 Cikanyere Pakuon Jawa Barat 48M 729077 9254991 2024 5x5 Nangka, Sukun dan Alpukat 26 73% Andosol 6.8 3B Ungkas
+192 307 5.00 Hitam 09-04-2026 9 Cikanyere Pakuon Jawa Barat 48M 728077 9253991 2024 5x5 Nangka, Sukun dan Alpukat 25 73% Andosol 6.8 3B Ungkas
+193 310 30.00 Hitam 09-04-2026 9 Cikanyere Pakuon Jawa Barat 48M 728077 9254091 2024 5x5 Nangka, Sukun dan Alpukat 25 73% Andosol 6.8 3B Ungkas
+194 312 40.00 Hitam 09-04-2026 9 Cikanyere Pakuon Jawa Barat 48M 728105 9254191 2024 5x5 Nangka, Sukun dan Alpukat 25 73% Andosol 6.8 3B Ungkas
+195 555 30.00 Hitam 09-04-2026 9 Cikanyere Pakuon Jawa Barat 48M 727972 9253865 2024 5x5 Nangka, Sukun dan Alpukat 25 73% Andosol 6.8 3B Ungkas
+196 555B 67.50 Merah 09-04-2026 9 Cikanyere Pakuon Jawa Barat 48M 727869 9253807 2024 5x5 Nangka, Sukun dan Alpukat 25 73% Andosol 6.8 3B Ungkas
+197 435 91.07 Hijau 14/04/2026 R1 Sabuhur II 1 Jorong, Pelaihari 50M 262953 9553549 2025 3x3 Mahoni, Galam, belangiran 32.9 71% Litosol 5.1 18 2A Adek N
+198 438 86.61 Hijau 14/04/2026 R1 Sabuhur II 1 Jorong, Pelaihari 50M 262951 9553647 2025 3x3 Mahoni, Galam, belangiran 30.3 82% Litosol 5.2 9 2A Adek N
+199 440 91.07 Hijau 14/04/2026 R1 Sabuhur II 1 Jorong, Pelaihari 50M 262952 9553740 2025 3x3 Mahoni, Galam, belangiran 30.7 82% Litosol 6 12 2A Adek N
+200 488 84.82 Hijau 15/04/2026 7 Belangian I 9 Belangian 50M 276580 9597807 2025 3x3 MahonI 27.8 83% Latosol 6 39 2A JufrI
+201 567 79.46 Kuning 15-04-2026 4 Tiwingan Lama II 7 Tahura Sultan Adam 50M 282099 9611625 2025 3x3 Kapuk Randu, MahonIKaret Latosol 2A Asra
+202 571 74.11 Merah 15-04-2026 4 Tiwingan Lama II 7 Tahura Sultan Adam 50M 282286 9611714 2025 3x3 Kapuk Randu, MahonIKaret Latosol 2A Asra
+203 490 83.04 Hijau 15/04/2026 7 Belangian I 9 Belangian 50M 276596 9597936 2025 3x3 Mahoni 29.6 97% Latosol 4.5 35 2A Jufri
+204 492 76.79 Kuning 15/04/2026 7 Belangian I 9 Belangian 50M 276386 9598012 2025 3x3 Mahoni, Kapuk Randu 30.4 79% Latosol 4.6 35 2A JufrI
+205 6082 82.14 Hijau 21/04/2026 3 Tiwingan Lama I 4 Aranio, Kab. banjar 50M 279705 9612280 2025 3x3 Karet, pete 30.3 74% Latosol 5.5 30 2A Asra
+206 6026 88.39 Hijau 21/04/2026 3 Tiwingan Lama I 4 Aranio, Kab. banjar 50M 279697 9612211 2025 3x3 Karet,Pete,jengkol 30.6 76% Latosol 5.7 32 2A Asra
+207 427 83.04 Hijau 22-04-2026 R1 Sabuhur II 2 Jorong, Pelaihari 50M 262760 9553337 2025 3x3 Belangiran, Pulai 33.8 62% Aluvial 5.6 14 3C Adek N
+208 431 84.82 Hijau 22-04-2026 R1 Sabuhur II 1 Jorong, Pelaihari 50M 262763 9553428 2025 3x3 Belangiran 32.8 71% Aluvial 5.4 14 3C Adek N
+209 569 81.25 Hijau 23-04-2026 4 Tiwingan Lama II 7 Tahura Sultan Adam 50M 281937 9611721 2025 3x3 Mahoni, Karet 31 79% Latosol 5.6 37 2A Asra
+210 573 72.32 Merah 23-04-2026 4 Tiwingan Lama II 7 Tahura Sultan Adam 50M 282063 9611845 2025 3x3 Karet, Petai 31 74% Latosol 5.6 23 2A Asra
+211 575 72.32 Merah 23-04-2026 4 Tiwingan Lama II 7 Tahura Sultan Adam 50M 281893 9611922 2025 3x3 Karet 30.1 86% Latosol 5.6 33 2A Asra
+212 512 83.04 Hijau 25/04/2025 I I 9 Pamaton, Kec. Aranio 50M 268877 9608064 2025 3x3 Mahoni 32.9 65% Litosol 6.8 23 2A Ghadafi
+213 580 70.54 Merah 28/03/2026 4 Tiwingan Lama II 7 Aranio, Kab. banjar 50M 282098 9612033 2025 3x3 Karet 31.1 68% Latosol 5.8 29 2A Asra
+214 584 50.89 Merah 28/03/2026 4 Tiwingan Lama II 7 Aranio, Kab. banjar 50M 282092 9612148 2025 3x3 Karet 30.9 75% Latosol 5.6 27 2A Asra
+215 776 88.39 Hijau 28/04/2026 7 Belangian I 3 Belangian 50M 277214 9597074 2025 3x3 Mahoni, Kapuk Randu , Karet 33.4 68% Latosol 5.8 42 2A JufrI
+216 778 48.21 Merah 28/04/2026 7 Belangian I 3 Belangian 50M 277262 9597140 2025 3x3 Mahoni, Kapuk Randu , Karet 28 58% Latosol 6 40 2A Jufri
+217 780 38.39 Hitam 28/04/2026 7 Belangian I 3 Belangian 50M 277372 9597261 2025 3x3 Mahoni, Kapuk Randu , Karet 31.1 74% Latosol 5.4 41 2A Jufri
+218 782 29.46 Hitam 28/04/2026 7 Belangian I 3 Belangian 50M 277310 9597457 2025 3x3 Mahoni, Kapuk Randu 31 70% Latosol 6.4 41 2A Jufri
+219 428 82.14 Hijau 29/04/2026 R1 Sabuhur II 2 Sabuhur 50M 262942 9553372 2025 3x3 Mahoni, Galam, Belangiran 35.6 71% Litosol 6.2 30 2A Adek
+220 424 58.04 Merah 29/04/2026 R1 Sabuhur II 2 Sabuhur 50M 263157 9553241 2025 3x3 Mahoni, Galam, Belangiran 33.6 71% Litosol 5.2 24 2A Adek
+221 418 66.07 Merah 29/04/2026 R1 Sabuhur II 2 Sabuhur 50M 263157 9553241 2025 3x3 Mahoni, Galam, Belangiran 33.6 71% Litosol 5.2 24 2A Adek
+222 462 65.18 Merah 31/03/2026 7 Belangian II 7 belangian 50M 275665 9597605 2025 3x3 Karet,Pete, MahonI 29.1 76% Latosol 4.8 32 2A Jufri
+223 516 3.57 Hitam 01-04-26 1 I 9 Pamato, Kec. Karang Intan 50M 268700 9608152 2025 3x3 MahonI 28.8 83% Latosol 5.8 35 2A Ghadafi
+224 522 6.25 Hitam 01-04-26 1 I 9 Pamato, Kec. Karang Intan 50M 268692 9608246 2025 3x3 MahonI 28.8 82% Latosol 5.5 35 2A Ghadafi
+225 254 65.00 Merah 21-04-26 9 Sukasari Sindangsari Jawa Barat 48M 805209 9238319 2025 5x5 JatIPutih, Alpukat (Okulasi), Petai, Jengkol, Nangka 29.5 49% Eutric Cambisols 5.3 15.1 3B OdIYana
+226 261 50.00 Merah 22-04-26 9 Kuningan Subang Jawa Barat 48M 891574 9212006 2025 5x5 Kemiri, Picung, Alpukat (okulasi), Sukun, Pala 26.9 78% Podzolik 5.8 25.4 3B Asep
+227 274 93.02 Hijau 22-04-2026 9 Kuningan Gunungsari Jawa Barat 48M 909168 9225384 2025 5x5 Nangka, Jambu air, Asam jawa 27 84% Pellic Vertisols 6.6 13.3 3B Asep
+228 293 87.50 Hijau 23-04-2026 9 Kuningan Padangbeunghar & Kadeula/KRK Jawa Barat 48M 876378 9244918 2025 5x5 Kenanga, Kayu Manis, Kayu Putih, Januju, Saninten, Durian, Manggis, Alpukat, Bisbul, Santigi 28 74% Ochric Andosols 5 6.6 3B Asep
+229 294 60.00 Merah 23-04-2026 9 Kuningan Padangbeunghar & Kadeula/KRK Jawa Barat 48M 876799 9244885 2025 5x5 Manggis 30.6 68% Ochric Andosols 6.7 4.7 3B Asep
+230 748 93.75 Hijau 30-04-2026 7 Belangian I 8 Belangian, Kec. Aranio, Kab. Banjar 50M 276826 9597660 2025 3x3 Jambu Mete, Kapuk Randu 32.1 73% Latosol 6.4 27 2 M. Jufri
+231 751 89.29 Hijau 30-04-2026 7 Belangian I 8 Belangian, Kec. Aranio, Kab. Banjar 50M 276838 9597749 2025 3x3 Jambu Mete, Kapuk Randu 29.1 80% Latosol 6.6 32 2 M. Jufri
+232 752 48.21 Merah 30-04-2026 7 Belangian I 8 Belangian, Kec. Aranio, Kab. Banjar 50M 277020 9597761 2025 3x3 Jambu Mete, Kapuk Randu 31.6 74% Latosol 6 28 2 M. Jufri
+233 452 88.29 Hijau 06-05-2026 7 Belangian tanjung 7 Belangian, Kec. Aranio, Kab. Banjar 50M 274030 9597816 2026 3x3 Kapuk randu,karet, mahonI 31.7 73% latosol 6.4 19 2 Ari
+234 454 91.96 Hijau 06-05-2026 7 Belangian tanjung 7 Belangian, Kec. Aranio, Kab. Banjar 50M 274024 9597902 2026 3x3 Kapuk randu,karet, mahonI 31.2 75% latosol 6.2 24 2 Ari
+235 241 79.46 Kuning 06-05-2026 R1 Batakan I 7 Batakan, Kec. Panyipatan 50M 237161 9539913 2026 3x3 Pulai, Belangiran 3C Septia Rendy S
+236 466 65.18 Merah 07-05-2026 7 Belangian II 7 Belangian, Kec. Aranio, Banjar 50M 275233 9597789 2025 3x3 Mahoni, Kapuk Randu 27.3 87% Latosol 6.6 26 2A M. Jufri
+237 467 60.71 Merah 07-05-2026 7 Belangian II 7 Belangian, Kec. Aranio, Banjar 50M 275476 9597784 2025 3x3 Mahoni, Jambu Mete, Kapuk Randu 27.7 86% Latosol 6.4 32 2A M. Jufri

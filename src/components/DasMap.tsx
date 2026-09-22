@@ -58,10 +58,10 @@ export const DasMap: React.FC<DasMapProps> = ({
   useEffect(() => {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
 
-    // Center around Southern Bandung / Kertasari / DAS Citarum Hulu
+    // Center around South Kalimantan / Central Rehabilitation Region
     const map = L.map(mapContainerRef.current, {
-      center: [-7.14, 107.64],
-      zoom: 11,
+      center: [-3.55, 115.05],
+      zoom: 10,
       zoomControl: false,
     });
 
@@ -75,16 +75,6 @@ export const DasMap: React.FC<DasMapProps> = ({
     ).addTo(map);
 
     tileLayerRef.current = initialTile;
-
-    // Delineation polygon
-    const boundary = L.polygon(DAS_BOUNDARY_COORDS, {
-      color: '#38bdf8',
-      weight: 2,
-      dashArray: '5, 8',
-      fillColor: '#0284c7',
-      fillOpacity: 0.08,
-    }).addTo(map);
-    boundaryLayerRef.current = boundary;
 
     // Layer group for markers
     const markersGroup = L.layerGroup().addTo(map);
@@ -422,6 +412,28 @@ export const DasMap: React.FC<DasMapProps> = ({
       });
     }
   }, [selectedPuId, puList]);
+
+  // Automatically fit map bounds when Sub-DAS filter changes or when list first loads
+  const prevFilterRef = useRef<string>(activeSubDasFilter);
+  const initialFitDoneRef = useRef<boolean>(false);
+  useEffect(() => {
+    if (!mapInstanceRef.current || puList.length === 0) return;
+    const filterChanged = prevFilterRef.current !== activeSubDasFilter;
+    if (filterChanged || !initialFitDoneRef.current) {
+      prevFilterRef.current = activeSubDasFilter;
+      initialFitDoneRef.current = true;
+      const filtered = puList.filter((p) => {
+        if (activeSubDasFilter === 'all') return true;
+        const dasVal = p.das || p.subDas;
+        return dasVal === activeSubDasFilter;
+      });
+      const pointsToFit = filtered.length > 0 ? filtered : puList;
+      const bounds = L.latLngBounds(pointsToFit.map((p) => [p.latitude, p.longitude]));
+      if (bounds.isValid()) {
+        mapInstanceRef.current.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+      }
+    }
+  }, [activeSubDasFilter, puList]);
 
   // Center bounds
   const handleResetBounds = () => {

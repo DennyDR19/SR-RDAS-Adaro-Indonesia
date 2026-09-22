@@ -31,18 +31,26 @@ import {
 
 interface AnalyticsDashboardProps {
   puList: PetakUkur[];
+  allPuList?: PetakUkur[];
   onSelectPu: (pu: PetakUkur) => void;
   onOpenDetail: (pu: PetakUkur) => void;
   onOpenExcelImport?: () => void;
+  activeFilterCount?: number;
+  onResetFilters?: () => void;
 }
 
 export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   puList,
+  allPuList,
   onSelectPu,
   onOpenDetail,
   onOpenExcelImport,
+  activeFilterCount = 0,
+  onResetFilters,
 }) => {
   const metrics = computeDasMetrics(puList);
+  const totalOverall = allPuList?.length || puList.length;
+  const isFiltered = activeFilterCount > 0 || (allPuList && puList.length < allPuList.length);
   const [selectedSubDas, setSelectedSubDas] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -78,16 +86,41 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     },
   ].filter((d) => d.value > 0);
 
-  // 2. Data for Bar Chart: Average SR per Sub-DAS
-  const subDasChartData = metrics.distribusiSubDas.map((d) => ({
-    name: d.subDas.replace('Sub-DAS ', ''),
-    fullName: d.subDas,
-    rataRataSR: d.rataRataSR,
-    totalPU: d.totalPU,
-    pohonHidup: d.pohonHidup,
-    pohonAwal: d.pohonAwal,
-    kebutuhanSulam: Math.max(0, d.pohonAwal - d.pohonHidup),
-  }));
+  // 2. Adaptive Data for Bar Chart: Average SR per Sub-DAS or per Blok if filtered to single area
+  const isSingleArea = metrics.distribusiSubDas.length <= 1;
+  let subDasChartData: any[] = [];
+  let barChartTitle = 'Performa Rata-Rata Survival Rate per Sub-DAS';
+
+  if (isSingleArea && puList.length > 0) {
+    const blokMap = new Map<string, { awal: number; hidup: number; count: number }>();
+    for (const p of puList) {
+      const b = p.blok || 'Blok Terpilih';
+      const cur = blokMap.get(b) || { awal: 0, hidup: 0, count: 0 };
+      const awal = p.tanamanAwal || 50;
+      const hidup = p.tanamanHidup !== undefined ? p.tanamanHidup : Math.round(((p.survivalRate || 0) / 100) * awal);
+      blokMap.set(b, { awal: cur.awal + awal, hidup: cur.hidup + hidup, count: cur.count + 1 });
+    }
+    subDasChartData = Array.from(blokMap.entries()).map(([blokName, stat]) => ({
+      name: blokName,
+      fullName: `Blok ${blokName}`,
+      rataRataSR: stat.awal > 0 ? Math.round((stat.hidup / stat.awal) * 1000) / 10 : 0,
+      totalPU: stat.count,
+      pohonHidup: stat.hidup,
+      pohonAwal: stat.awal,
+      kebutuhanSulam: Math.max(0, stat.awal - stat.hidup),
+    }));
+    barChartTitle = 'Performa Rata-Rata Survival Rate per Blok';
+  } else {
+    subDasChartData = metrics.distribusiSubDas.map((d) => ({
+      name: d.subDas.replace('Sub-DAS ', ''),
+      fullName: d.subDas,
+      rataRataSR: d.rataRataSR,
+      totalPU: d.totalPU,
+      pohonHidup: d.pohonHidup,
+      pohonAwal: d.pohonAwal,
+      kebutuhanSulam: Math.max(0, d.pohonAwal - d.pohonHidup),
+    }));
+  }
 
   // 3. Filtered PU table
   const filteredPuList = puList.filter((pu) => {
@@ -107,6 +140,48 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
   return (
     <div className="w-full space-y-6 pb-8">
+      {/* Active Filter Scope Notification Banner */}
+      {isFiltered && (
+        <div className="bg-[#02241e] border border-lime-400/40 p-3 rounded-xl flex flex-wrap items-center justify-between gap-2.5 text-xs shadow-md">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-lime-400 animate-pulse" />
+            <span className="text-emerald-200">
+              Menampilkan Dasbor Kinerja Khusus Area Terfilter:{' '}
+              <strong className="text-lime-300 font-bold">{puList.length}</strong> dari {totalOverall} PU
+            </span>
+          </div>
+          {onResetFilters && (
+            <button
+              type="button"
+              onClick={onResetFilters}
+              className="text-[11px] px-2.5 py-1 rounded-lg bg-emerald-800/50 hover:bg-emerald-700/60 text-emerald-200 hover:text-white border border-emerald-500/30 transition-colors font-medium"
+            >
+              Kembali ke Seluruh Area ({totalOverall} PU)
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Zero match empty state */}
+      {puList.length === 0 && (
+        <div className="bg-[#04332b]/90 border border-amber-500/40 rounded-xl p-8 text-center space-y-3">
+          <AlertTriangle className="w-8 h-8 text-amber-400 mx-auto" />
+          <h3 className="text-white font-bold text-sm">Tidak Ada Data Petak Ukur yang Sesuai</h3>
+          <p className="text-emerald-200/80 text-xs max-w-md mx-auto">
+            Tidak ditemukan Petak Ukur dengan kombinasi kriteria filter saat ini. Silakan ubah atau reset filter ke pilihan &quot;All&quot;.
+          </p>
+          {onResetFilters && (
+            <button
+              type="button"
+              onClick={onResetFilters}
+              className="px-4 py-2 rounded-xl bg-lime-500 hover:bg-lime-400 text-slate-900 text-xs font-bold transition-colors shadow-lg"
+            >
+              Reset Semua Filter (All)
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Top Headline Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {/* Card 1: Rata-Rata Survival Rate */}
@@ -283,13 +358,13 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </div>
         </div>
 
-        {/* Right Chart: Average Survival Rate per Sub-DAS */}
+        {/* Right Chart: Average Survival Rate per Sub-DAS or per Blok */}
         <div className="lg:col-span-7 bg-[#04332b]/90 border border-emerald-500/30 backdrop-blur-md rounded-xl p-5 shadow-xl flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-1">
               <h3 className="font-bold text-white text-sm flex items-center gap-2">
                 <Layers className="w-4 h-4 text-lime-400" />
-                Performa Rata-Rata Survival Rate per Sub-DAS
+                {barChartTitle}
               </h3>
               <span className="text-xs text-emerald-300/80 font-medium">Garis Merah: Ambang Batas 75%</span>
             </div>

@@ -1,0 +1,87 @@
+PAGE 1
+1 480 95.54 Hijau 06-01-26 7 Belangian II 8 Belangian 50M 275294 9598293 2025 3 x 3 Mente, Mahoni 30 73,50 Gembur 4,7 26 2A
+2 447 85.71 Hijau 07-01-26 7 Belangian Tanjung 7 Desa Belangian, Kec. Aranio -3.63733047 114.9622084 2025 3 x 3 Mente, Mahoni 0,00 2A Ari
+3 10 71.56 Merah 07-01-26 9 Agrabinta Sinarlaut Jawa Barat 48M 705581 9177828 2025 3 x 3 Cemara Udang 30 0,00 Regosol 3B
+4 11 71.03 Merah 07-01-26 9 Agrabinta Sinarlaut Jawa Barat 48M 705581 9177824 2025 3 x 3 Cemara Udang 30 0,00 Regosol 3B
+5 17 70 Merah 07-01-26 9 Agrabinta Sinarlaut Jawa Barat 48M 703189 9177920 2025 3 x 3 Cemara Udang 30 0,00 Regosol 3B
+6 18 69.03 Merah 07-01-26 9 Agrabinta Sinarlaut Jawa Barat 48M 703384 9177919 2025 3 x 3 Cemara Udang 29 0,00 Regosol 3B
+7 19 49.18 Merah 07-01-26 9 Agrabinta Sinarlaut Jawa Barat 48M 703586 9177918 2025 3 x 3 Cemara Udang 30 0,00 Regosol 3B
+8 20 38.24 Hitam 07-01-26 9 Agrabinta Sinarlaut Jawa Barat 48M 703784 9177909 2025 3 x 3 Cemara Udang 30 0,00 Regosol 3B
+9 595 50.89 Merah 08-01-26 3 Tiwingan Lama I 4 Tiwingan Lama 50M 279414 9612084 2018-2025 3 x 3 Karet dan Petai 29,8 74,80 Ultisol 5,8 36 2A
+10 608 75 Kuning 08-01-26 3 Tiwingan Lama I 4 Tiwingan Lama 50M 279588 9612296 2018-2025 3 x 3 Karet, PetaIdan Kapuk Randu 28,7 74,80 Ultisol 6 47 2A Riyandi
+11 613 76.79 Kuning 08-01-26 3 Tiwingan Lama I 4 Tiwingan Lama 50M 279616 9612367 2018-2025 3 x 3 Karet, PetaIdan Kapuk Randu 29,8 74,80 Ultisol 5,6 26 2A Riyandi
+12 68 68.75 Merah 08-01-26 9 Cidaun Karangwangi Jawa Barat 48M 767016 9169837 2025 3 x 3 Cemara Udang 29 66,00 Regosol 3B Cep
+13 69 54.46 Merah 08-01-26 9 Cidaun Karangwangi Jawa Barat 48M 766216 9169937 2025 3 x 3 Cemara Udang 29 66,00 Regosol 3B Cep
+14 70 46.43 Merah 08-01-26 9 Cidaun Karangwangi Jawa Barat 48M 766416 9169924 2025 3 x 3 Cemara Udang 29 66,00 Regosol 3B Cep
+15 71 59.82 Merah 08-01-26 9 Cidaun Karangwangi Jawa Barat 48M 765616 9170020 2025 3 x 3 Cemara Udang 29 66,00 Regosol 3B Cep
+16 604 84.82 Hijau 10-01-26 3 Tiwingan Lama I 6 Tiwingan Lama I 50M 280022 9612190 2025 3 x 3 Karet, Pete, Mahoni, Jengkol 28 82,90 Gembur 5,8 41 2A Rehan & Asra
+17 610 89.29 Hijau 10-01-26 3 Tiwingan Lama I 6 Tiwingan Lama I 50M 280008 9612272 2025 3 x 3 Karet, Pete, Mahoni, Jengkol 28,2 85,00 Gembur 5,8 44 2A Rehan & Asra
+18 614 91.07 Hijau 10-01-26 3 Tiwingan Lama I 6 Tiwingan Lama I 50M 280200 9612375 2025 3 x 3 Karet, Pete, Mahoni, Jengkol 0,00 2A Rehan & Asra
+19 426 99.11 Hijau 13-01-26 RT1 Sabuhur II 2 Jorong, Pelaihari 50M 262548 9553348 2025 3 x 3 Pulai 86,00 Lempung 6 4 3C Adek
+20 428 0 Hitam 13-01-26 RT1 Sabuhur II 2 Jorong, Pelaihari 50M 262957 9553353 2025 3 x 3 - 31,4 78,60 Lempung 6,2 3 3C Adek Belum dilakukan penanaman
+21 430 0 Hitam 13-01-26 RT1 Sabuhur II 2 Jorong, Pelaihari 50M 262560 9553444 2025 3 x 3 - 30,4 77,80 Lempung 5,6 7 3C Adek Belum dilakukan penanaman
+22 432 0 Hitam 13-01-26 RT1 Sabuhur II 2 Jorong, Pelaihari 50M 262945 9553447 2025 3 x 3 - 31,7 70,50 Lempung 5,7 7 3C Adek Belum dilakukan penanaman
+23 445 75 Kuning 14-01-26 7 Belangian Tanjung 7 Banjar 50M 273819 9597655 2020, 2025 3 x 3 Kapuk Randu 32 70,80 Latosol 6 42 2A Naslihun
+24 448 85.71 Hijau 14-01-26 7 Belangian Tanjung 7 Banjar 50M 273819 9597683 2020, 2025 3 x 3 Kapuk Randu 30,2 72,60 Latosol 6 24 2A Naslihun
+25 450 84.82 Hijau 14-01-26 7 Belangian Tanjung 7 Banjar 50M 273616 9597853 2020, 2025 3 x 3 Mahoni, Kapuk Randu dan Jambu Mete 29,6 76,80 Latosol 6 35 2A Naslihun
+26 451 76.79 Kuning 14-01-26 7 Belangian Tanjung 7 Banjar 50M 273823 9597804 2020, 2025 3 x 3 Mahoni, Kapuk Randu dan Jambu Mete 30,3 75,00 Latosol 6 32 2A Naslihun
+27 152 55 Merah 14-01-26 9 Cikadu Mekarlaksana Jawa Barat 48M 748993 9188253 2025 5 x 5 Sengon, Jabon, Durian, Alpukat 26 77,00 Regosol 23 3B Husen
+28 154 87.1 Hijau 14-01-26 9 Cikadu Mekarlaksana Jawa Barat 48M 748993 9188353 2025 5 x 5 Sengon, Jabon, Durian, Alpukat 26 77,00 Regosol 23 3B Husen
+29 157 80 Kuning 14-01-26 9 Cikadu Mekarlaksana Jawa Barat 48M 749193 9188453 2025 5 x 5 Sengon, Jabon, Durian, Alpukat 26 77,00 Regosol 23 3B Husen
+30 159 87.38 Hijau 14-01-26 9 Cikadu Mekarlaksana Jawa Barat 48M 749193 9188553 2025 5 x 5 Sengon, Jabon, Durian, Alpukat 26 77,00 Regosol 23 3B Husen
+31 568 69.64 Merah 15-01-26 4 Tiwingan Lama II 8 Tahura Sultan Adam 50M 282519 9611654 2020 & 2025 3 x 3 Karet, Petai 31,3 77,40 Latosol 5,6 38 2A Fadlullah & Muhammad Asra
+32 577 72.32 Merah 15-01-26 4 Tiwingan Lama II 8 Tahura Sultan Adam 50M 282323 9611940 2020 & 2025 3 x 3 Karet, Petai 28,1 78,90 Latosol 5,6 23 2A Fadlullah & Muhammad Asra
+33 578 88.39 Hijau 15-01-26 4 Tiwingan Lama II 8 Tahura Sultan Adam 50M 282480 9611952 2020 & 2025 3 x 3 Karet, Petai 29,8 79,70 Latosol 6,2 41 2A Fadlullah & Muhammad Asra
+34 592 64.29 Merah 17-01-26 3 Tiwingan Lama I 4 Tiwingan Lama I 50M 279817 9612001 2025 3x3 Karet, Pete, Mahoni, Jengkol 28,1 82,10 Gembur 5,4 0 2A Asra & Yandi
+35 594 67.86 Merah 17-01-26 3 Tiwingan Lama I 4 Tiwingan Lama I 50M 280219 9611981 2025 3x3 Karet, Pete, Mahoni, Jengkol 28,9 77,30 Gembur 5,2 0 2A Asra & Yandi
+36 598 77.68 Kuning 17-01-26 3 Tiwingan Lama I 6 Tiwingan Lama I 50M 280033 9612079 2025 3x3 Karet, Pete, Mahoni, Jengkol 28,3 78,80 Gembur 5,2 0 2A Asra & Yandi
+37 496 66.07 Merah 20-01-26 7 Belangian I 9 Belangian 50M 275982 9598219 2025 3x3 Karet, Pete, Mahoni 32,5 66,00 Gembur 5,45 34 2A Jufri
+38 498 45.54 Merah 20-01-26 7 Belangian I 9 Belangian 50M 276001 9598327 2025 3x3 Karet, Pete, Mahoni 30,1 77,20 Gembur 5 37 2A Jufri
+39 500 57.14 Merah 20-01-26 7 Belangian I 9 Belangian 50M 275976 9598417 2025 3x3 Karet, Pete, Mahoni 29,7 75,30 Gembur 4,8 34 2A Jufri
+40 308 85 Hijau 20-01-26 9 Cikanyere Pakuon Jawa Barat 48M 728257 9253990 2024 5x5 Nangka, Sukun, Alpukat 22 88 Andosol 6,8 3B Ungkas
+41 301 65 Merah 20-01-26 9 Cikanyere Pakuon Jawa Barat 48M 728135 9253587 2024 5x5 Nangka, Sukun, Alpukat 22 88 Andosol 6,8 3B Ungkas
+42 313 75 Kuning 21-01-26 9 Cikanyere Pakuon Jawa Barat 48M 728248 9254190 2024 5x5 Nangka, Sukun, Alpukat 22 88 Andosol 6,8 3B Ungkas
+43 311 65 Merah 21-01-26 9 Cikanyere Pakuon Jawa Barat 48M 728277 9254091 2024 5x5 Nangka, Sukun, Alpukat 22 88 Andosol 6,8 3B Ungkas
+44 491 91.96 Hijau 22-01-26 7 Belangian I 9 Belangian 50M 276201 9598023 2026 3x3 Jambu Mente, Karet, Randu 33,5 56% Latosol 4,4 31 2A Jufri
+45 494 97.32 HIjau 22-01-26 7 Belangian I 9 Belangian 50M 276195 9598102 2026 3x3 Jambu Mente, Randu 33,2 57% Latosol 4,8 31 2A Jufri
+46 497 58.04 Merah 22-01-26 7 Belangian I 9 Belangian 50M 276184 9598208 2026 3x3 Jambu Mente 31,3 61% Latosol 4 47 2A Jufri
+47 481 69.64 Merah 28-01-26 7 Belangian II 8 Belangian 50M 275490 9598295 2025 3x3 Jambu Mente, Karet, Randu Latosol 2A Jufri
+48 483 84.82 Hijau 28-01-26 7 Belangian II 8 Belangian 50M 275491 9598384 2025 3x3 Mahoni, Karet, Randu Latosol 2A Jufri
+49 485 87.5 HIjau 28-01-26 7 Belangian II 8 Belangian 50M 275460 9598427 2025 3x3 Jambu Mente, Mahoni, Karet, Randu Latosol 2A Jufri
+50 449 44.64 Merah 29-01-26 7 Belangian Tanjung 7 Belangian 50M 274207 9597710 2025 3x3 Karet, Kapuk Randu 28,3 90% Latosol 5,8 19 2A Ari
+51 452 58.93 Merah 29-01-26 7 Belangian Tanjung 7 Belangian 50M 274041 9597819 2025 3x3 Karet, Kapuk Randu 27,4 90% Latosol 5,8 28 2A Ari
+52 453 55.36 Merah 29-01-26 7 Belangian Tanjung 7 Belangian 50M 274228 9597792 2025 3x3 Karet, Kapuk Randu 28,3 89% Latosol 4,4 19 2A Ari
+53 454 70.54 Merah 29-01-26 7 Belangian Tanjung 7 Belangian 50M 274028 9597894 2025 3x3 Karet, Kapuk Randu 27,3 94% Latosol 5,2 38 2A Ari
+54 31 66.96 Merah 28-01-26 9 Sindangbarang Saganten Jawa Barat 48M 736875 9174278 2024 3x3 Cemara Udang 27 66% Regosol 1,5 3B Alfath
+55 32 35.71 Hitam 28-01-26 9 Sindangbarang Saganten Jawa Barat 48M 736475 9174378 2024 3x3 Cemara Udang 27 66% Regosol 1,2 3B Alfath
+56 33 69.64 Merah 28-01-26 9 Sindangbarang Saganten Jawa Barat 48M 736075 9174478 2024 3x3 Cemara Udang 27 66% Regosol 1,5 3B Alfath
+57 34 75.89 Kuning 28-01-26 9 Sindangbarang Saganten Jawa Barat 48M 735698 9174587 2024 3x3 Cemara Udang 27 66% Regosol 1,5 3B Alfath
+58 35 87.5 Hijau 28-01-26 9 Sindangbarang Saganten Jawa Barat 48M 735275 9174678 2024 3x3 Cemara Udang 27 66% Regosol 1,5 3B Alfath
+59 21 47.32 Merah 29-01-26 9 Sindangbarang Jayagiri Jawa Barat 48M 744475 9172478 2024 3x3 Cemara Udang 27 66% Regosol 14,7 3B Alfath
+60 22 66.07 Merah 29-01-26 9 Sindangbarang Jayagiri Jawa Barat 48M 744076 9172553 2024 3x3 Cemara Udang 27 66% Regosol 14,7 3B Alfath
+61 23 50 Merah 29-01-26 9 Sindangbarang Jayagiri Jawa Barat 48M 743477 9172697 2024 3x3 Cemara Udang 27 66% Regosol 14,7 3B Alfath
+62 24 77.68 Kuning 29-01-26 9 Sindangbarang Jayagiri Jawa Barat 48M 743676 9172660 2024 3x3 Cemara Udang 27 66% Regosol 1,9 3B Alfath
+63 25 39.29 Hitam 29-01-26 9 Sindangbarang Jayagiri Jawa Barat 48M 743065 9172769 2024 3x3 Cemara Udang 27 66% Regosol 1,9 3B Alfath
+64 26 50.89 Merah 29-01-26 9 Sindangbarang Jayagiri Jawa Barat 48M 742675 9172878 2024 3x3 Cemara Udang 27 66% Regosol 14 3B Alfath
+65 27 57.14 Merah 29-01-26 9 Sindangbarang Jayagiri Jawa Barat 48M 742275 9172975 2024 3x3 Cemara Udang 27 66% Regosol 1 3B Alfath
+66 472 94.64 Hijau 21-01-26 7 Belangian II 8 Belangian II 50M 275982 9598219 2025 3x3 Karet, Pete, Mahoni 2A JufrI
+67 482 92.86 Hijau 21-01-26 7 Belangian II 8 Belangian II 50M 275297 9598377 2025 3x3 Karet, Pete, Mahoni 2A Jufri
+68 484 89.92 Hijau 21-01-26 7 Belangian II 8 Belangian II 50M 275294 9598485 2025 3x3 Karet, Pete, Mahoni 30,5 64,8% Gembur 5 39 2A JufrI
+69 486 87.5 Hijau 21-01-26 7 Belangian II 8 Belangian II 50M 275289 9598580 2025 3x3 Karet, Pete, Mahoni 30,6 64,3% Gembur 4,9 24 2A JufrI
+70 602 97.32 Hijau 31-01-26 3 Tiwingan Lama I 4 Tiwingan Lama I 50M 279628 9612167 2025 3x3 Karet,Randu 29,8 79,6% Gembur 5,3 46 2A Asra & Yandi
+71 596 91.96 Hijau 31-01-26 3 Tiwingan lama I 4 Tiwingan Lama I 50M 279621 9612105 2025 3x3 Karet,Randu 31,1 78% Gembur 4,9 39 2A Asra & Yandi
+72 471 94.64 Hijau 05-02-26 7 Belangian II 8 Belangian, Kec. Aranio, Banjar 50M 275478 9597887 2025 3x3 Jambu Mete, Mahoni 29 85% Latosol 4,8 20 2A JufrI
+73 474 75.89 Kuning 05-02-26 7 Belangian II 8 Belangian, Kec. Aranio, Banjar 50M 275501 9597997 2025 3x3 Jambu Mete, Mahoni 27,8 83% Latosol 5,6 12 2A Jufri
+74 477 92.86 HIjau 05-02-26 7 Belangian II 8 Belangian, Kec. Aranio, Banjar 50M 275502 9598100 2025 3x3 Jambu Mete 27,8 86% Latosol 5 25 2A JufrI
+75 479 72.32 Merah 05-02-26 7 Belangian II 8 Belangian, Kec. Aranio, Banjar 50M 275490 9598183 2025 3x3 Karet, Jambu Mete, Kapuk Randu 27,9 84% Latosol 5,2 31 2A Jufri
+76 3 33.93 Hitam 04-02-26 9 Agrabinta Tanjungsari Jawa Barat 48M 715581 9176932 2024 3x3 Cemara Udang 27 73% Regosol 2,1 3B Ikbal
+77 4 55.36 Merah 04-02-26 9 Agrabinta Tanjungsari Jawa Barat 48M 715781 9176913 2024 3x3 Cemara Udang 27 73% Regosol 2,1 3B Ikbal
+78 5 50 Merah 04-02-26 9 Agrabinta Tanjungsari Jawa Barat 48M 714181 9177121 2024 3x3 Cemara Udang 27 73% Regosol 9 3B Ikbal
+79 6 61.61 Merah 04-02-26 9 Agrabinta Tanjungsari Jawa Barat 48M 714381 9177121 2024 3x3 Cemara Udang 27 73% Regosol 5 3B Ikbal
+80 7 84.82 Hijau 04-02-26 9 Agrabinta Tanjungsari Jawa Barat 48M 714580 9177103 2024 3x3 Cemara Udang 27 73% Regosol 2,1 3B Ikbal
+81 8 61.61 Merah 04-02-26 9 Agrabinta Tanjungsari Jawa Barat 48M 713381 9177231 2024 3x3 Cemara Udang 27 73% Regosol 2,1 3B Ikbal
+82 9 50.89 Merah 04-02-26 9 Agrabinta Tanjungsari Jawa Barat 48M 713781 9177221 2024 3x3 Cemara Udang 27 73% Regosol 2,1 3B Ikbal
+83 444 69.64 Merah 04-02-26 9 Agrabinta Tanjungsari Jawa Barat 48M 718562 9176657 2024 3x3 Cemara Udang 27 73% Regosol 2,1 3B Ikbal
+84 94 94.64 Hijau 05-02-26 9 Cidaun Jayapura Jawa Barat 48M 752416 9171045 2024 3x3 Cemara Udang 27 73% Regosol 2,1 3B Cep
+85 95 77.68 Kuning 05-02-26 9 Cidaun Jayapura Jawa Barat 48M 752593 9171034 2024 3x3 Cemara Udang 27 73% Regosol 2,1 3B Cep
+86 104 71.43 Merah 05-02-26 9 Cidaun Jayapura Jawa Barat 48M 751816 9171145 2024 3x3 Cemara Udang 28 77% Regosol 19 3B Cep

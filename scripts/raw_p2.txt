@@ -1,0 +1,78 @@
+PAGE 2
+87 105 72.32 Merah 05-02-26 9 Cidaun Jayapura Jawa Barat 48M 751415 9171229 2024 3x3 Cemara Udang 28 77% Regosol 2,1 3B Cep
+88 430 92.86 Hijau 03-02-26 RT1 Sabuhur II 1 Jorong, Pelaihari 50M 262557 9553431 2025 3x3 Pulai 84 29,8% Lempung 6 5 3C Adek, Andika & Amat
+89 434 76.79 Kuning 03-02-26 RT1 Sabuhur II 1 Jorong, Pelaihari 50M 262758 9553536 2025 3x3 Pulai, belangiran 77,9 31,5% Lempung 6 18 3C Adek, Andika & Amat
+90 436 99.11 Hijau 03-02-26 RT1 Sabuhur II 1 Jorong, Pelaihari 50M 262559 9553627 2025 3x3 PulaI 76,1 30,5% Lempung 5,3 21 3C Adek, Andika & Amat
+91 154 99.11 Hijau 12-02-26 RT1 Batakan II 6 Batakan, Kec. Panyipatan 50M 238277 9540863 2026 3x3 Pulai, Galam, Belangiran 31,1 72% Latosol 6,2 12 3C Suliadi
+92 476 94.64 Hijau 21-01-26 7 Belangian II 8 Belangian 50M 275338 9598063 2025 3x3 Karet, Pete, MahonI 56,5 31,2% Gembur 4,2 40 2A JufrI
+93 482 92.86 Hijau 21-01-26 7 Belangian II 8 Belangian 50M 275306 9598345 2025 3x3 Karet, Pete, MahonI 62,3 30,6% Gembur 4,2 31 2A jufri
+94 484 89.29 Hijau 21-01-26 7 Belangian II 8 Belangian 50M 275294 9598485 2025 3x3 Karet, Pete, MahonI 30,5 64,8% Gembur 5 39 2A JufrI
+95 486 87.5 Hijau 21-01-26 7 Belangian II 8 Belangian 50M 275289 9598580 2025 3x3 Karet, Pete, MahonI 30,6 64,3% Gembur 4,9 24 2A JufrI
+96 566 89.29 Hijau 24-01-26 4 Tiwingan Lama II 8 Tiwingan Lama 50M 282526 9611558 2025 3x3 Karet,Pete,Mahoni, Jengkol 30,2 81,5% Gembur 5 39 2A Asra
+97 574 67.86 Merah 24-01-26 4 Tiwingan Lama II 8 Tiwingan Lama 50M 282303 9611866 2025 3x3 Karet,Pete,Mahoni, Jengkol 28,9 84,3% Gembur 5,4 46 2A Asra
+98 582 84.82 Hijau 24-01-26 4 Tiwingan Lama II 8 Tiwingan Lama 50M 282489 9612050 2025 3x3 Karet,Pete,Mahoni, Jengkol 30,8 75,8% Gembur 5,2 40 2A Asra
+99 586 70.54 Merah 24-01-26 4 Tiwingan lama II 8 Tiwingan Lama 50M 282503 9612116 2025 3x3 Karet,Pete,Mahoni, Jengkol 30,5 78,5% Gembur 5 45 2A Asra
+100 446 24.11 Hitam 27-01-26 7 Belangian Tanjung 7 Belangian Tanjung 50M 274225 9597590 2025 3x3 Karet 30,7 75,9% Gembur 4,4 29 2A Naslihun
+101 444 37.5 Hitam 27-01-26 7 Belangian Tanjung 7 Belangian Tanjung 50M 274206 9597526 2025 3x3 Karet 31,1 72,4% Gembur 5,4 36 2A Naslihun
+102 442 39.29 Hitam 27-01-26 7 Belangian Tanjung 7 Belangian Tanjung 50M 274224 9597407 2025 3x3 Karet 34,4 60,2% Gembur 5,4 43 2A Naslihun
+103 612 71.43 Merah 28-01-26 3 Tiwingan Lama I 6 Tiwingan Lama 50M 280391 9612303 2025 3x3 Karet 30,1 75,9% Gembur 5,2 35 2A Asra
+104 606 75 Kuning 28-01-26 3 Tiwingan Lama I 6 Tiwingan Lama 50M 280401 9612194 2025 3x3 Karet 29,8 85,8% Gembur 5,4 45 2A Asra
+105 600 77.68 Kuning 28-01-26 3 Tiwingan Lama I 6 Tiwingan lama 50M 280387 9612105 2025 3x3 Karet 28,4 88,4% Gembur 5,3 45 2A Asra
+106 530 3.57 Hitam 19-02-26 1 I 10 Kiram, Karang Intan 50M 269065 9608328 2025 3x3 Mahoni 29,9 67,8% Podsolik Merah Kuning 4,4 33 3A Akhmad Ghadafi
+107 553 81.25 Hijau 19-02-26 1 I 11 Kiram, Karang Intan 50M 269504 9608672 2025 3x3 Bintaro, Mahoni, Eukalyptus, Kayu putih 29,3 80,7% Podsolik Merah Kuning 5 26 3A Akhmad Ghadafi
+108 560 85.71 Hijau 19-02-26 1 I 11 Kiram, Karang Intan 50M 269501 9608776 2025 3x3 Bintaro, Mahoni 27,6 83,8% Podsolik Merah Kuning 5,2 38 3A Akhmad Ghadafi
+109 561 92.86 Hijau 19-02-26 1 I 11 Kiram, Karang Intan 50M 269720 9608744 2025 3x3 Bintaro, Mahoni 29,6 75,0% Podsolik Merah Kuning 5,4 12 3A Akhmad Ghadafi
+110 1 68.75 Merah 11-02-26 9 Agrabinta Wanasari Jawa Barat 48M 719048 9176637 2024 3x3 Cemara Udang 31 78% Regosol 0,7 3B Ikbal
+111 2 94.64 Hijau 11-02-26 9 Agrabinta Wanasari Jawa Barat 48M 719381 9176621 2024 3x3 Cemara Udang 29 75% Regosol 0,8 3B Ikbal
+112 73 55.36 Merah 18-02-26 9 Cidaun Cidamar Jawa Barat 48M 760016 9170349 2024 3x3 Cemara Udang 27 66% Regosol 3 3B Cep
+113 74 39.29 Hitam 18-02-26 9 Cidaun Cidamar Jawa Barat 48M 760216 9170349 2024 3x3 Cemara Udang 27 66% Regosol 3 3B Cep
+114 570 66.07 Merah 07-02-26 4 Tiwingan Lama II 7 Aranio, Kab banjar 50M 282132 9611761 2025 3x3 Karet 29,2 72,6% Latosol 5,4 25 2A Asra
+115 502 78.57 Kuning 14-02-26 1 I 9 Kiram, Karang Intan 50M 268698 9607730 2025 3x3 mahoni, eucalyptus, Bintaro 32,6 58,2 % Gembur 5,2 30 2A GhadafI
+116 504 90.18 Hijau 14-02-26 1 I 9 Kiram, Karang intan 50M 268687 9607846 2025 3x3 mahoni, eucalyptus, Bintaro 33,7 59,4% Gembur 5,7 23 2A GhadafI
+117 506 96.43 Hijau 14-02-26 1 I 9 Kiram, Karang intan 50M 268479 9607957 2025 3x3 mahoni, eucalyptus, Bintaro 34 57,20% Gembur 5 10 2A GhadafI
+118 510 99.11 Hijau 14-02-26 1 I 9 Kiram, Karang intan 50M 268481 9608029 2025 3x3 mahoni, eucalyptus, Bintaro 35,4 57% Gembur 5,2 15 2A GhadafI
+119 468 71.43 Merah 18-02-26 7 Belangian II 8 Belangian 50M 275706 9597767 2025 3x3 Karet,Pete,MahonI 56,5 31,2% Latosol 5,8 32 2A JufrI
+120 462 0 Hitam 18-02-26 7 Belangian II 8 Belangian 50M 275678 9597621 2025 3x3 Karet,Pete,MahonI 27,4 84,4% Latosol 4,9 22 2A JufrI
+121 588 85.71 Hijau 21-02-26 3 Tiwingan lama I 4 Tiwingan Lama 50M 279409 9611917 2025 3x3 karet, Kemiri, pete,jengkol 28,4 85,1% gembur 5,7 28 2A Asra
+122 590 86.61 Hijau 21-02-26 3 Tiwingan Lama I 4 Tiwingan Lama 50M 2794907 9611967 2025 3x3 karet, Kemiri, pete,jengkol 27,2 88,7% Gembur 5,4 38 2A Asra
+123 559 82.14 Hijau 25-02-26 1 I 11 Kiram, Karang Intan 50M 269318 9608751 2025 3x3 Bintaro, Mahoni Podsolik Merah Kuning 3A Akhmad Ghadafi
+124 563 76.79 Kuning 25-02-26 1 I 11 Kiram, Karang Intan 50M 269354 9608836 2025 3x3 Bintaro, Mahoni, Eukalyptus, Rawa Pipit Podsolik Merah Kuning 3A Akhmad Ghadafi
+125 410 58.93 Merah 26-02-26 RT1 Sabuhur II 3 Jorong, Pelaihari 50M 262364 9553082 2025 3x3 Belangiran 32,3 64% Aluvial 5,6 14 3C Adek N
+126 432 75 Kuning 26-02-26 RT1 Sabuhur II 3 Jorong, Pelaihari 50M 262947 9553448 2025 3x3 Pulai 31,4 70% Aluvial 5,8 15 3C Adek N
+127 266 97.5 Hijau 25-02-26 9 Kuningan Situgede Jawa Barat 49M 230507 9213087 2025 5x5 Alpukat Okulasi, Pala, Pete 25 70% Regosol 25 3B Asep
+128 267 100 Hijau 25-02-26 9 Kuningan Situgede Jawa Barat 49M 230529 9213159 2025 5x5 Alpukat Okulasi, Pala, Pete 25 70% Regosol 25 3B Asep
+129 271 95 Hijau 25-02-26 9 Kuningan Cipedes Jawa Barat 49M 225864 9219174 2025 5x5 Pete, Jengkol, Kemiri, Jambu Mete 25 70% Orthic Acrisol 25 3B Asep
+130 502 78.57 Kuning 14-02-26 1 I 9 Kiram, Karang Intan 50M 268698 9607750 2025 3x3 Mahoni, ecalyptus, Bintaro 32,6 58,2% gembur 5,2 30 2A Ghadafi
+131 504 90.18 Hijau 14-02-26 1 I 9 Kiram, Karang Intan 50M 268687 9607846 2025 3x3 Mahoni, ecalyptus, Bintaro 33,7 59,4% Gembur 5,7 23 2A Ghadafi
+132 506 96.43 Hijau 14-02-26 1 I 9 Kiram, Karang Intan 50M 268479 9607957 2025 3x3 Mahoni, ecalyptus, Bintaro 34,0 57,20% Gembur 5 10 2A GhadafI
+133 510 99.11 Hijau 14-02-26 1 I 9 Kiram, Karang Intan 50M 268481 9608029 2025 3x3 Mahoni, ecalyptus, Bintaro 35,4 57% Gembur 5,2 15 2A Ghadafi
+134 468 71.43 Merah 18-02-26 7 Belangian II 8 Belangian 50M 275706 9597767 2025 3x3 Karet, Mahoni, Pete 56,5 31,2 % latosol 5,8 32 2A JufrI
+135 464 73.21 Merah 18-02-26 7 Belangian II 7 Belangian 50M 275474 9597688 2025 3x3 Karet, Mahoni, Pete 27,3 93% Latosol 5,1 25 2A JufrI
+136 462 0 Hitam 18-02-26 7 Belangian II 8 Belangian 50M 275678 9597621 2025 3x3 Karet, Mahoni, Pete 27,4 84,4% Latosol 4,9 22 2A JufrI
+137 588 85.71 Hijau 21-02-26 3 Tiwingan Lama I 4 Tiwingan lama 50M 279409 9611917 2025 3x3 Karet, Mahoni, Pete, Jengkol 28,4 85,1% Gembur 5,7 28 2A Asra
+138 590 86.61 Hijau 21-02-26 3 Tiwingan Lama I 4 Tiwingan lama 50M 279407 9611967 2025 3x3 Karet, Mahoni, Pete, Jengkol 27,2 88,7% gembur 5,4 38 2A Asra
+139 554 69.64 Merah 28-02-26 1 I 11 Pamaton, kec. Karang Intan 50M 299699 9608647 2025 3X3 Mahoni, Bintaro 30,5 75,8% Litosol 6,1 32 3A GhadafI
+140 548 75.89 Kuning 28-02-26 1 I 11 Pamaton, kec. Karang Intan 50M 269688 9608545 2025 3x3 Mahoni, Bintaro 31,7 69,5% Litosol 5,6 25 3A GhadafI
+141 540 33.04 Hitam 28-02-26 1 I 11 Pamaton, kec. Karang Intan 50M 269691 9608451 2025 3x3 Mahoni 30,0 75,1% Litosol 5,6 40 3A GhadafI
+142 456 0 Hitam 03-03-26 7 Belangian II 7 Belangian 50M 275286 9597385 2025 3x3 karet,Pete, MahonI 33,0 65,6% Latosol 5,6 34 2A JufrI
+143 458 52.68 Merah 03-03-26 7 Belangian II 7 Belangian 50M 275287 9597486 2025 3x3 karet,Pete, MahonI 32,2 72,5% Latosol 5 44 2A JufrI
+144 460 91.07 Hijau 03-03-26 7 Belangian II 7 Belangian 50M 275287 9597586 2025 3x3 karet,Pete, MahonI 29,9 77,4% Latosol 5,4 38 2A Jufri
+145 576 56.25 Merah 07-03-26 4 Tiwingan Lama II 7 Aranio, Kab. banjar 50M 282107 9611939 2025 3x3 karet 27,8 84% Latosol 6 18 2A Asra
+146 572 72.32 Merah 07-03-26 4 Tiwingan Lama II 7 Aranio, Kab. banjar 50M 281916 9611850 2025 3x3 karet 27,5 85,3% Latosol 5,6 39 2A Asra
+147 539 85.71 Hijau 04-03-26 1 I 11 Kiram, Karang Intan 50M 269486 9608464 2025 3x3 Mahoni, eucalyptus Podsolik Merah Kuning 3A Ghadafi
+148 547 50.89 Merah 04-03-26 1 I 11 Kiram, Karang intan 50M 269468 9608548 2025 3x3 Mahoni, Bintaro, Rawa- rawa pipit Podsolik Merah Kuning 3A Ghadafi
+149 565 58.04 Merah 04-03-26 1 I 11 Kiram, Karang intan 50M 269468 9608538 2025 3x3 Mahoni Podsolik Merah Kuning 3A Ghadafi
+150 546 83.93 Hijau 05-03-26 1 I 11 Kiram, Karang Intan 50M 269307 9608607 2025 3x3 Mahoni, Eucalyptus 32,5 65% Podsolik Merah Kuning 5,4 23 3A Ghadafi
+151 552 78.57 Kuning 05-03-26 1 I 11 Kiram, Karang intan 50M 269292 9608618 2025 3x3 Mahoni, Eucalyptus 32,5 65% Podsolik Merah Kuning 5,2 38 3A Ghadafi
+152 564 77.68 Kuning 05-03-26 1 I 11 Kiram, Karang intan 50M 269500 9608865 2025 3x3 Mahoni, Gaharu, Bintaro, Rawa-rawa pipit 28,2 81% Podsolik Merah Kuning 5,4 23 3A Ghadafi
+153 130 100 Hijau 11-03-26 9 Cikadu Sukaluyu Jawa Barat 48M 746406 9180453 2024 5x5 Sengon, Jabon, Durian, Alpukat 29 69% Orthic Luvisol 5 3B Ikhsan
+154 131 62.5 Merah 11-03-26 9 Cikadu Sukaluyu Jawa Barat 48M 746561 9180468 2024 5x5 Sengon, Jabon, Durian, Alpukat 29 69% Orthic Luvisol 23 3B Ikhsan
+155 139 2.5 Hitam 11-03-26 9 Cikadu Sukaluyu Jawa Barat 48M 746393 9180953 2024 5x5 Sengon, Jabon, Durian, Alpukat 29 69% Orthic Luvisol 5 3B Ikhsan
+156 777 90 Hijau 11-03-26 9 Cikadu Sukaluyu Jawa Barat 48M 746380 9180897 2024 5x5 Sengon, Jabon, Durian, Alpukat 29 69% Orthic Luvisol 5 3B Ikhsan
+157 533 50.89 Merah 11-03-26 1 I 11 Kiram, Karang Intan 50M 269677 9608345 2025 3x3 Mahoni Podsolik Merah Kuning 3A Ghadafi
+158 541 91.07 Hijau 11-03-26 1 I 11 Kiram, Karang intan 50M 269893 9608460 2025 3x3 Mahoni, Bintaro Podsolik Merah Kuning 3A Ghadafi
+159 555 92.86 Hijau 11-03-26 1 I 11 Kiram, Karang intan 50M 269856 9608649 2025 3x3 Mahoni, Bintaro, Eucalyptus Podsolik Merah Kuning 3A Ghadafi
+160 503 93.75 Hijau 18-03-26 1 I 9 Kiram, Karang intan 50M 268504 9607878 2025 3x3 Bintaro, Jambu Mete, Eucalyptus, Mahoni Podsolik Merah Kuning 3A Ghadafi
+161 507 16.07 Hitam 18-03-26 1 I 9 Kiram, Karang intan 50M 268705 9607948 2025 3x3 Rawa-rawa pipit, Randu, Jambu sekati Podsolik Merah Kuning 3A Ghadafi
+162 508 8.93 Hitam 14-03-2026 1 I 9 Kiram, Karang intan 50M 268927 9607958 2025 3x3 Mahoni,ecalyptus 33,1 68,7% Litosol 5,5 39 2A Ghadafi
+163 512 3.57 Hitam 14-03-2026 1 I 9 Kiram, Karang intan 50M 268865 9608064 2025 3x3 Mahoni,ecalyptus 29,3 77,7% Litosol 5,6 32 2A Ghadafi

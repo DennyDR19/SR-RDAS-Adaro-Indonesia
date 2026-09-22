@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { PetakUkur, AppNotification, CustomBoundary } from './types';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { PetakUkur, AppNotification, CustomBoundary, PuFilterCriteria, DEFAULT_PU_FILTER } from './types';
 import { ApiService } from './services/apiService';
 import { computeDasMetrics } from './utils/survivalHelper';
+import { filterPetakUkurList, countActiveFilters } from './utils/filterHelper';
 import { exportDasReportPdf } from './utils/pdfGenerator';
 import { Header } from './components/Header';
 import { DasMap } from './components/DasMap';
 import { LegendWidget } from './components/LegendWidget';
 import { AnalyticsDashboard } from './components/AnalyticsDashboard';
+import { AreaFilterPanel } from './components/AreaFilterPanel';
 import { PuDetailModal } from './components/PuDetailModal';
 import { PuFormModal } from './components/PuFormModal';
 import { NotificationDrawer } from './components/NotificationDrawer';
@@ -57,10 +59,8 @@ export default function App() {
   });
   const [focusedBoundary, setFocusedBoundary] = useState<CustomBoundary | null>(null);
 
-  // Filters
-  const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>('all');
-  const [activeSubDasFilter, setActiveSubDasFilter] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  // 16-Dimension Comprehensive Filters for Area and Performance Analytics
+  const [puFilters, setPuFilters] = useState<PuFilterCriteria>(DEFAULT_PU_FILTER);
 
   // Real-time synchronization state
   const [isRealtimeConnected, setIsRealtimeConnected] = useState<boolean>(false);
@@ -206,26 +206,21 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [toastMessage]);
 
-  // Compute metrics
-  const metrics = computeDasMetrics(puList);
+  // Filtered Petak Ukur list based on all 16 dimensions
+  const filteredPuList = useMemo(() => {
+    return filterPetakUkurList(puList, puFilters);
+  }, [puList, puFilters]);
 
-  // Filtered list based on search and filters
-  const filteredPuList = puList.filter((pu) => {
-    if (activeCategoryFilter !== 'all' && pu.kategori !== activeCategoryFilter) return false;
-    if (activeSubDasFilter !== 'all' && pu.subDas !== activeSubDasFilter) return false;
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      return (
-        pu.kodePU.toLowerCase().includes(q) ||
-        pu.blok.toLowerCase().includes(q) ||
-        (pu.das || pu.subDas || '').toLowerCase().includes(q) ||
-        (pu.lokasiDaerah || pu.desa || '').toLowerCase().includes(q) ||
-        (pu.petak || '').toLowerCase().includes(q) ||
-        pu.jenisTanaman.some((j) => j.toLowerCase().includes(q))
-      );
-    }
-    return true;
-  });
+  const activeFilterCount = useMemo(() => {
+    return countActiveFilters(puFilters);
+  }, [puFilters]);
+
+  // Overall metrics (all PU points)
+  const overallMetrics = useMemo(() => computeDasMetrics(puList), [puList]);
+
+  // Active metrics for the currently filtered area/criteria
+  const activeMetrics = useMemo(() => computeDasMetrics(filteredPuList), [filteredPuList]);
+  const metrics = activeMetrics;
 
   // Action handlers
   const handleOpenAddModal = () => {
@@ -365,7 +360,7 @@ export default function App() {
         onChangeView={setCurrentView}
         onOpenAddModal={handleOpenAddModal}
         onOpenExcelImport={() => setIsExcelImportModalOpen(true)}
-        onExportPdf={() => exportDasReportPdf(puList)}
+        onExportPdf={() => exportDasReportPdf(filteredPuList)}
         onOpenShareModal={() => setIsShareModalOpen(true)}
         onOpenNotifications={() => setIsNotificationDrawerOpen(true)}
         onOpenGoogleSheets={() => setIsGoogleSheetsModalOpen(true)}
@@ -401,6 +396,44 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 flex flex-col gap-4 relative z-10">
+        {/* 16-Dimension Filter Panel for Comprehensive Area & Field Performance */}
+        <AreaFilterPanel
+          puList={puList}
+          filteredCount={filteredPuList.length}
+          totalCount={puList.length}
+          filters={puFilters}
+          onFilterChange={setPuFilters}
+          onResetFilters={() => setPuFilters(DEFAULT_PU_FILTER)}
+        />
+
+        {/* Scope Indicator Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-xs text-emerald-200/90 -mb-1">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-white flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-lime-400" />
+              Cakupan Analisis:
+            </span>
+            <span className="text-lime-300 font-bold">
+              {activeFilterCount > 0
+                ? `Area Terfilter (${filteredPuList.length} dari ${puList.length} Petak Ukur)`
+                : `Seluruh Area Konsesi (${puList.length} Petak Ukur)`}
+            </span>
+            {activeFilterCount > 0 && (
+              <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                {activeFilterCount} filter aktif
+              </span>
+            )}
+          </div>
+          {activeFilterCount > 0 && (
+            <button
+              onClick={() => setPuFilters(DEFAULT_PU_FILTER)}
+              className="text-[11px] text-emerald-300 hover:text-white underline font-medium flex items-center gap-1"
+            >
+              Kembali ke Seluruh Area ({puList.length} PU)
+            </button>
+          )}
+        </div>
+
         {/* Quick KPI Bar on Map View */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           <div className="bg-[#04332b]/85 border border-emerald-500/30 backdrop-blur-md rounded-xl p-3 flex items-center justify-between shadow-lg shadow-black/20">
@@ -464,14 +497,14 @@ export default function App() {
                   <input
                     id="map-search-input"
                     type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    value={puFilters.searchQuery}
+                    onChange={(e) => setPuFilters((prev) => ({ ...prev, searchQuery: e.target.value }))}
                     placeholder="Cari Kode PU (misal PU-01), Blok, Desa, atau Jenis..."
                     className="w-full bg-[#02241e] border border-emerald-500/30 text-emerald-100 placeholder-emerald-400/50 text-xs rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:border-lime-400"
                   />
-                  {searchQuery && (
+                  {puFilters.searchQuery && (
                     <button
-                      onClick={() => setSearchQuery('')}
+                      onClick={() => setPuFilters((prev) => ({ ...prev, searchQuery: '' }))}
                       className="absolute right-2.5 top-1/2 -translate-y-1/2 text-emerald-300/80 hover:text-white"
                     >
                       <X className="w-3 h-3" />
@@ -484,12 +517,12 @@ export default function App() {
                   <Filter className="w-3.5 h-3.5 text-emerald-400 hidden sm:block" />
                   <select
                     id="subdas-filter-select"
-                    value={activeSubDasFilter}
-                    onChange={(e) => setActiveSubDasFilter(e.target.value)}
+                    value={puFilters.das}
+                    onChange={(e) => setPuFilters((prev) => ({ ...prev, das: e.target.value }))}
                     className="bg-[#02241e] border border-emerald-500/30 text-emerald-100 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-lime-400"
                   >
-                    <option value="all">Semua Sub-DAS</option>
-                    {metrics.distribusiSubDas.map((s) => (
+                    <option value="all">Semua DAS / Sub-DAS</option>
+                    {overallMetrics.distribusiSubDas.map((s) => (
                       <option key={s.subDas} value={s.subDas}>
                         {s.subDas}
                       </option>
@@ -501,7 +534,7 @@ export default function App() {
               {/* Action buttons inside filter bar */}
               <div className="flex items-center gap-2">
                 <span className="text-xs text-emerald-300/80 font-mono">
-                  Menampilkan: <strong className="text-lime-300 font-bold">{filteredPuList.length}</strong> / {metrics.totalPU} PU
+                  Menampilkan: <strong className="text-lime-300 font-bold">{filteredPuList.length}</strong> / {overallMetrics.totalPU} PU
                 </span>
               </div>
             </div>
@@ -516,8 +549,8 @@ export default function App() {
                   setSelectedPu(pu);
                   setIsDetailModalOpen(true);
                 }}
-                activeCategoryFilter={activeCategoryFilter}
-                activeSubDasFilter={activeSubDasFilter}
+                activeCategoryFilter={puFilters.kategori}
+                activeSubDasFilter={puFilters.das}
                 customBoundaries={boundaries}
                 onOpenBoundaryModal={() => setIsBoundaryModalOpen(true)}
                 focusedBoundary={focusedBoundary}
@@ -526,8 +559,8 @@ export default function App() {
 
             {/* Criteria Legend & Quick Filter Widget */}
             <LegendWidget
-              activeCategoryFilter={activeCategoryFilter}
-              onSelectCategoryFilter={setActiveCategoryFilter}
+              activeCategoryFilter={puFilters.kategori}
+              onSelectCategoryFilter={(cat) => setPuFilters((prev) => ({ ...prev, kategori: cat }))}
               countByKategori={metrics.countByKategori}
               totalPU={metrics.totalPU}
             />
@@ -537,7 +570,10 @@ export default function App() {
         {/* View 2: Dasbor Analitik Kinerja Mendalam */}
         {currentView === 'analytics' && (
           <AnalyticsDashboard
-            puList={puList}
+            puList={filteredPuList}
+            allPuList={puList}
+            activeFilterCount={activeFilterCount}
+            onResetFilters={() => setPuFilters(DEFAULT_PU_FILTER)}
             onSelectPu={(pu) => setSelectedPu(pu)}
             onOpenDetail={(pu) => {
               setSelectedPu(pu);
