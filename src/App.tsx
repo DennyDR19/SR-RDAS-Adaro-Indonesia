@@ -274,13 +274,70 @@ export default function App() {
 
   const handleDeletePu = async (id: string) => {
     try {
+      const target = puList.find((p) => p.id === id);
       await ApiService.deletePetakUkur(id);
       setPuList((prev) => prev.filter((p) => p.id !== id));
       if (selectedPu?.id === id) {
         setSelectedPu(null);
       }
-    } catch (err) {
-      console.error(err);
+      setToastMessage({
+        title: 'Data Berhasil Dihapus',
+        desc: target ? `Petak Ukur ${target.kodePU} telah dihapus dari sistem.` : 'Data berhasil dihapus.',
+        type: 'info',
+      });
+    } catch (err: any) {
+      setToastMessage({
+        title: 'Gagal Menghapus Data',
+        desc: err.message || 'Terjadi kesalahan saat menghapus data.',
+        type: 'error',
+      });
+    }
+  };
+
+  const handleBulkDeletePu = async (ids: string[]) => {
+    try {
+      const result = await ApiService.bulkDeletePetakUkur(ids);
+      const idSet = new Set(ids);
+      setPuList((prev) => prev.filter((p) => !idSet.has(p.id)));
+      if (selectedPu && idSet.has(selectedPu.id)) {
+        setSelectedPu(null);
+      }
+      if (result.notification) {
+        setNotifications((prev) => [result.notification!, ...prev]);
+      }
+      setToastMessage({
+        title: 'Hapus Massal Berhasil!',
+        desc: `Sebanyak ${result.count} data Petak Ukur berhasil dihapus secara bersamaan.`,
+        type: 'success',
+      });
+    } catch (err: any) {
+      setToastMessage({
+        title: 'Gagal Hapus Massal',
+        desc: err.message || 'Terjadi kesalahan saat menghapus data.',
+        type: 'error',
+      });
+    }
+  };
+
+  const handleClearAllPu = async () => {
+    try {
+      const result = await ApiService.clearAllPetakUkur();
+      setPuList([]);
+      setSelectedPu(null);
+      if (result.notification) {
+        setNotifications((prev) => [result.notification!, ...prev]);
+      }
+      setToastMessage({
+        title: 'Database Dikosongkan',
+        desc: `Seluruh data Petak Ukur (${result.count} titik) telah dikosongkan. Anda dapat mengimpor data baru via Excel.`,
+        type: 'info',
+      });
+    } catch (err: any) {
+      setToastMessage({
+        title: 'Gagal Mengosongkan Data',
+        desc: err.message || 'Terjadi kesalahan saat mengosongkan data.',
+        type: 'error',
+      });
     }
   };
 
@@ -580,6 +637,10 @@ export default function App() {
               setIsDetailModalOpen(true);
             }}
             onOpenExcelImport={() => setIsExcelImportModalOpen(true)}
+            onDeletePu={handleDeletePu}
+            onBulkDeletePu={handleBulkDeletePu}
+            onClearAllPu={handleClearAllPu}
+            onResetData={handleResetData}
           />
         )}
       </main>

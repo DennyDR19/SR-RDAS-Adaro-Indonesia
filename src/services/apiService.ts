@@ -295,6 +295,87 @@ export class ApiService {
     }
   }
 
+  // Bulk Delete multiple Petak Ukur (e.g. checked items or filtered list)
+  static async bulkDeletePetakUkur(
+    ids: string[]
+  ): Promise<{ count: number; notification?: AppNotification }> {
+    if (!ids || ids.length === 0) return { count: 0 };
+
+    let deletedCount = ids.length;
+    let notif: AppNotification | undefined = undefined;
+
+    try {
+      const res = await fetch('/api/pu/bulk-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids }),
+      });
+      if (res.ok) {
+        const json = await res.json();
+        deletedCount = json.count ?? ids.length;
+        notif = json.notification;
+      }
+    } catch {
+      // server unavailable, proceed to local sync
+    }
+
+    const idSet = new Set(ids);
+    const list = getLocalPUList();
+    const filtered = list.filter((p) => !idSet.has(p.id));
+    saveLocalPUList(filtered);
+
+    if (!notif) {
+      notif = {
+        id: `notif-${Date.now()}`,
+        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+        type: 'warning',
+        title: `Hapus Massal (${deletedCount} PU)`,
+        message: `Sebanyak ${deletedCount} data Petak Ukur berhasil dihapus dari sistem.`,
+        isRead: false,
+      };
+      const notifs = getLocalNotifs();
+      saveLocalNotifs([notif, ...notifs]);
+    }
+
+    return { count: deletedCount, notification: notif };
+  }
+
+  // Clear all Petak Ukur (Empty whole database)
+  static async clearAllPetakUkur(): Promise<{ count: number; notification?: AppNotification }> {
+    let deletedCount = 0;
+    let notif: AppNotification | undefined = undefined;
+
+    try {
+      const res = await fetch('/api/pu/clear-all', { method: 'POST' });
+      if (res.ok) {
+        const json = await res.json();
+        deletedCount = json.count ?? 0;
+        notif = json.notification;
+      }
+    } catch {
+      // fallback
+    }
+
+    const current = getLocalPUList();
+    if (deletedCount === 0) deletedCount = current.length;
+    saveLocalPUList([]);
+
+    if (!notif) {
+      notif = {
+        id: `notif-${Date.now()}`,
+        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+        type: 'warning',
+        title: `Database PU Dikosongkan (${deletedCount} Titik)`,
+        message: `Seluruh data Petak Ukur telah berhasil dikosongkan.`,
+        isRead: false,
+      };
+      const notifs = getLocalNotifs();
+      saveLocalNotifs([notif, ...notifs]);
+    }
+
+    return { count: deletedCount, notification: notif };
+  }
+
   // Bulk import multiple Petak Ukur (e.g. from Excel / CSV)
   static async bulkImportPetakUkur(
     items: PetakUkur[],

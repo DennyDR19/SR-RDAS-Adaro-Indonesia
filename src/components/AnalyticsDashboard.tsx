@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { PetakUkur } from '../types';
 import { computeDasMetrics, CATEGORY_INFO_MAP } from '../utils/survivalHelper';
 import {
@@ -33,6 +33,13 @@ import {
   ArrowDown,
   Clock,
   Filter,
+  Trash2,
+  AlertOctagon,
+  CheckSquare,
+  Square,
+  MinusSquare,
+  ChevronDown,
+  RotateCcw,
 } from 'lucide-react';
 
 export type SortField =
@@ -51,6 +58,10 @@ interface AnalyticsDashboardProps {
   onSelectPu: (pu: PetakUkur) => void;
   onOpenDetail: (pu: PetakUkur) => void;
   onOpenExcelImport?: () => void;
+  onDeletePu?: (id: string) => Promise<void> | void;
+  onBulkDeletePu?: (ids: string[]) => Promise<void> | void;
+  onClearAllPu?: () => Promise<void> | void;
+  onResetData?: () => Promise<void> | void;
   activeFilterCount?: number;
   onResetFilters?: () => void;
 }
@@ -61,6 +72,10 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   onSelectPu,
   onOpenDetail,
   onOpenExcelImport,
+  onDeletePu,
+  onBulkDeletePu,
+  onClearAllPu,
+  onResetData,
   activeFilterCount = 0,
   onResetFilters,
 }) => {
@@ -238,6 +253,100 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     });
     return list;
   }, [filteredPuList, sortField, sortOrder]);
+
+  // State for Multi-Select & Bulk Deletion
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [confirmDeleteModal, setConfirmDeleteModal] = useState<{
+    isOpen: boolean;
+    mode: 'selected' | 'filtered' | 'all' | 'single';
+    targetIds: string[];
+    targetCode?: string;
+  } | null>(null);
+  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState<boolean>(false);
+
+  // Synchronize selectedIds when puList updates
+  useEffect(() => {
+    setSelectedIds((prev) => {
+      if (prev.size === 0) return prev;
+      const currentIds = new Set(puList.map((p) => p.id));
+      let changed = false;
+      const next = new Set<string>();
+      for (const id of prev) {
+        if (currentIds.has(id)) {
+          next.add(id);
+        } else {
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [puList]);
+
+  const isAllSelected =
+    sortedPuList.length > 0 && sortedPuList.every((p) => selectedIds.has(p.id));
+  const isSomeSelected =
+    sortedPuList.some((p) => selectedIds.has(p.id)) && !isAllSelected;
+
+  const handleToggleSelectAll = () => {
+    if (isAllSelected) {
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        sortedPuList.forEach((p) => next.delete(p.id));
+        return next;
+      });
+    } else {
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        sortedPuList.forEach((p) => next.add(p.id));
+        return next;
+      });
+    }
+  };
+
+  const handleToggleSelectRow = (id: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const handleExecuteDelete = async () => {
+    if (!confirmDeleteModal) return;
+    const { mode, targetIds } = confirmDeleteModal;
+    setIsDeleting(true);
+    try {
+      if (mode === 'all' && onClearAllPu) {
+        await onClearAllPu();
+        setSelectedIds(new Set());
+      } else if ((mode === 'selected' || mode === 'filtered') && onBulkDeletePu) {
+        await onBulkDeletePu(targetIds);
+        setSelectedIds((prev) => {
+          const next = new Set(prev);
+          targetIds.forEach((id) => next.delete(id));
+          return next;
+        });
+      } else if (mode === 'single' && onDeletePu && targetIds.length > 0) {
+        await onDeletePu(targetIds[0]);
+        setSelectedIds((prev) => {
+          const next = new Set(prev);
+          next.delete(targetIds[0]);
+          return next;
+        });
+      }
+      setConfirmDeleteModal(null);
+    } catch (err) {
+      console.error('Delete failed:', err);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <div className="w-full space-y-6 pb-8">
@@ -651,8 +760,177 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 <span>Impor Excel</span>
               </button>
             )}
+
+            {/* Menu / Tombol Hapus Data Terpilih & Massal */}
+            <div className="relative">
+              <button
+                id="analytics-delete-menu-btn"
+                type="button"
+                onClick={() => setIsDeleteMenuOpen((prev) => !prev)}
+                className="px-2.5 py-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/50 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
+                title="Opsi penghapusan data massal & bersihkan database"
+              >
+                <Trash2 className="w-3.5 h-3.5 text-rose-400" />
+                <span className="hidden sm:inline">Hapus Data</span>
+                {selectedIds.size > 0 && (
+                  <span className="px-1.5 py-0.2 rounded-full bg-rose-600 text-white text-[10px] font-bold">
+                    {selectedIds.size}
+                  </span>
+                )}
+                <ChevronDown className="w-3 h-3 text-rose-300" />
+              </button>
+
+              {isDeleteMenuOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setIsDeleteMenuOpen(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-1.5 z-50 w-64 bg-[#03231e] border border-emerald-500/40 rounded-xl shadow-2xl p-1 text-xs">
+                    <div className="px-3 py-1.5 text-[10px] uppercase font-bold tracking-wider text-emerald-400/80 border-b border-emerald-500/20">
+                      Opsi Penghapusan Data
+                    </div>
+
+                    {/* Hapus Terpilih */}
+                    <button
+                      type="button"
+                      disabled={selectedIds.size === 0}
+                      onClick={() => {
+                        setIsDeleteMenuOpen(false);
+                        setConfirmDeleteModal({
+                          isOpen: true,
+                          mode: 'selected',
+                          targetIds: Array.from(selectedIds),
+                        });
+                      }}
+                      className={`w-full text-left px-3 py-2 rounded-lg flex items-center justify-between transition-colors ${
+                        selectedIds.size > 0
+                          ? 'hover:bg-rose-950/60 text-rose-300 cursor-pointer'
+                          : 'text-slate-500 cursor-not-allowed opacity-50'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <CheckSquare className="w-3.5 h-3.5 text-rose-400" />
+                        <span>Hapus Data Terpilih</span>
+                      </div>
+                      <span className="px-1.5 py-0.5 rounded bg-rose-900/40 text-[10px] font-mono">
+                        {selectedIds.size} PU
+                      </span>
+                    </button>
+
+                    {/* Hapus Hasil Filter */}
+                    <button
+                      type="button"
+                      disabled={sortedPuList.length === 0}
+                      onClick={() => {
+                        setIsDeleteMenuOpen(false);
+                        setConfirmDeleteModal({
+                          isOpen: true,
+                          mode: 'filtered',
+                          targetIds: sortedPuList.map((p) => p.id),
+                        });
+                      }}
+                      className={`w-full text-left px-3 py-2 rounded-lg flex items-center justify-between transition-colors ${
+                        sortedPuList.length > 0
+                          ? 'hover:bg-rose-950/60 text-rose-300 cursor-pointer'
+                          : 'text-slate-500 cursor-not-allowed opacity-50'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Filter className="w-3.5 h-3.5 text-amber-400" />
+                        <span>Hapus Semua Hasil Filter</span>
+                      </div>
+                      <span className="px-1.5 py-0.5 rounded bg-amber-900/40 text-[10px] font-mono text-amber-300">
+                        {sortedPuList.length} PU
+                      </span>
+                    </button>
+
+                    <div className="my-1 border-t border-emerald-500/20" />
+
+                    {/* Kosongkan Seluruh Database */}
+                    <button
+                      type="button"
+                      disabled={totalOverall === 0}
+                      onClick={() => {
+                        setIsDeleteMenuOpen(false);
+                        setConfirmDeleteModal({
+                          isOpen: true,
+                          mode: 'all',
+                          targetIds: [],
+                        });
+                      }}
+                      className={`w-full text-left px-3 py-2 rounded-lg flex items-center justify-between transition-colors ${
+                        totalOverall > 0
+                          ? 'hover:bg-rose-900/60 text-rose-200 cursor-pointer'
+                          : 'text-slate-500 cursor-not-allowed opacity-50'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <AlertOctagon className="w-3.5 h-3.5 text-rose-400" />
+                        <span className="font-semibold">Kosongkan Seluruh Database</span>
+                      </div>
+                      <span className="px-1.5 py-0.5 rounded bg-rose-800/40 text-[10px] font-mono">
+                        {totalOverall} PU
+                      </span>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* Floating / Inline Bulk Selection Action Banner */}
+        {selectedIds.size > 0 && (
+          <div className="bg-gradient-to-r from-[#032b24] via-[#053d33] to-[#04332b] border border-lime-400/50 rounded-xl p-3 mb-3 flex flex-wrap items-center justify-between gap-3 shadow-xl ring-1 ring-lime-400/20 animate-fade-in">
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-8 rounded-lg bg-lime-400/20 text-lime-300 font-bold flex items-center justify-center text-xs shrink-0">
+                {selectedIds.size}
+              </span>
+              <div>
+                <div className="font-bold text-white text-xs flex items-center gap-1.5">
+                  <span>{selectedIds.size} Petak Ukur Dipilih</span>
+                  <span className="text-[10px] text-emerald-300/70 font-normal">
+                    (dari {sortedPuList.length} data tampil)
+                  </span>
+                </div>
+                <p className="text-[10px] text-emerald-200/80">
+                  Gunakan tombol aksi untuk menghapus data yang Anda centang secara bersamaan.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleToggleSelectAll}
+                className="px-2.5 py-1.5 rounded-lg bg-[#02241e] hover:bg-[#033028] text-emerald-200 text-xs font-medium border border-emerald-500/30 transition-colors"
+              >
+                {isAllSelected ? 'Batalkan Pilih Semua' : `Pilih Semua (${sortedPuList.length})`}
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedIds(new Set())}
+                className="px-2.5 py-1.5 text-xs text-emerald-400 hover:text-white transition-colors"
+              >
+                Batal Pilihan
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setConfirmDeleteModal({
+                    isOpen: true,
+                    mode: 'selected',
+                    targetIds: Array.from(selectedIds),
+                  });
+                }}
+                className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-rose-950/50 transition-all hover:scale-[1.02]"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Hapus {selectedIds.size} Data Terpilih</span>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Status Bar: Total baris & Kriteria Pengurutan Aktif */}
         <div className="flex items-center justify-between text-[11px] text-emerald-300/80 mb-3 px-1">
@@ -663,6 +941,11 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             {searchQuery && (
               <span className="text-emerald-400/70">
                 (filter kata kunci: &ldquo;{searchQuery}&rdquo;)
+              </span>
+            )}
+            {selectedIds.size > 0 && (
+              <span className="text-lime-300 font-semibold">
+                &bull; {selectedIds.size} terpilih
               </span>
             )}
           </div>
@@ -689,6 +972,20 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               <tr className="border-b border-emerald-500/30 text-emerald-300/80 uppercase tracking-wider text-[10px]">
+                {/* Checkbox Master Header (Select All) */}
+                <th className="py-2.5 px-3 w-10 text-center select-none">
+                  <input
+                    type="checkbox"
+                    checked={isAllSelected}
+                    ref={(el) => {
+                      if (el) el.indeterminate = isSomeSelected;
+                    }}
+                    onChange={handleToggleSelectAll}
+                    className="w-4 h-4 rounded border-emerald-500/50 bg-[#02241e] text-emerald-600 focus:ring-lime-400 focus:ring-offset-0 cursor-pointer accent-emerald-500"
+                    title={isAllSelected ? 'Batalkan pilihan semua' : 'Pilih semua data yang tampil'}
+                  />
+                </th>
+
                 {/* Kode PU Column Header */}
                 <th
                   className="py-2.5 px-3 cursor-pointer select-none hover:text-white transition-colors"
@@ -802,15 +1099,61 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <tbody className="divide-y divide-emerald-500/20">
               {sortedPuList.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="py-8 text-center text-emerald-300/70">
-                    <p className="text-sm">Tidak ditemukan data Petak Ukur yang sesuai.</p>
-                    {searchQuery && (
-                      <button
-                        onClick={() => setSearchQuery('')}
-                        className="mt-2 text-xs text-lime-300 hover:underline"
-                      >
-                        Hapus kata kunci pencarian
-                      </button>
+                  <td colSpan={11} className="py-12 text-center text-emerald-300/70">
+                    {totalOverall === 0 ? (
+                      <div className="max-w-md mx-auto flex flex-col items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-950/80 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-inner">
+                          <TreeDeciduous className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-white text-sm">Database Petak Ukur Kosong</h4>
+                          <p className="text-xs text-emerald-200/70 mt-1 leading-relaxed">
+                            Belum ada data Petak Ukur tersimpan atau database baru saja dikosongkan.
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
+                          {onOpenExcelImport && (
+                            <button
+                              type="button"
+                              onClick={onOpenExcelImport}
+                              className="px-3.5 py-1.5 rounded-xl bg-[#007a48] hover:bg-[#009650] text-white text-xs font-bold flex items-center gap-1.5 shadow-md border border-lime-400/30 transition-all hover:scale-[1.02]"
+                            >
+                              <FileSpreadsheet className="w-4 h-4 text-lime-300" />
+                              <span>Impor Database dari Excel</span>
+                            </button>
+                          )}
+                          {onResetData && (
+                            <button
+                              type="button"
+                              onClick={onResetData}
+                              className="px-3 py-1.5 rounded-xl bg-[#032e27] hover:bg-[#05453a] text-emerald-200 text-xs font-semibold border border-emerald-500/30 flex items-center gap-1.5 transition-colors"
+                            >
+                              <RotateCcw className="w-3.5 h-3.5 text-lime-300" />
+                              <span>Pulihkan Sampel Standar BPDAS</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="text-sm">Tidak ditemukan data Petak Ukur yang sesuai dengan kriteria filter.</p>
+                        {searchQuery && (
+                          <button
+                            onClick={() => setSearchQuery('')}
+                            className="mt-2 text-xs text-lime-300 hover:underline block mx-auto"
+                          >
+                            Hapus kata kunci pencarian (&ldquo;{searchQuery}&rdquo;)
+                          </button>
+                        )}
+                        {onResetFilters && activeFilterCount > 0 && (
+                          <button
+                            onClick={onResetFilters}
+                            className="mt-2 text-xs text-emerald-300 hover:text-white underline block mx-auto"
+                          >
+                            Reset Semua Filter Lapangan ({activeFilterCount})
+                          </button>
+                        )}
+                      </div>
                     )}
                   </td>
                 </tr>
@@ -829,16 +1172,35 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                   const namaDas = pu.das || pu.subDas;
                   const srVal = pu.persentaseHidup !== undefined ? pu.persentaseHidup : pu.survivalRate;
                   const { dateStr, timeStr } = formatTanggalInput(pu);
+                  const isRowSelected = selectedIds.has(pu.id);
 
                   return (
                     <tr
                       key={pu.id}
-                      className="hover:bg-[#06433a]/50 transition-colors group cursor-pointer"
+                      className={`transition-colors group cursor-pointer ${
+                        isRowSelected
+                          ? 'bg-[#08483e]/80 ring-1 ring-inset ring-lime-400/40 border-l-2 border-l-lime-400'
+                          : 'hover:bg-[#06433a]/50'
+                      }`}
                       onClick={() => {
                         onSelectPu(pu);
                         onOpenDetail(pu);
                       }}
                     >
+                      {/* Checkbox Row Selection */}
+                      <td
+                        className="py-3 px-3 w-10 text-center"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isRowSelected}
+                          onChange={() => handleToggleSelectRow(pu.id)}
+                          className="w-4 h-4 rounded border-emerald-500/50 bg-[#02241e] text-emerald-600 focus:ring-lime-400 focus:ring-offset-0 cursor-pointer accent-emerald-500"
+                          title={`Pilih titik ${pu.kodePU}`}
+                        />
+                      </td>
+
                       {/* Kode PU */}
                       <td className="py-3 px-3 font-bold text-lime-300 whitespace-nowrap">
                         {pu.kodePU}
@@ -911,19 +1273,40 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                         {pu.rekomendasi || (srVal >= 75 ? 'Pertahankan pemeliharaan intensif.' : 'Segera lakukan penyulaman bibit.')}
                       </td>
 
-                      {/* Aksi */}
-                      <td className="py-3 px-3 text-right">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onSelectPu(pu);
-                            onOpenDetail(pu);
-                          }}
-                          className="px-2.5 py-1 rounded-lg bg-[#032e27] hover:bg-[#05453a] text-emerald-200 text-[11px] font-medium border border-emerald-500/30 transition-colors inline-flex items-center gap-1"
-                        >
-                          Lihat
-                          <ArrowUpRight className="w-3 h-3 text-lime-400" />
-                        </button>
+                      {/* Aksi: Lihat Detail & Hapus */}
+                      <td className="py-3 px-3 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onSelectPu(pu);
+                              onOpenDetail(pu);
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-[#032e27] hover:bg-[#05453a] text-emerald-200 text-[11px] font-medium border border-emerald-500/30 transition-colors inline-flex items-center gap-1"
+                          >
+                            Lihat
+                            <ArrowUpRight className="w-3 h-3 text-lime-400" />
+                          </button>
+                          {onDeletePu && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setConfirmDeleteModal({
+                                  isOpen: true,
+                                  mode: 'single',
+                                  targetIds: [pu.id],
+                                  targetCode: pu.kodePU,
+                                });
+                              }}
+                              title={`Hapus data ${pu.kodePU}`}
+                              className="p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/70 text-rose-400 hover:text-rose-200 border border-rose-800/40 transition-colors"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -933,6 +1316,95 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </table>
         </div>
       </div>
+
+      {/* Confirmation Modal for Bulk / Filtered / Single / All Delete */}
+      {confirmDeleteModal && confirmDeleteModal.isOpen && (
+        <div className="fixed inset-0 z-[1100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#03231e] border border-rose-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl text-slate-100 flex flex-col gap-4 animate-scale-in">
+            <div className="flex items-start gap-3.5">
+              <div className="p-3 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 shrink-0">
+                <AlertOctagon className="w-6 h-6" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="text-base font-bold text-white">
+                  {confirmDeleteModal.mode === 'all'
+                    ? 'Kosongkan Seluruh Database PU?'
+                    : confirmDeleteModal.mode === 'single'
+                    ? `Hapus Petak Ukur ${confirmDeleteModal.targetCode}?`
+                    : confirmDeleteModal.mode === 'filtered'
+                    ? `Hapus Semua Hasil Filter (${confirmDeleteModal.targetIds.length} PU)?`
+                    : `Hapus ${confirmDeleteModal.targetIds.length} Data Terpilih?`}
+                </h4>
+                <p className="text-xs text-emerald-200/80 mt-1.5 leading-relaxed">
+                  {confirmDeleteModal.mode === 'all'
+                    ? `Tindakan ini akan menghapus seluruh ${totalOverall} data Petak Ukur dari sistem dan sinkronisasi real-time. Anda dapat mengimpor data baru via Excel setelah ini.`
+                    : confirmDeleteModal.mode === 'single'
+                    ? `Data Petak Ukur ${confirmDeleteModal.targetCode} akan dihapus secara permanen dari sistem.`
+                    : confirmDeleteModal.mode === 'filtered'
+                    ? `Sebanyak ${confirmDeleteModal.targetIds.length} data Petak Ukur yang sesuai dengan kriteria filter saat ini akan dihapus sekaligus.`
+                    : `Sebanyak ${confirmDeleteModal.targetIds.length} data Petak Ukur yang Anda centang akan dihapus sekaligus dari sistem.`}
+                </p>
+              </div>
+            </div>
+
+            {/* Sample Codes Preview */}
+            {confirmDeleteModal.targetIds.length > 0 && confirmDeleteModal.mode !== 'single' && (
+              <div className="bg-[#021a16] border border-emerald-500/20 rounded-xl p-3 text-xs">
+                <span className="text-[11px] text-emerald-400 font-semibold block mb-1.5">
+                  Daftar Petak Ukur yang akan dihapus:
+                </span>
+                <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
+                  {confirmDeleteModal.targetIds.slice(0, 15).map((id) => {
+                    const item = puList.find((p) => p.id === id);
+                    return (
+                      <span
+                        key={id}
+                        className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-200 text-[10px] font-mono border border-emerald-500/30"
+                      >
+                        {item ? item.kodePU : id}
+                      </span>
+                    );
+                  })}
+                  {confirmDeleteModal.targetIds.length > 15 && (
+                    <span className="px-2 py-0.5 text-[10px] text-emerald-400 font-medium self-center">
+                      +{confirmDeleteModal.targetIds.length - 15} lainnya
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-emerald-500/20">
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={() => setConfirmDeleteModal(null)}
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors disabled:opacity-50"
+              >
+                Batalkan
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={handleExecuteDelete}
+                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-rose-950/50 transition-all hover:scale-[1.02] disabled:opacity-50"
+              >
+                {isDeleting ? (
+                  <>
+                    <Clock className="w-3.5 h-3.5 animate-spin" />
+                    <span>Menghapus Data...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Ya, Hapus Sekarang</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

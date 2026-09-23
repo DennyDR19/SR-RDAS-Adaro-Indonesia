@@ -363,6 +363,61 @@ app.delete('/api/pu/:id', (req: Request, res: Response) => {
   res.json({ success: true, id, notification: notif });
 });
 
+// POST bulk delete Petak Ukur (Multiple IDs)
+app.post('/api/pu/bulk-delete', (req: Request, res: Response) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: 'Array ids tidak boleh kosong.' });
+    }
+
+    const idSet = new Set(ids);
+    const beforeCount = petakUkurStore.length;
+    petakUkurStore = petakUkurStore.filter((p) => !idSet.has(p.id));
+    const deletedCount = beforeCount - petakUkurStore.length;
+
+    const notif: AppNotification = {
+      id: `notif-${Date.now()}`,
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      type: 'warning',
+      title: `Hapus Massal Selesai (${deletedCount} PU)`,
+      message: `Sebanyak ${deletedCount} data Petak Ukur berhasil dihapus sekaligus dari sistem.`,
+      isRead: false,
+    };
+    notificationStore.unshift(notif);
+
+    broadcastEvent('pu_bulk_deleted', { ids, deletedCount, remaining: petakUkurStore.length, notification: notif });
+
+    return res.json({ success: true, count: deletedCount, remaining: petakUkurStore.length, notification: notif });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message || 'Gagal menghapus data secara massal.' });
+  }
+});
+
+// POST clear all Petak Ukur (Empty database)
+app.post('/api/pu/clear-all', (req: Request, res: Response) => {
+  try {
+    const totalDeleted = petakUkurStore.length;
+    petakUkurStore = [];
+
+    const notif: AppNotification = {
+      id: `notif-${Date.now()}`,
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      type: 'warning',
+      title: `Database PU Dikosongkan (${totalDeleted} Titik)`,
+      message: `Seluruh ${totalDeleted} data Petak Ukur telah dikosongkan. Anda dapat mengimpor data baru via Excel.`,
+      isRead: false,
+    };
+    notificationStore.unshift(notif);
+
+    broadcastEvent('pu_cleared', { totalDeleted, notification: notif });
+
+    return res.json({ success: true, count: totalDeleted, notification: notif });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message || 'Gagal mengosongkan data.' });
+  }
+});
+
 // Reset to default sample dataset
 app.post('/api/pu/reset', (req: Request, res: Response) => {
   petakUkurStore = JSON.parse(JSON.stringify(INITIAL_PETAK_UKUR));
