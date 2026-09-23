@@ -16,7 +16,6 @@ import { ShareModal } from './components/ShareModal';
 import { GoogleSheetsModal } from './components/GoogleSheetsModal';
 import { BoundaryModal } from './components/BoundaryModal';
 import { ExcelImportModal } from './components/ExcelImportModal';
-import { PrdModal } from './components/PrdModal';
 import { GoogleSheetsBackend } from './services/googleSheetsBackend';
 import { getAccessToken } from './services/googleSheetsDirectService';
 import {
@@ -50,7 +49,6 @@ export default function App() {
   const [isGoogleSheetsModalOpen, setIsGoogleSheetsModalOpen] = useState<boolean>(false);
   const [isBoundaryModalOpen, setIsBoundaryModalOpen] = useState<boolean>(false);
   const [isExcelImportModalOpen, setIsExcelImportModalOpen] = useState<boolean>(false);
-  const [isPrdModalOpen, setIsPrdModalOpen] = useState<boolean>(false);
   const [currentView, setCurrentView] = useState<'map' | 'analytics'>('map');
 
   // Custom Map Area Boundaries (SHP / KML)
@@ -373,7 +371,6 @@ export default function App() {
         onResetData={handleResetData}
         onOpenBoundaryModal={() => setIsBoundaryModalOpen(true)}
         boundaryCount={boundaries.length}
-        onOpenPrdModal={() => setIsPrdModalOpen(true)}
       />
 
       {/* Real-time Floating Toast Alert Banner */}
@@ -671,12 +668,6 @@ export default function App() {
         onShowToast={(title, desc, type) => {
           setToastMessage({ title, desc, type });
         }}
-      />
-
-      {/* Modal 7: Product Requirement Document (PRD) with DOC and PDF Export */}
-      <PrdModal
-        isOpen={isPrdModalOpen}
-        onClose={() => setIsPrdModalOpen(false)}
       />
     </div>
   );

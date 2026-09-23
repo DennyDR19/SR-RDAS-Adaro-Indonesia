@@ -363,25 +363,6 @@ app.delete('/api/pu/:id', (req: Request, res: Response) => {
   res.json({ success: true, id, notification: notif });
 });
 
-// Direct Download PRD endpoints
-app.get('/api/download/prd-doc', (req: Request, res: Response) => {
-  const filePath = path.join(process.cwd(), 'public', 'PRD_SIG_Rehabilitasi_DAS_PT_Adaro_Indonesia.doc');
-  if (fs.existsSync(filePath)) {
-    res.download(filePath, 'PRD_SIG_Rehabilitasi_DAS_PT_Adaro_Indonesia.doc');
-  } else {
-    res.status(404).send('File PRD DOC belum tersedia.');
-  }
-});
-
-app.get('/api/download/prd-pdf', (req: Request, res: Response) => {
-  const filePath = path.join(process.cwd(), 'public', 'PRD_SIG_Rehabilitasi_DAS_PT_Adaro_Indonesia.pdf');
-  if (fs.existsSync(filePath)) {
-    res.download(filePath, 'PRD_SIG_Rehabilitasi_DAS_PT_Adaro_Indonesia.pdf');
-  } else {
-    res.status(404).send('File PRD PDF belum tersedia.');
-  }
-});
-
 // Reset to default sample dataset
 app.post('/api/pu/reset', (req: Request, res: Response) => {
   petakUkurStore = JSON.parse(JSON.stringify(INITIAL_PETAK_UKUR));
