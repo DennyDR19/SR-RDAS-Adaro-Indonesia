@@ -65,6 +65,10 @@ export const GoogleSheetsModal: React.FC<GoogleSheetsModalProps> = ({
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isSigningIn, setIsSigningIn] = useState<boolean>(false);
+  const [authError, setAuthError] = useState<{
+    type: 'popup_closed' | 'popup_blocked' | 'generic';
+    message: string;
+  } | null>(null);
   const [spreadsheetUrl, setSpreadsheetUrl] = useState<string | null>(null);
   const [driveFolderUrl, setDriveFolderUrl] = useState<string | null>(null);
   const [isSettingUpSheet, setIsSettingUpSheet] = useState<boolean>(false);
@@ -130,11 +134,13 @@ export const GoogleSheetsModal: React.FC<GoogleSheetsModalProps> = ({
 
   const handleGoogleSignIn = async () => {
     setIsSigningIn(true);
+    setAuthError(null);
     try {
       const result = await googleSignIn();
       if (result) {
         setUser(result.user);
         setToken(result.accessToken);
+        setAuthError(null);
         onShowToast(
           'Otentikasi Berhasil',
           `Masuk sebagai ${result.user.displayName || result.user.email}. Menyiapkan Google Drive & Sheets...`,
@@ -170,7 +176,41 @@ export const GoogleSheetsModal: React.FC<GoogleSheetsModalProps> = ({
       }
     } catch (err: any) {
       console.error('Sign in error:', err);
-      onShowToast('Gagal Masuk', err.message || 'Otentikasi Google dibatalkan.', 'alert');
+      const errStr = `${err?.code || ''} ${err?.message || ''}`.toLowerCase();
+      
+      if (errStr.includes('popup-closed-by-user')) {
+        setAuthError({
+          type: 'popup_closed',
+          message:
+            'Jendela pop-up Google ditutup sebelum selesai, atau diblokir otomatis oleh pembatasan cookie/keamanan browser.',
+        });
+        onShowToast(
+          'Login Google Dibatalkan',
+          'Jendela otentikasi ditutup sebelum selesai. Anda juga dapat menggunakan tab "Webhook Apps Script" yang tidak memerlukan pop-up.',
+          'alert'
+        );
+      } else if (errStr.includes('popup-blocked')) {
+        setAuthError({
+          type: 'popup_blocked',
+          message:
+            'Browser memblokir jendela pop-up. Izinkan pop-up di bilah alamat browser, atau beralih ke tab "Webhook Apps Script".',
+        });
+        onShowToast(
+          'Pop-up Diblokir Browser',
+          'Silakan izinkan pop-up atau beralih ke tab Webhook Apps Script.',
+          'alert'
+        );
+      } else {
+        setAuthError({
+          type: 'generic',
+          message: err?.message || 'Terjadi kesalahan saat otentikasi Google.',
+        });
+        onShowToast(
+          'Gagal Masuk Google',
+          err?.message || 'Otentikasi Google dibatalkan atau terkendala koneksi.',
+          'alert'
+        );
+      }
     } finally {
       setIsSigningIn(false);
     }
@@ -564,6 +604,52 @@ export const GoogleSheetsModal: React.FC<GoogleSheetsModalProps> = ({
                       <ShieldCheck className="w-3 h-3 text-emerald-400" />
                       Aman & terenkripsi: Token disimpan dalam memori sesi (in-memory token caching).
                     </div>
+
+                    {/* Troubleshooting Guidance Banner for Popup Issues */}
+                    {authError && (
+                      <div className="w-full max-w-lg mt-3 p-4 rounded-xl bg-amber-950/40 border border-amber-500/40 text-left text-amber-200 space-y-2.5 animate-fade-in">
+                        <div className="flex items-start gap-2.5">
+                          <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                          <div className="space-y-1">
+                            <h5 className="font-bold text-xs text-amber-300">
+                              {authError.type === 'popup_closed'
+                                ? 'Penyebab: Jendela Pop-up Google Tertutup Sebelum Selesai'
+                                : authError.type === 'popup_blocked'
+                                ? 'Penyebab: Pop-up Diblokir oleh Browser'
+                                : 'Penyebab Kendala Koneksi Google'}
+                            </h5>
+                            <p className="text-[11px] text-amber-200/90 leading-relaxed">
+                              {authError.type === 'popup_closed' ? (
+                                <>
+                                  Jendela otentikasi ditutup sebelum proses izin akun selesai, atau sistem keamanan browser membatasi komunikasi pop-up di dalam mode pratinjau (iframe / third-party cookies).
+                                </>
+                              ) : (
+                                authError.message
+                              )}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="pt-2 border-t border-amber-500/20 flex flex-wrap items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setActiveTab('webhook')}
+                            className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold flex items-center gap-1.5 shadow transition-all hover:scale-[1.02]"
+                          >
+                            <Terminal className="w-3.5 h-3.5" />
+                            <span>Gunakan Webhook Apps Script (Bebas Pop-up & 100% Lancar)</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleGoogleSignIn}
+                            disabled={isSigningIn}
+                            className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-medium transition-colors"
+                          >
+                            Coba Masuk Lagi
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
